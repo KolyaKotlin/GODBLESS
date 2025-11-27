@@ -27,7 +27,9 @@ import androidx.navigation.NavController
 import com.example.godbless.NeprosrochApp
 import com.example.godbless.R
 import com.example.godbless.domain.model.Product
+import com.example.godbless.domain.model.ProductCategory
 import com.example.godbless.domain.model.ProductStatus
+import com.example.godbless.domain.model.StorageLocation
 import com.example.godbless.ui.screens.shopping.ShoppingViewModel
 import com.example.godbless.ui.screens.shopping.ShoppingViewModelFactory
 import com.example.godbless.ui.theme.StatusGreen
@@ -142,6 +144,7 @@ fun HomeScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddProductDialog(
     onDismiss: () -> Unit,
