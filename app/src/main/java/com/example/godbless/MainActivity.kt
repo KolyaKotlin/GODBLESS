@@ -25,6 +25,7 @@ import com.example.godbless.ui.navigation.Screen
 import com.example.godbless.ui.screens.auth.AuthScreen
 import com.example.godbless.ui.screens.home.HomeScreen
 import com.example.godbless.ui.screens.profile.ProfileScreen
+import com.example.godbless.ui.screens.scanner.ScannerScreen
 import com.example.godbless.ui.screens.shopping.ShoppingScreen
 import com.example.godbless.ui.theme.GODBLESSTheme
 
@@ -112,7 +113,7 @@ fun MainScreen(rootNavController: NavHostController) {
                 HomeScreen(navController)
             }
             composable(Screen.Scanner.route) {
-                ScannerPlaceholderScreen()
+                ScannerScreen(navController)
             }
             composable(Screen.Shopping.route) {
                 ShoppingScreen()
@@ -173,16 +174,6 @@ fun BottomNavigationBar(
                     popUpTo(Screen.Home.route)
                 }
             }
-        )
-    }
-}
-
-@Composable
-fun ScannerPlaceholderScreen() {
-    Surface {
-        Text(
-            text = "Экран сканера будет здесь. Требуется разрешение камеры.",
-            modifier = Modifier.padding(16.dp)
         )
     }
 }
