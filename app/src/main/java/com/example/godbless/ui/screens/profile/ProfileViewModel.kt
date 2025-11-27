@@ -3,9 +3,9 @@ package com.example.godbless.ui.screens.profile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.godbless.data.repository.AuthRepository
+import com.example.godbless.data.repository.MockUser
 import com.example.godbless.data.repository.PreferencesRepository
 import com.example.godbless.domain.model.UserPreferences
-import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,8 +16,8 @@ class ProfileViewModel(
     private val preferencesRepository: PreferencesRepository
 ) : ViewModel() {
 
-    private val _currentUser = MutableStateFlow<FirebaseUser?>(authRepository.currentUser)
-    val currentUser: StateFlow<FirebaseUser?> = _currentUser.asStateFlow()
+    private val _currentUser = MutableStateFlow<MockUser?>(authRepository.currentUser)
+    val currentUser: StateFlow<MockUser?> = _currentUser.asStateFlow()
 
     private val _userPreferences = MutableStateFlow(UserPreferences())
     val userPreferences: StateFlow<UserPreferences> = _userPreferences.asStateFlow()

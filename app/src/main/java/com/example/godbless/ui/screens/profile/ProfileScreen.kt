@@ -17,6 +17,7 @@ import com.example.godbless.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
+    onSignOut: () -> Unit = {},
     viewModel: ProfileViewModel = viewModel(
         factory = ProfileViewModelFactory(
             NeprosrochApp.instance.authRepository,
@@ -45,7 +46,7 @@ fun ProfileScreen(
             if (currentUser == null) {
                 AuthSection(viewModel, error)
             } else {
-                UserSection(currentUser!!.email ?: "", viewModel)
+                UserSection(currentUser!!.email ?: "", viewModel, onSignOut)
                 Spacer(modifier = Modifier.height(24.dp))
                 NotificationSettings(userPreferences, viewModel)
             }
@@ -148,7 +149,7 @@ fun AuthSection(viewModel: ProfileViewModel, error: String?) {
 }
 
 @Composable
-fun UserSection(email: String, viewModel: ProfileViewModel) {
+fun UserSection(email: String, viewModel: ProfileViewModel, onSignOut: () -> Unit) {
     Card(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -166,7 +167,10 @@ fun UserSection(email: String, viewModel: ProfileViewModel) {
             )
             Spacer(modifier = Modifier.height(16.dp))
             Button(
-                onClick = { viewModel.signOut() },
+                onClick = {
+                    viewModel.signOut()
+                    onSignOut()
+                },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(stringResource(R.string.sign_out))

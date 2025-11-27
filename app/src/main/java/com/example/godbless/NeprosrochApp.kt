@@ -35,7 +35,7 @@ class NeprosrochApp : Application() {
             shoppingItemDao = database.shoppingItemDao()
         )
 
-        authRepository = AuthRepository()
+        authRepository = AuthRepository(applicationContext)
 
         preferencesRepository = PreferencesRepository(applicationContext)
 
