@@ -28,6 +28,8 @@ import com.example.godbless.NeprosrochApp
 import com.example.godbless.R
 import com.example.godbless.domain.model.Product
 import com.example.godbless.domain.model.ProductStatus
+import com.example.godbless.ui.screens.shopping.ShoppingViewModel
+import com.example.godbless.ui.screens.shopping.ShoppingViewModelFactory
 import com.example.godbless.ui.theme.StatusGreen
 import com.example.godbless.ui.theme.StatusRed
 import com.example.godbless.ui.theme.StatusYellow
@@ -40,10 +42,14 @@ fun HomeScreen(
     navController: NavController,
     viewModel: HomeViewModel = viewModel(
         factory = HomeViewModelFactory(NeprosrochApp.instance.productRepository)
+    ),
+    shoppingViewModel: ShoppingViewModel = viewModel(
+        factory = ShoppingViewModelFactory(NeprosrochApp.instance.shoppingRepository)
     )
 ) {
     val products by viewModel.products.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
+    var showAddProductDialog by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -52,8 +58,17 @@ fun HomeScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { /* Navigate to add product */ }) {
-                Icon(Icons.Default.Add, contentDescription = stringResource(R.string.add_product))
+            FloatingActionButton(
+                onClick = { showAddProductDialog = true },
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                Icon(
+                    Icons.Default.Add,
+                    contentDescription = stringResource(R.string.add_product),
+                    modifier = Modifier.size(28.dp)
+                )
             }
         }
     ) { padding ->
@@ -90,18 +105,227 @@ fun HomeScreen(
                 items(products, key = { it.id }) { product ->
                     ProductCard(
                         product = product,
-                        onDelete = { viewModel.deleteProduct(product) }
+                        onDelete = { viewModel.deleteProduct(product) },
+                        onAddToShopping = {
+                            shoppingViewModel.addShoppingItem(
+                                name = product.name,
+                                quantity = "1 шт"
+                            )
+                        }
                     )
                 }
             }
         }
     }
+
+    // Диалог добавления продукта
+    if (showAddProductDialog) {
+        AddProductDialog(
+            onDismiss = { showAddProductDialog = false },
+            onAddProduct = { name, category, location, daysUntilExpiry ->
+                val expiryDate = java.util.Calendar.getInstance().apply {
+                    add(java.util.Calendar.DAY_OF_YEAR, daysUntilExpiry)
+                }.time
+
+                viewModel.addProduct(
+                    name = name,
+                    brand = null,
+                    category = category,
+                    storageLocation = location,
+                    expiryDate = expiryDate,
+                    barcode = null,
+                    notes = null
+                )
+                showAddProductDialog = false
+            }
+        )
+    }
+}
+
+@Composable
+fun AddProductDialog(
+    onDismiss: () -> Unit,
+    onAddProduct: (String, ProductCategory, StorageLocation, Int) -> Unit
+) {
+    var productName by remember { mutableStateOf("") }
+    var selectedCategory by remember { mutableStateOf(ProductCategory.OTHER) }
+    var selectedLocation by remember { mutableStateOf(StorageLocation.FRIDGE) }
+    var daysUntilExpiry by remember { mutableStateOf("7") }
+
+    var showCategoryMenu by remember { mutableStateOf(false) }
+    var showLocationMenu by remember { mutableStateOf(false) }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        shape = RoundedCornerShape(24.dp),
+        title = {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(bottom = 8.dp)
+            ) {
+                Icon(
+                    Icons.Default.Add,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(28.dp)
+                )
+                Spacer(modifier = Modifier.width(12.dp))
+                Text(
+                    text = "Добавить продукт",
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        },
+        text = {
+            Column(modifier = Modifier.padding(vertical = 8.dp)) {
+                OutlinedTextField(
+                    value = productName,
+                    onValueChange = { productName = it },
+                    label = { Text("Название продукта") },
+                    placeholder = { Text("Например: Молоко") },
+                    leadingIcon = {
+                        Icon(
+                            Icons.Default.ShoppingBag,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        focusedLabelColor = MaterialTheme.colorScheme.primary
+                    )
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                // Категория
+                ExposedDropdownMenuBox(
+                    expanded = showCategoryMenu,
+                    onExpandedChange = { showCategoryMenu = it }
+                ) {
+                    OutlinedTextField(
+                        value = selectedCategory.displayName,
+                        onValueChange = {},
+                        readOnly = true,
+                        label = { Text("Категория") },
+                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = showCategoryMenu) },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .menuAnchor(),
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                    ExposedDropdownMenu(
+                        expanded = showCategoryMenu,
+                        onDismissRequest = { showCategoryMenu = false }
+                    ) {
+                        ProductCategory.values().forEach { category ->
+                            DropdownMenuItem(
+                                text = { Text(category.displayName) },
+                                onClick = {
+                                    selectedCategory = category
+                                    showCategoryMenu = false
+                                }
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                // Место хранения
+                ExposedDropdownMenuBox(
+                    expanded = showLocationMenu,
+                    onExpandedChange = { showLocationMenu = it }
+                ) {
+                    OutlinedTextField(
+                        value = selectedLocation.displayName,
+                        onValueChange = {},
+                        readOnly = true,
+                        label = { Text("Место хранения") },
+                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = showLocationMenu) },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .menuAnchor(),
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                    ExposedDropdownMenu(
+                        expanded = showLocationMenu,
+                        onDismissRequest = { showLocationMenu = false }
+                    ) {
+                        StorageLocation.values().forEach { location ->
+                            DropdownMenuItem(
+                                text = { Text(location.displayName) },
+                                onClick = {
+                                    selectedLocation = location
+                                    showLocationMenu = false
+                                }
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                OutlinedTextField(
+                    value = daysUntilExpiry,
+                    onValueChange = { if (it.all { char -> char.isDigit() } || it.isEmpty()) daysUntilExpiry = it },
+                    label = { Text("Срок годности (дней)") },
+                    placeholder = { Text("7") },
+                    leadingIcon = {
+                        Icon(
+                            Icons.Default.CalendarToday,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.secondary
+                        )
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = MaterialTheme.colorScheme.secondary,
+                        focusedLabelColor = MaterialTheme.colorScheme.secondary
+                    )
+                )
+            }
+        },
+        confirmButton = {
+            Button(
+                onClick = {
+                    if (productName.isNotBlank() && daysUntilExpiry.isNotBlank()) {
+                        val days = daysUntilExpiry.toIntOrNull() ?: 7
+                        onAddProduct(productName, selectedCategory, selectedLocation, days)
+                    }
+                },
+                enabled = productName.isNotBlank() && daysUntilExpiry.isNotBlank(),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Icon(
+                    Icons.Default.Add,
+                    contentDescription = null,
+                    modifier = Modifier.size(18.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text("Добавить", fontWeight = FontWeight.Bold)
+            }
+        },
+        dismissButton = {
+            OutlinedButton(
+                onClick = onDismiss,
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Text("Отмена")
+            }
+        }
+    )
 }
 
 @Composable
 fun ProductCard(
     product: Product,
-    onDelete: () -> Unit
+    onDelete: () -> Unit,
+    onAddToShopping: () -> Unit
 ) {
     val statusColor = when (product.getStatusColor()) {
         ProductStatus.GOOD -> StatusGreen
@@ -275,17 +499,33 @@ fun ProductCard(
                     }
                 }
 
-                // Кнопка удаления
-                IconButton(
-                    onClick = onDelete,
-                    colors = IconButtonDefaults.iconButtonColors(
-                        contentColor = MaterialTheme.colorScheme.error
-                    )
-                ) {
-                    Icon(
-                        Icons.Default.DeleteOutline,
-                        contentDescription = stringResource(R.string.delete)
-                    )
+                // Кнопки действий
+                Column {
+                    // Кнопка добавления в список покупок
+                    IconButton(
+                        onClick = onAddToShopping,
+                        colors = IconButtonDefaults.iconButtonColors(
+                            contentColor = MaterialTheme.colorScheme.primary
+                        )
+                    ) {
+                        Icon(
+                            Icons.Default.ShoppingCart,
+                            contentDescription = "В список покупок"
+                        )
+                    }
+
+                    // Кнопка удаления
+                    IconButton(
+                        onClick = onDelete,
+                        colors = IconButtonDefaults.iconButtonColors(
+                            contentColor = MaterialTheme.colorScheme.error
+                        )
+                    ) {
+                        Icon(
+                            Icons.Default.DeleteOutline,
+                            contentDescription = stringResource(R.string.delete)
+                        )
+                    }
                 }
             }
 
