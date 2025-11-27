@@ -323,6 +323,7 @@ class BarcodeAnalyzer(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddScannedProductDialog(
     barcode: String,
