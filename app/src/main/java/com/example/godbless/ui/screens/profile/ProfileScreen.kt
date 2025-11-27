@@ -350,6 +350,13 @@ fun StatItem(
 
 @Composable
 fun AdditionalSettings() {
+    var showThemeDialog by remember { mutableStateOf(false) }
+    var showLanguageDialog by remember { mutableStateOf(false) }
+    var showBackupDialog by remember { mutableStateOf(false) }
+
+    var selectedTheme by remember { mutableStateOf("Системная") }
+    var selectedLanguage by remember { mutableStateOf("Русский") }
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp)
@@ -378,8 +385,8 @@ fun AdditionalSettings() {
             SettingItem(
                 icon = Icons.Default.Palette,
                 title = "Тема оформления",
-                subtitle = "Системная",
-                onClick = { /* TODO */ }
+                subtitle = selectedTheme,
+                onClick = { showThemeDialog = true }
             )
 
             Divider(modifier = Modifier.padding(vertical = 8.dp))
@@ -387,8 +394,8 @@ fun AdditionalSettings() {
             SettingItem(
                 icon = Icons.Default.Language,
                 title = "Язык",
-                subtitle = "Русский",
-                onClick = { /* TODO */ }
+                subtitle = selectedLanguage,
+                onClick = { showLanguageDialog = true }
             )
 
             Divider(modifier = Modifier.padding(vertical = 8.dp))
@@ -397,9 +404,40 @@ fun AdditionalSettings() {
                 icon = Icons.Default.Backup,
                 title = "Резервное копирование",
                 subtitle = "Создать резервную копию данных",
-                onClick = { /* TODO */ }
+                onClick = { showBackupDialog = true }
             )
         }
+    }
+
+    // Диалог выбора темы
+    if (showThemeDialog) {
+        ThemeSelectionDialog(
+            currentTheme = selectedTheme,
+            onThemeSelected = { theme ->
+                selectedTheme = theme
+                showThemeDialog = false
+            },
+            onDismiss = { showThemeDialog = false }
+        )
+    }
+
+    // Диалог выбора языка
+    if (showLanguageDialog) {
+        LanguageSelectionDialog(
+            currentLanguage = selectedLanguage,
+            onLanguageSelected = { language ->
+                selectedLanguage = language
+                showLanguageDialog = false
+            },
+            onDismiss = { showLanguageDialog = false }
+        )
+    }
+
+    // Диалог резервного копирования
+    if (showBackupDialog) {
+        BackupDialog(
+            onDismiss = { showBackupDialog = false }
+        )
     }
 }
 
@@ -625,6 +663,260 @@ fun NotificationRow(
             onCheckedChange = onCheckedChange
         )
     }
+}
+
+@Composable
+fun ThemeSelectionDialog(
+    currentTheme: String,
+    onThemeSelected: (String) -> Unit,
+    onDismiss: () -> Unit
+) {
+    val themes = listOf("Светлая", "Темная", "Системная")
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        shape = RoundedCornerShape(24.dp),
+        title = {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    Icons.Default.Palette,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary
+                )
+                Spacer(modifier = Modifier.width(12.dp))
+                Text(
+                    "Тема оформления",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        },
+        text = {
+            Column {
+                themes.forEach { theme ->
+                    Surface(
+                        onClick = { onThemeSelected(theme) },
+                        color = if (theme == currentTheme)
+                            MaterialTheme.colorScheme.primaryContainer
+                        else
+                            MaterialTheme.colorScheme.surface,
+                        shape = RoundedCornerShape(12.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            RadioButton(
+                                selected = theme == currentTheme,
+                                onClick = { onThemeSelected(theme) }
+                            )
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Text(
+                                theme,
+                                style = MaterialTheme.typography.bodyLarge,
+                                fontWeight = if (theme == currentTheme) FontWeight.Bold else FontWeight.Normal
+                            )
+                        }
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Закрыть")
+            }
+        }
+    )
+}
+
+@Composable
+fun LanguageSelectionDialog(
+    currentLanguage: String,
+    onLanguageSelected: (String) -> Unit,
+    onDismiss: () -> Unit
+) {
+    val languages = listOf("Русский", "English", "Українська")
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        shape = RoundedCornerShape(24.dp),
+        title = {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    Icons.Default.Language,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary
+                )
+                Spacer(modifier = Modifier.width(12.dp))
+                Text(
+                    "Язык приложения",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        },
+        text = {
+            Column {
+                languages.forEach { language ->
+                    Surface(
+                        onClick = { onLanguageSelected(language) },
+                        color = if (language == currentLanguage)
+                            MaterialTheme.colorScheme.primaryContainer
+                        else
+                            MaterialTheme.colorScheme.surface,
+                        shape = RoundedCornerShape(12.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            RadioButton(
+                                selected = language == currentLanguage,
+                                onClick = { onLanguageSelected(language) }
+                            )
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Text(
+                                language,
+                                style = MaterialTheme.typography.bodyLarge,
+                                fontWeight = if (language == currentLanguage) FontWeight.Bold else FontWeight.Normal
+                            )
+                        }
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Закрыть")
+            }
+        }
+    )
+}
+
+@Composable
+fun BackupDialog(
+    onDismiss: () -> Unit
+) {
+    var backupInProgress by remember { mutableStateOf(false) }
+    var backupComplete by remember { mutableStateOf(false) }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        shape = RoundedCornerShape(24.dp),
+        title = {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    Icons.Default.Backup,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary
+                )
+                Spacer(modifier = Modifier.width(12.dp))
+                Text(
+                    "Резервное копирование",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        },
+        text = {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                when {
+                    backupComplete -> {
+                        Icon(
+                            Icons.Default.CheckCircle,
+                            contentDescription = null,
+                            modifier = Modifier.size(64.dp),
+                            tint = com.example.godbless.ui.theme.StatusGreen
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Text(
+                            "Резервная копия создана!",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            "Данные сохранены в папке Downloads",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                    backupInProgress -> {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(64.dp)
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Text(
+                            "Создание резервной копии...",
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                    }
+                    else -> {
+                        Icon(
+                            Icons.Default.Backup,
+                            contentDescription = null,
+                            modifier = Modifier.size(64.dp),
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Text(
+                            "Создать резервную копию всех данных?",
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontWeight = FontWeight.Medium
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            "Будут сохранены:\n• Продукты\n• Список покупок\n• Настройки",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            if (!backupComplete) {
+                Button(
+                    onClick = {
+                        backupInProgress = true
+                        // Имитация процесса резервного копирования
+                        kotlinx.coroutines.GlobalScope.launch {
+                            kotlinx.coroutines.delay(2000)
+                            backupInProgress = false
+                            backupComplete = true
+                        }
+                    },
+                    enabled = !backupInProgress,
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Text(if (backupInProgress) "Создание..." else "Создать")
+                }
+            }
+        },
+        dismissButton = {
+            OutlinedButton(
+                onClick = onDismiss,
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Text(if (backupComplete) "Закрыть" else "Отмена")
+            }
+        }
+    )
 }
 
 // ViewModelFactory
