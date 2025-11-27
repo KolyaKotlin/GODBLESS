@@ -1,6 +1,7 @@
 package com.example.godbless.ui.navigation
 
 sealed class Screen(val route: String) {
+    object Auth : Screen("auth")
     object Home : Screen("home")
     object Scanner : Screen("scanner")
     object Shopping : Screen("shopping")
