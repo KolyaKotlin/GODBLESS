@@ -49,6 +49,9 @@ fun ScannerScreen(
     navController: NavController,
     viewModel: HomeViewModel = viewModel(
         factory = HomeViewModelFactory(NeprosrochApp.instance.productRepository)
+    ),
+    scannerViewModel: ScannerViewModel = viewModel(
+        factory = ScannerViewModelFactory(NeprosrochApp.instance.openFoodFactsRepository)
     )
 ) {
     val context = LocalContext.current
@@ -66,6 +69,10 @@ fun ScannerScreen(
     var scannedBarcode by remember { mutableStateOf<String?>(null) }
     var torchEnabled by remember { mutableStateOf(false) }
     var showAddProductDialog by remember { mutableStateOf(false) }
+
+    val scannedProduct by scannerViewModel.scannedProduct.collectAsState()
+    val isLoading by scannerViewModel.isLoading.collectAsState()
+    val error by scannerViewModel.error.collectAsState()
 
     val cameraPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
@@ -111,6 +118,7 @@ fun ScannerScreen(
                     torchEnabled = torchEnabled,
                     onBarcodeScanned = { barcode ->
                         scannedBarcode = barcode
+                        scannerViewModel.searchByBarcode(barcode)
                         showAddProductDialog = true
                     }
                 )
@@ -200,9 +208,14 @@ fun ScannerScreen(
     if (showAddProductDialog && scannedBarcode != null) {
         AddScannedProductDialog(
             barcode = scannedBarcode!!,
+            scannedProduct = scannedProduct,
+            isLoading = isLoading,
+            error = error,
+            scannerViewModel = scannerViewModel,
             onDismiss = {
                 showAddProductDialog = false
                 scannedBarcode = null
+                scannerViewModel.clearSearch()
             },
             onAddProduct = { name, category, location, expiryDate ->
                 viewModel.addProduct(
@@ -216,6 +229,7 @@ fun ScannerScreen(
                 )
                 showAddProductDialog = false
                 scannedBarcode = null
+                scannerViewModel.clearSearch()
                 navController.navigate(Screen.Home.route) {
                     popUpTo(Screen.Home.route) { inclusive = true }
                 }
@@ -327,6 +341,10 @@ class BarcodeAnalyzer(
 @Composable
 fun AddScannedProductDialog(
     barcode: String,
+    scannedProduct: com.example.godbless.data.remote.OpenFoodProduct?,
+    isLoading: Boolean,
+    error: String?,
+    scannerViewModel: ScannerViewModel,
     onDismiss: () -> Unit,
     onAddProduct: (String, ProductCategory, StorageLocation, Date) -> Unit
 ) {
@@ -337,6 +355,15 @@ fun AddScannedProductDialog(
 
     var showCategoryMenu by remember { mutableStateOf(false) }
     var showLocationMenu by remember { mutableStateOf(false) }
+
+    val searchResults by scannerViewModel.searchResults.collectAsState()
+
+    // Автозаполнение из API
+    LaunchedEffect(scannedProduct) {
+        scannedProduct?.let { product ->
+            productName = product.productName ?: ""
+        }
+    }
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -358,14 +385,119 @@ fun AddScannedProductDialog(
         },
         text = {
             Column(modifier = Modifier.padding(vertical = 8.dp)) {
+                // Статус загрузки/ошибки
+                when {
+                    isLoading -> {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 8.dp),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            CircularProgressIndicator(modifier = Modifier.size(24.dp))
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Text(
+                                "Поиск в базе OpenFoodFacts...",
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
+                    }
+                    scannedProduct != null -> {
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.primaryContainer
+                            )
+                        ) {
+                            Row(
+                                modifier = Modifier.padding(12.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    "✓",
+                                    style = MaterialTheme.typography.headlineMedium,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text(
+                                    "Продукт найден в базе!",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(12.dp))
+                    }
+                    error != null -> {
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.errorContainer
+                            )
+                        ) {
+                            Text(
+                                "Продукт не найден. Введите название вручную.",
+                                modifier = Modifier.padding(12.dp),
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onErrorContainer
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(12.dp))
+                    }
+                }
+
+                // Поле ввода названия с автокомплитом
                 OutlinedTextField(
                     value = productName,
-                    onValueChange = { productName = it },
+                    onValueChange = {
+                        productName = it
+                        if (it.length >= 2) {
+                            scannerViewModel.searchProducts(it)
+                        }
+                    },
                     label = { Text("Название продукта") },
                     placeholder = { Text("Например: Молоко") },
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp)
+                    shape = RoundedCornerShape(12.dp),
+                    enabled = !isLoading
                 )
+
+                // Результаты автокомплита
+                if (searchResults.isNotEmpty() && productName.length >= 2) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant
+                        )
+                    ) {
+                        Column(modifier = Modifier.padding(8.dp)) {
+                            Text(
+                                "Выберите из найденных:",
+                                style = MaterialTheme.typography.labelMedium,
+                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            searchResults.take(3).forEach { product ->
+                                TextButton(
+                                    onClick = {
+                                        productName = product.productName ?: ""
+                                        scannerViewModel.clearSearch()
+                                    },
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Text(
+                                        product.productName ?: "Неизвестно",
+                                        modifier = Modifier.fillMaxWidth(),
+                                        textAlign = TextAlign.Start
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
 
                 Spacer(modifier = Modifier.height(12.dp))
 

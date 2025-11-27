@@ -3,6 +3,9 @@ package com.example.godbless.workers
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.media.AudioAttributes
+import android.media.RingtoneManager
+import android.net.Uri
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -52,26 +55,91 @@ class ExpiryNotificationWorker(
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = "Уведомления о сроке годности"
-            val descriptionText = "Уведомления о продуктах, у которых истекает срок годности"
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
-                description = descriptionText
+            val notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+            // Создаем отдельные каналы для разных периодов с разными звуками
+            createChannelWithSound(
+                notificationManager,
+                CHANNEL_ID_7_DAYS,
+                "Уведомления за 7 дней",
+                R.raw.notification_7days
+            )
+
+            createChannelWithSound(
+                notificationManager,
+                CHANNEL_ID_3_DAYS,
+                "Уведомления за 3 дня",
+                R.raw.notification_3days
+            )
+
+            createChannelWithSound(
+                notificationManager,
+                CHANNEL_ID_1_DAY,
+                "Уведомления за 1 день",
+                R.raw.notification_1day
+            )
+        }
+    }
+
+    private fun createChannelWithSound(
+        notificationManager: NotificationManager,
+        channelId: String,
+        channelName: String,
+        soundResId: Int
+    ) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val soundUri = Uri.parse("android.resource://${applicationContext.packageName}/$soundResId")
+            val audioAttributes = AudioAttributes.Builder()
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                .build()
+
+            val channel = NotificationChannel(
+                channelId,
+                channelName,
+                NotificationManager.IMPORTANCE_HIGH
+            ).apply {
+                description = "Уведомления о продуктах, у которых истекает срок годности"
+                setSound(soundUri, audioAttributes)
+                enableVibration(true)
+                vibrationPattern = longArrayOf(0, 500, 200, 500)
             }
 
-            val notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
         }
     }
 
     private fun sendNotification(productName: String, daysLeft: Int, notificationId: Int) {
-        val notification = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
+        // Выбираем канал и звук в зависимости от количества дней
+        val channelId = when (daysLeft) {
+            7 -> CHANNEL_ID_7_DAYS
+            3 -> CHANNEL_ID_3_DAYS
+            1 -> CHANNEL_ID_1_DAY
+            else -> CHANNEL_ID_7_DAYS
+        }
+
+        val soundResId = when (daysLeft) {
+            7 -> R.raw.notification_7days
+            3 -> R.raw.notification_3days
+            1 -> R.raw.notification_1day
+            else -> R.raw.notification_7days
+        }
+
+        val soundUri = Uri.parse("android.resource://${applicationContext.packageName}/$soundResId")
+
+        val builder = NotificationCompat.Builder(applicationContext, channelId)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle(applicationContext.getString(R.string.notification_title))
             .setContentText("$productName - осталось $daysLeft дней")
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
-            .build()
+
+        // Для версий ниже Android O устанавливаем звук напрямую
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            builder.setSound(soundUri)
+        }
+
+        val notification = builder.build()
 
         try {
             NotificationManagerCompat.from(applicationContext)
@@ -82,7 +150,9 @@ class ExpiryNotificationWorker(
     }
 
     companion object {
-        const val CHANNEL_ID = "expiry_notifications"
+        const val CHANNEL_ID_7_DAYS = "expiry_7_days"
+        const val CHANNEL_ID_3_DAYS = "expiry_3_days"
+        const val CHANNEL_ID_1_DAY = "expiry_1_day"
         const val WORK_NAME = "expiry_notification_work"
     }
 }
