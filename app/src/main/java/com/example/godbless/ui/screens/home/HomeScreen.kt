@@ -30,6 +30,8 @@ import com.example.godbless.domain.model.Product
 import com.example.godbless.domain.model.ProductCategory
 import com.example.godbless.domain.model.ProductStatus
 import com.example.godbless.domain.model.StorageLocation
+import com.example.godbless.ui.components.CategoryFilter
+import com.example.godbless.ui.components.DateInputSection
 import com.example.godbless.ui.screens.shopping.ShoppingViewModel
 import com.example.godbless.ui.screens.shopping.ShoppingViewModelFactory
 import com.example.godbless.ui.theme.StatusGreen
@@ -52,6 +54,16 @@ fun HomeScreen(
     val products by viewModel.products.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     var showAddProductDialog by remember { mutableStateOf(false) }
+    var selectedCategory by remember { mutableStateOf<ProductCategory?>(null) }
+
+    // Фильтрация продуктов
+    val filteredProducts = remember(products, selectedCategory) {
+        if (selectedCategory == null) {
+            products
+        } else {
+            products.filter { it.category == selectedCategory }
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -104,7 +116,16 @@ fun HomeScreen(
                 contentPadding = PaddingValues(16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                items(products, key = { it.id }) { product ->
+                // Фильтр по категориям
+                item {
+                    CategoryFilter(
+                        selectedCategory = selectedCategory,
+                        onCategorySelected = { selectedCategory = it }
+                    )
+                }
+
+                // Список продуктов
+                items(filteredProducts, key = { it.id }) { product ->
                     ProductCard(
                         product = product,
                         onDelete = { viewModel.deleteProduct(product) },
@@ -124,11 +145,7 @@ fun HomeScreen(
     if (showAddProductDialog) {
         AddProductDialog(
             onDismiss = { showAddProductDialog = false },
-            onAddProduct = { name, category, location, daysUntilExpiry ->
-                val expiryDate = java.util.Calendar.getInstance().apply {
-                    add(java.util.Calendar.DAY_OF_YEAR, daysUntilExpiry)
-                }.time
-
+            onAddProduct = { name, category, location, expiryDate ->
                 viewModel.addProduct(
                     name = name,
                     brand = null,
@@ -148,15 +165,25 @@ fun HomeScreen(
 @Composable
 fun AddProductDialog(
     onDismiss: () -> Unit,
-    onAddProduct: (String, ProductCategory, StorageLocation, Int) -> Unit
+    onAddProduct: (String, ProductCategory, StorageLocation, java.util.Date) -> Unit
 ) {
     var productName by remember { mutableStateOf("") }
     var selectedCategory by remember { mutableStateOf(ProductCategory.OTHER) }
     var selectedLocation by remember { mutableStateOf(StorageLocation.FRIDGE) }
-    var daysUntilExpiry by remember { mutableStateOf("7") }
+    var calculatedDays by remember { mutableStateOf(7) }
+    var expiryDate by remember { mutableStateOf<java.util.Date?>(null) }
 
     var showCategoryMenu by remember { mutableStateOf(false) }
     var showLocationMenu by remember { mutableStateOf(false) }
+
+    // Рассчитываем дату окончания срока годности на основе дней
+    LaunchedEffect(calculatedDays) {
+        if (expiryDate == null) {
+            expiryDate = java.util.Calendar.getInstance().apply {
+                add(java.util.Calendar.DAY_OF_YEAR, calculatedDays)
+            }.time
+        }
+    }
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -272,36 +299,30 @@ fun AddProductDialog(
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                OutlinedTextField(
-                    value = daysUntilExpiry,
-                    onValueChange = { if (it.all { char -> char.isDigit() } || it.isEmpty()) daysUntilExpiry = it },
-                    label = { Text("Срок годности (дней)") },
-                    placeholder = { Text("7") },
-                    leadingIcon = {
-                        Icon(
-                            Icons.Default.CalendarToday,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.secondary
-                        )
+                // Ввод даты
+                DateInputSection(
+                    onDaysCalculated = { days ->
+                        calculatedDays = days
+                        expiryDate = java.util.Calendar.getInstance().apply {
+                            add(java.util.Calendar.DAY_OF_YEAR, days)
+                        }.time
                     },
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = MaterialTheme.colorScheme.secondary,
-                        focusedLabelColor = MaterialTheme.colorScheme.secondary
-                    )
+                    onExpiryDateChanged = { date ->
+                        if (date != null) {
+                            expiryDate = date
+                        }
+                    }
                 )
             }
         },
         confirmButton = {
             Button(
                 onClick = {
-                    if (productName.isNotBlank() && daysUntilExpiry.isNotBlank()) {
-                        val days = daysUntilExpiry.toIntOrNull() ?: 7
-                        onAddProduct(productName, selectedCategory, selectedLocation, days)
+                    if (productName.isNotBlank() && expiryDate != null) {
+                        onAddProduct(productName, selectedCategory, selectedLocation, expiryDate!!)
                     }
                 },
-                enabled = productName.isNotBlank() && daysUntilExpiry.isNotBlank(),
+                enabled = productName.isNotBlank() && expiryDate != null,
                 shape = RoundedCornerShape(12.dp)
             ) {
                 Icon(
