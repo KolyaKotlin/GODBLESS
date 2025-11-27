@@ -5,6 +5,7 @@ import androidx.work.*
 import com.example.godbless.data.local.AppDatabase
 import com.example.godbless.data.remote.RetrofitClient
 import com.example.godbless.data.repository.AuthRepository
+import com.example.godbless.data.repository.OpenFoodFactsRepository
 import com.example.godbless.data.repository.PreferencesRepository
 import com.example.godbless.data.repository.ProductRepository
 import com.example.godbless.data.repository.ShoppingRepository
@@ -17,6 +18,7 @@ class NeprosrochApp : Application() {
     lateinit var shoppingRepository: ShoppingRepository
     lateinit var authRepository: AuthRepository
     lateinit var preferencesRepository: PreferencesRepository
+    lateinit var openFoodFactsRepository: OpenFoodFactsRepository
 
     override fun onCreate() {
         super.onCreate()
@@ -38,6 +40,10 @@ class NeprosrochApp : Application() {
         authRepository = AuthRepository(applicationContext)
 
         preferencesRepository = PreferencesRepository(applicationContext)
+
+        openFoodFactsRepository = OpenFoodFactsRepository(
+            api = RetrofitClient.openFoodFactsApi
+        )
 
         // Setup WorkManager for notifications
         setupExpiryNotifications()
