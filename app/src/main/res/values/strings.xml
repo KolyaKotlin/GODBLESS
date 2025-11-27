@@ -1,3 +1,114 @@
 <resources>
-    <string name="app_name">GODBLESS</string>
+    <string name="app_name">НеПросрочь!</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Главная</string>
+    <string name="nav_scanner">Сканер</string>
+    <string name="nav_shopping">Покупки</string>
+    <string name="nav_profile">Профиль</string>
+
+    <!-- Home Screen -->
+    <string name="home_title">Мои продукты</string>
+    <string name="add_product">Добавить продукт</string>
+    <string name="empty_products">У вас пока нет продуктов</string>
+    <string name="days_left">Осталось дней: %d</string>
+    <string name="expired">Просрочен</string>
+    <string name="expires_today">Истекает сегодня</string>
+    <string name="sort_by">Сортировать</string>
+    <string name="filter">Фильтр</string>
+
+    <!-- Product Details -->
+    <string name="product_name">Название</string>
+    <string name="product_brand">Бренд</string>
+    <string name="product_category">Категория</string>
+    <string name="product_location">Место хранения</string>
+    <string name="product_expiry">Срок годности</string>
+    <string name="product_barcode">Штрихкод</string>
+    <string name="product_notes">Заметки</string>
+
+    <!-- Categories -->
+    <string name="category_dairy">Молочные продукты</string>
+    <string name="category_meat">Мясо и птица</string>
+    <string name="category_fish">Рыба и морепродукты</string>
+    <string name="category_vegetables">Овощи</string>
+    <string name="category_fruits">Фрукты</string>
+    <string name="category_bakery">Хлебобулочные изделия</string>
+    <string name="category_frozen">Замороженные продукты</string>
+    <string name="category_canned">Консервы</string>
+    <string name="category_beverages">Напитки</string>
+    <string name="category_other">Другое</string>
+
+    <!-- Storage Locations -->
+    <string name="location_fridge">Холодильник</string>
+    <string name="location_freezer">Морозильник</string>
+    <string name="location_pantry">Кладовая</string>
+    <string name="location_counter">На столе</string>
+
+    <!-- Add/Edit Product -->
+    <string name="add_product_title">Добавить продукт</string>
+    <string name="edit_product_title">Редактировать продукт</string>
+    <string name="save">Сохранить</string>
+    <string name="cancel">Отмена</string>
+    <string name="delete">Удалить</string>
+    <string name="scan_barcode">Сканировать штрихкод</string>
+    <string name="enter_manually">Ввести вручную</string>
+    <string name="search_openfoodfacts">Поиск в OpenFoodFacts</string>
+    <string name="select_product">Выберите продукт</string>
+
+    <!-- Scanner Screen -->
+    <string name="scanner_title">Сканер штрихкодов</string>
+    <string name="scanner_hint">Наведите камеру на штрихкод</string>
+    <string name="scanner_success">Штрихкод обнаружен!</string>
+    <string name="camera_permission_required">Требуется разрешение на использование камеры</string>
+    <string name="grant_permission">Предоставить разрешение</string>
+
+    <!-- Shopping List -->
+    <string name="shopping_title">Список покупок</string>
+    <string name="add_to_shopping">Добавить в список</string>
+    <string name="empty_shopping">Список покупок пуст</string>
+    <string name="mark_bought">Отметить как купленное</string>
+    <string name="item_name">Название товара</string>
+    <string name="quantity">Количество</string>
+
+    <!-- Profile Screen -->
+    <string name="profile_title">Профиль</string>
+    <string name="sign_in">Войти</string>
+    <string name="sign_up">Регистрация</string>
+    <string name="sign_out">Выйти</string>
+    <string name="email">Email</string>
+    <string name="password">Пароль</string>
+    <string name="confirm_password">Подтвердите пароль</string>
+    <string name="forgot_password">Забыли пароль?</string>
+
+    <!-- Notifications Settings -->
+    <string name="notifications_settings">Настройки уведомлений</string>
+    <string name="notify_7_days">Уведомлять за 7 дней</string>
+    <string name="notify_3_days">Уведомлять за 3 дня</string>
+    <string name="notify_1_day">Уведомлять за 24 часа</string>
+    <string name="notification_title">Продукт скоро испортится</string>
+    <string name="notification_message">%s - осталось %d дней</string>
+
+    <!-- Errors -->
+    <string name="error_empty_field">Это поле не может быть пустым</string>
+    <string name="error_invalid_email">Неверный формат email</string>
+    <string name="error_passwords_not_match">Пароли не совпадают</string>
+    <string name="error_network">Ошибка сети. Проверьте подключение к интернету</string>
+    <string name="error_auth_failed">Ошибка авторизации</string>
+    <string name="error_generic">Произошла ошибка. Попробуйте снова</string>
+
+    <!-- Success Messages -->
+    <string name="success_product_added">Продукт добавлен</string>
+    <string name="success_product_updated">Продукт обновлен</string>
+    <string name="success_product_deleted">Продукт удален</string>
+    <string name="success_signed_in">Вы успешно вошли</string>
+
+    <!-- Dialogs -->
+    <string name="dialog_delete_title">Удалить продукт?</string>
+    <string name="dialog_delete_message">Вы уверены, что хотите удалить этот продукт?</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+
+    <!-- Date Format -->
+    <string name="date_format">dd.MM.yyyy</string>
+    <string name="select_date">Выберите дату</string>
 </resources>
