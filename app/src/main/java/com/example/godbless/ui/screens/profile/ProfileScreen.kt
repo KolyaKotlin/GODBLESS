@@ -1,5 +1,6 @@
 package com.example.godbless.ui.screens.profile
 
+import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -15,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -350,12 +352,15 @@ fun StatItem(
 
 @Composable
 fun AdditionalSettings() {
+    val settingsManager = NeprosrochApp.instance.settingsManager
+    val context = LocalContext.current
+    val activity = context as? Activity
+
     var showThemeDialog by remember { mutableStateOf(false) }
     var showLanguageDialog by remember { mutableStateOf(false) }
-    var showBackupDialog by remember { mutableStateOf(false) }
 
-    var selectedTheme by remember { mutableStateOf("Системная") }
-    var selectedLanguage by remember { mutableStateOf("Русский") }
+    var selectedTheme by remember { mutableStateOf(settingsManager.getTheme()) }
+    var selectedLanguage by remember { mutableStateOf(settingsManager.getLanguage()) }
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -397,15 +402,6 @@ fun AdditionalSettings() {
                 subtitle = selectedLanguage,
                 onClick = { showLanguageDialog = true }
             )
-
-            Divider(modifier = Modifier.padding(vertical = 8.dp))
-
-            SettingItem(
-                icon = Icons.Default.Backup,
-                title = "Резервное копирование",
-                subtitle = "Создать резервную копию данных",
-                onClick = { showBackupDialog = true }
-            )
         }
     }
 
@@ -415,7 +411,10 @@ fun AdditionalSettings() {
             currentTheme = selectedTheme,
             onThemeSelected = { theme ->
                 selectedTheme = theme
+                settingsManager.setTheme(theme)
                 showThemeDialog = false
+                // Перезапускаем Activity для применения темы
+                activity?.recreate()
             },
             onDismiss = { showThemeDialog = false }
         )
@@ -427,16 +426,12 @@ fun AdditionalSettings() {
             currentLanguage = selectedLanguage,
             onLanguageSelected = { language ->
                 selectedLanguage = language
+                settingsManager.setLanguage(language)
                 showLanguageDialog = false
+                // Перезапускаем Activity для применения языка
+                activity?.recreate()
             },
             onDismiss = { showLanguageDialog = false }
-        )
-    }
-
-    // Диалог резервного копирования
-    if (showBackupDialog) {
-        BackupDialog(
-            onDismiss = { showBackupDialog = false }
         )
     }
 }
@@ -740,7 +735,7 @@ fun LanguageSelectionDialog(
     onLanguageSelected: (String) -> Unit,
     onDismiss: () -> Unit
 ) {
-    val languages = listOf("Русский", "English", "Українська")
+    val languages = listOf("Русский", "English")
 
     AlertDialog(
         onDismissRequest = onDismiss,

@@ -38,15 +38,16 @@ class ExpiryNotificationWorker(
         products.forEach { product ->
             val daysUntilExpiry = product.getDaysUntilExpiry()
 
-            val shouldNotify = when (daysUntilExpiry) {
-                7 -> preferences.notifySevenDays
-                3 -> preferences.notifyThreeDays
-                1 -> preferences.notifyOneDay
-                else -> false
+            // Определяем тип уведомления (используем диапазоны для надежности)
+            val notificationType = when {
+                daysUntilExpiry in 6..7 && preferences.notifySevenDays -> 7
+                daysUntilExpiry in 2..3 && preferences.notifyThreeDays -> 3
+                daysUntilExpiry in 0..1 && preferences.notifyOneDay -> 1
+                else -> null
             }
 
-            if (shouldNotify) {
-                sendNotification(product.name, daysUntilExpiry, product.id.toInt())
+            if (notificationType != null) {
+                sendNotification(product.name, notificationType, product.id.toInt())
             }
         }
 
