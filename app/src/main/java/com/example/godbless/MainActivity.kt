@@ -7,6 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -21,22 +22,48 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.godbless.data.SettingsManager
 import com.example.godbless.ui.navigation.Screen
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.godbless.ui.screens.auth.AuthScreen
 import com.example.godbless.ui.screens.home.HomeScreen
 import com.example.godbless.ui.screens.profile.ProfileScreen
 import com.example.godbless.ui.screens.scanner.ScannerScreen
 import com.example.godbless.ui.screens.shopping.ShoppingScreen
+import com.example.godbless.ui.screens.shopping.ShoppingViewModel
+import com.example.godbless.ui.screens.shopping.ShoppingViewModelFactory
 import com.example.godbless.ui.theme.GODBLESSTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            GODBLESSTheme {
+            AppThemeWrapper {
                 MainApp()
             }
         }
+    }
+}
+
+@Composable
+fun AppThemeWrapper(content: @Composable () -> Unit) {
+    val settingsManager = NeprosrochApp.instance.settingsManager
+    var savedTheme by remember { mutableStateOf(settingsManager.getTheme()) }
+    val isSystemDark = isSystemInDarkTheme()
+
+    // Обновляем тему каждый раз при ребилде
+    LaunchedEffect(Unit) {
+        savedTheme = settingsManager.getTheme()
+    }
+
+    val darkTheme = when (savedTheme) {
+        SettingsManager.THEME_LIGHT -> false
+        SettingsManager.THEME_DARK -> true
+        else -> isSystemDark // THEME_SYSTEM
+    }
+
+    GODBLESSTheme(darkTheme = darkTheme) {
+        content()
     }
 }
 
@@ -91,6 +118,11 @@ fun MainScreen(rootNavController: NavHostController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
+    val shoppingViewModel: ShoppingViewModel = viewModel(
+        factory = ShoppingViewModelFactory(NeprosrochApp.instance.shoppingRepository)
+    )
+    val shoppingItems by shoppingViewModel.shoppingItems.collectAsState()
+
     Scaffold(
         bottomBar = {
             if (currentRoute in listOf(
@@ -100,7 +132,11 @@ fun MainScreen(rootNavController: NavHostController) {
                     Screen.Profile.route
                 )
             ) {
-                BottomNavigationBar(navController, currentRoute)
+                BottomNavigationBar(
+                    navController = navController,
+                    currentRoute = currentRoute,
+                    shoppingItemsCount = shoppingItems.size
+                )
             }
         }
     ) { paddingValues ->
@@ -132,7 +168,8 @@ fun MainScreen(rootNavController: NavHostController) {
 @Composable
 fun BottomNavigationBar(
     navController: NavHostController,
-    currentRoute: String?
+    currentRoute: String?,
+    shoppingItemsCount: Int = 0
 ) {
     NavigationBar {
         NavigationBarItem(
@@ -156,7 +193,19 @@ fun BottomNavigationBar(
             }
         )
         NavigationBarItem(
-            icon = { Icon(Icons.Default.ShoppingCart, contentDescription = null) },
+            icon = {
+                BadgedBox(
+                    badge = {
+                        if (shoppingItemsCount > 0) {
+                            Badge {
+                                Text(shoppingItemsCount.toString())
+                            }
+                        }
+                    }
+                ) {
+                    Icon(Icons.Default.ShoppingCart, contentDescription = null)
+                }
+            },
             label = { Text(stringResource(R.string.nav_shopping)) },
             selected = currentRoute == Screen.Shopping.route,
             onClick = {

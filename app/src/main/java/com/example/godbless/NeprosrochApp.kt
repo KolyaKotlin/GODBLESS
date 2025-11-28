@@ -9,6 +9,7 @@ import com.example.godbless.data.repository.OpenFoodFactsRepository
 import com.example.godbless.data.repository.PreferencesRepository
 import com.example.godbless.data.repository.ProductRepository
 import com.example.godbless.data.repository.ShoppingRepository
+import com.example.godbless.data.SettingsManager
 import com.example.godbless.workers.ExpiryNotificationWorker
 import java.util.concurrent.TimeUnit
 
@@ -19,6 +20,7 @@ class NeprosrochApp : Application() {
     lateinit var authRepository: AuthRepository
     lateinit var preferencesRepository: PreferencesRepository
     lateinit var openFoodFactsRepository: OpenFoodFactsRepository
+    lateinit var settingsManager: SettingsManager
 
     override fun onCreate() {
         super.onCreate()
@@ -45,6 +47,8 @@ class NeprosrochApp : Application() {
             api = RetrofitClient.openFoodFactsApi
         )
 
+        settingsManager = SettingsManager(applicationContext)
+
         // Setup WorkManager for notifications
         setupExpiryNotifications()
     }
@@ -52,18 +56,26 @@ class NeprosrochApp : Application() {
     private fun setupExpiryNotifications() {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.NOT_REQUIRED)
+            .setRequiresBatteryNotLow(false)
+            .setRequiresCharging(false)
             .build()
 
         val notificationWork = PeriodicWorkRequestBuilder<ExpiryNotificationWorker>(
             24, TimeUnit.HOURS
         )
             .setConstraints(constraints)
+            .setInitialDelay(1, TimeUnit.MINUTES) // Запускаем через 1 минуту после установки
+            .setBackoffCriteria(
+                BackoffPolicy.LINEAR,
+                PeriodicWorkRequest.MIN_BACKOFF_MILLIS,
+                TimeUnit.MILLISECONDS
+            )
             .build()
 
         WorkManager.getInstance(applicationContext)
             .enqueueUniquePeriodicWork(
                 ExpiryNotificationWorker.WORK_NAME,
-                ExistingPeriodicWorkPolicy.KEEP,
+                ExistingPeriodicWorkPolicy.REPLACE, // Заменяем старую работу на новую
                 notificationWork
             )
     }
