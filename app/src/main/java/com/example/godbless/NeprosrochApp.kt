@@ -67,7 +67,7 @@ class NeprosrochApp : Application() {
             .setInitialDelay(1, TimeUnit.MINUTES) // Запускаем через 1 минуту после установки
             .setBackoffCriteria(
                 BackoffPolicy.LINEAR,
-                PeriodicWorkRequest.MIN_BACKOFF_MILLIS,
+                WorkRequest.MIN_BACKOFF_MILLIS,
                 TimeUnit.MILLISECONDS
             )
             .build()
