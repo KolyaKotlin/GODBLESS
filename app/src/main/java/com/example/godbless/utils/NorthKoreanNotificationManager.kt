@@ -67,7 +67,7 @@ object NorthKoreanNotificationManager {
         "🌅 밝은 미래!"
     )
 
-    private val flagCombinations = listOf(
+    val flagCombinations = listOf(
         "🇰🇵",
         "🇰🇵🇰🇵",
         "🇰🇵🇵🇸",
@@ -271,7 +271,7 @@ fun NorthKoreanNotificationOverlay(
 
             // ОГРОМНЫЕ ФЛАГИ СНИЗУ (ДРУГИЕ)
             Text(
-                text = flagCombinations.random(),
+                text = NorthKoreanNotificationManager.flagCombinations.random(),
                 fontSize = 100.sp,
                 modifier = Modifier
                     .scale(scale * 1.1f)
