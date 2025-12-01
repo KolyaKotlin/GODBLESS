@@ -111,4 +111,69 @@
     <!-- Date Format -->
     <string name="date_format">dd.MM.yyyy</string>
     <string name="select_date">Выберите дату</string>
+
+    <!-- Common -->
+    <string name="products_count">%d продуктов</string>
+    <string name="products_count_one">%d продукт</string>
+    <string name="tap_plus_to_add">Нажмите + чтобы добавить первый продукт</string>
+    <string name="tap_plus_to_add_item">Нажмите + чтобы добавить товар</string>
+    <string name="barcode_auto_scanned">Штрихкод будет отсканирован автоматически</string>
+    <string name="point_camera_to_barcode">Наведите камеру на штрихкод</string>
+
+    <!-- Product Status -->
+    <string name="status_expired">Просрочен</string>
+    <string name="status_today">Сегодня!</string>
+    <string name="status_urgent">Срочно!</string>
+    <string name="status_good">В порядке</string>
+
+    <!-- Shopping -->
+    <string name="need_to_buy">Нужно купить (%d)</string>
+    <string name="purchased">Куплено (%d)</string>
+    <string name="purchased_mark">✓ Куплено</string>
+    <string name="not_purchased">Не куплено</string>
+    <string name="example_milk_bread">Например: Молоко, Хлеб...</string>
+    <string name="example_quantity">Например: 2 шт, 1 л...</string>
+
+    <!-- Scanner Dialog -->
+    <string name="scanned_barcode">Отсканирован штрихкод</string>
+    <string name="searching_openfoodfacts">Поиск в базе OpenFoodFacts...</string>
+    <string name="product_found">Продукт найден в базе!</string>
+    <string name="product_not_found">Продукт не найден. Введите название вручную.</string>
+    <string name="select_from_found">Выберите из найденных:</string>
+    <string name="unknown">Неизвестно</string>
+    <string name="example_product_milk">Например: Молоко</string>
+
+    <!-- Date Input -->
+    <string name="date_input_method">Способ указания срока годности:</string>
+    <string name="days_mode">Дни</string>
+    <string name="dates_mode">Даты</string>
+    <string name="expiry_days">Срок годности (дней)</string>
+    <string name="production_date">Дата производства (ДД.MM.ГГГГ)</string>
+    <string name="expiration_date">Дата истечения (ДД.MM.ГГГГ)</string>
+    <string name="date_example">01.01.2024</string>
+    <string name="date_example_end">31.12.2024</string>
+    <string name="add_button">Добавить</string>
+
+    <!-- Settings & Profile -->
+    <string name="additional_settings">Дополнительно</string>
+    <string name="theme_setting">Тема оформления</string>
+    <string name="language_setting">Язык</string>
+    <string name="about_app">О приложении</string>
+    <string name="version">Версия</string>
+    <string name="developer">Разработчик</string>
+    <string name="theme_light">Светлая</string>
+    <string name="theme_dark">Темная</string>
+    <string name="theme_system">Системная</string>
+    <string name="select_theme">Выберите тему</string>
+    <string name="select_language">Выберите язык</string>
+
+    <!-- Auth Screen -->
+    <string name="app_subtitle">Контроль сроков годности продуктов</string>
+    <string name="auth_title_signin">Вход</string>
+    <string name="auth_title_signup">Регистрация</string>
+    <string name="signin_button">Войти</string>
+    <string name="signup_button">Зарегистрироваться</string>
+    <string name="switch_to_signup">Нет аккаунта? Зарегистрируйтесь</string>
+    <string name="switch_to_signin">Уже есть аккаунт? Войдите</string>
+    <string name="auth_benefits">Отслеживайте сроки годности продуктов\nПолучайте уведомления вовремя\nНе выбрасывайте деньги на ветер!</string>
 </resources>
