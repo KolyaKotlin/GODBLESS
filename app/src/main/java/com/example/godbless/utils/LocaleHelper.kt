@@ -22,7 +22,6 @@ object LocaleHelper {
             SettingsManager.LANG_RUSSIAN -> Locale("ru")
             SettingsManager.LANG_ENGLISH -> Locale("en")
             SettingsManager.LANG_CHINESE -> Locale("zh")
-            SettingsManager.LANG_NORTH_KOREAN -> Locale("ko") // Корейский
             else -> Locale("ru") // По умолчанию русский
         }
     }

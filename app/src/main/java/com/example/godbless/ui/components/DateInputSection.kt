@@ -8,8 +8,10 @@ import androidx.compose.material.icons.filled.Event
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.godbless.R
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -47,13 +49,13 @@ fun DateInputSection(
             FilterChip(
                 selected = inputMode == DateInputMode.DAYS_COUNT,
                 onClick = { inputMode = DateInputMode.DAYS_COUNT },
-                label = { Text("Кол-во дней") },
+                label = { Text(stringResource(R.string.num_days)) },
                 modifier = Modifier.weight(1f)
             )
             FilterChip(
                 selected = inputMode == DateInputMode.DATE_RANGE,
                 onClick = { inputMode = DateInputMode.DATE_RANGE },
-                label = { Text("Даты") },
+                label = { Text(stringResource(R.string.dates)) },
                 modifier = Modifier.weight(1f)
             )
         }
@@ -72,8 +74,8 @@ fun DateInputSection(
                             onDaysCalculated(days)
                         }
                     },
-                    label = { Text("Срок годности (дней)") },
-                    placeholder = { Text("7") },
+                    label = { Text(stringResource(R.string.expiry_days)) },
+                    placeholder = { Text(stringResource(R.string.placeholder_7)) },
                     leadingIcon = {
                         Icon(
                             Icons.Default.Event,
@@ -109,13 +111,13 @@ fun DateInputSection(
                         ) {
                             Column {
                                 Text(
-                                    "Дата выработки",
+                                    stringResource(R.string.production_date_short),
                                     style = MaterialTheme.typography.labelMedium,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
-                                    productionDate?.let { dateFormat.format(it) } ?: "Не выбрана",
+                                    productionDate?.let { dateFormat.format(it) } ?: stringResource(R.string.not_selected),
                                     style = MaterialTheme.typography.bodyLarge,
                                     fontWeight = FontWeight.Medium
                                 )
@@ -142,13 +144,13 @@ fun DateInputSection(
                         ) {
                             Column {
                                 Text(
-                                    "Срок годности до",
+                                    stringResource(R.string.expiry_until),
                                     style = MaterialTheme.typography.labelMedium,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
-                                    expiryDate?.let { dateFormat.format(it) } ?: "Не выбрана",
+                                    expiryDate?.let { dateFormat.format(it) } ?: stringResource(R.string.not_selected),
                                     style = MaterialTheme.typography.bodyLarge,
                                     fontWeight = FontWeight.Medium
                                 )
@@ -176,7 +178,7 @@ fun DateInputSection(
                             )
                         ) {
                             Text(
-                                "Осталось: $days дней",
+                                stringResource(R.string.days_remaining, days),
                                 modifier = Modifier.padding(12.dp),
                                 style = MaterialTheme.typography.bodyLarge,
                                 fontWeight = FontWeight.Bold,
@@ -193,7 +195,7 @@ fun DateInputSection(
     // В реальной версии лучше использовать материал DatePicker, но это требует API 26+
     if (showProductionDatePicker) {
         DatePickerDialog(
-            title = "Дата выработки",
+            title = stringResource(R.string.production_date_short),
             onDismiss = { showProductionDatePicker = false },
             onDateSelected = { date ->
                 productionDate = date
@@ -204,7 +206,7 @@ fun DateInputSection(
 
     if (showExpiryDatePicker) {
         DatePickerDialog(
-            title = "Срок годности до",
+            title = stringResource(R.string.expiry_until),
             onDismiss = { showExpiryDatePicker = false },
             onDateSelected = { date ->
                 expiryDate = date
@@ -234,19 +236,19 @@ fun DatePickerDialog(
                 OutlinedTextField(
                     value = day,
                     onValueChange = { if (it.length <= 2 && it.all { c -> c.isDigit() }) day = it },
-                    label = { Text("День") },
+                    label = { Text(stringResource(R.string.day)) },
                     modifier = Modifier.weight(1f)
                 )
                 OutlinedTextField(
                     value = month,
                     onValueChange = { if (it.length <= 2 && it.all { c -> c.isDigit() }) month = it },
-                    label = { Text("Месяц") },
+                    label = { Text(stringResource(R.string.month)) },
                     modifier = Modifier.weight(1f)
                 )
                 OutlinedTextField(
                     value = year,
                     onValueChange = { if (it.length <= 4 && it.all { c -> c.isDigit() }) year = it },
-                    label = { Text("Год") },
+                    label = { Text(stringResource(R.string.year)) },
                     modifier = Modifier.weight(1.2f)
                 )
             }
@@ -268,12 +270,12 @@ fun DatePickerDialog(
                 },
                 enabled = day.isNotBlank() && month.isNotBlank() && year.isNotBlank()
             ) {
-                Text("OK")
+                Text(stringResource(R.string.ok))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Отмена")
+                Text(stringResource(R.string.cancel))
             }
         }
     )
