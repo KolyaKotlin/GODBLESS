@@ -1,0 +1,115 @@
+<resources>
+    <string name="app_name">위대한 신선도 추적기!</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">주페지</string>
+    <string name="nav_scanner">스캐너</string>
+    <string name="nav_shopping">쇼핑</string>
+    <string name="nav_profile">프로필</string>
+
+    <!-- Home Screen -->
+    <string name="home_title">나의 제품들</string>
+    <string name="add_product">제품 추가</string>
+    <string name="empty_products">아직 제품이 없습니다</string>
+    <string name="days_left">남은 일수: %d</string>
+    <string name="expired">만료됨</string>
+    <string name="expires_today">오늘 만료</string>
+    <string name="sort_by">정렬</string>
+    <string name="filter">필터</string>
+
+    <!-- Product Details -->
+    <string name="product_name">이름</string>
+    <string name="product_brand">상표</string>
+    <string name="product_category">범주</string>
+    <string name="product_location">보관 장소</string>
+    <string name="product_expiry">만료일</string>
+    <string name="product_barcode">바코드</string>
+    <string name="product_notes">메모</string>
+
+    <!-- Categories -->
+    <string name="category_dairy">유제품</string>
+    <string name="category_meat">고기</string>
+    <string name="category_fish">생선 및 해산물</string>
+    <string name="category_vegetables">채소</string>
+    <string name="category_fruits">과일</string>
+    <string name="category_bakery">빵류</string>
+    <string name="category_frozen">냉동식품</string>
+    <string name="category_canned">통조림</string>
+    <string name="category_beverages">음료</string>
+    <string name="category_other">기타</string>
+
+    <!-- Storage Locations -->
+    <string name="location_fridge">냉장고</string>
+    <string name="location_freezer">냉동고</string>
+    <string name="location_pantry">식료품 저장실</string>
+    <string name="location_counter">작업대</string>
+
+    <!-- Add/Edit Product -->
+    <string name="add_product_title">제품 추가</string>
+    <string name="edit_product_title">제품 편집</string>
+    <string name="save">저장</string>
+    <string name="cancel">취소</string>
+    <string name="delete">삭제</string>
+    <string name="scan_barcode">바코드 스캔</string>
+    <string name="enter_manually">수동 입력</string>
+    <string name="search_openfoodfacts">OpenFoodFacts 검색</string>
+    <string name="select_product">제품 선택</string>
+
+    <!-- Scanner Screen -->
+    <string name="scanner_title">바코드 스캐너</string>
+    <string name="scanner_hint">카메라를 바코드에 맞추세요</string>
+    <string name="scanner_searching">검색 중...</string>
+    <string name="scanner_found">제품을 찾았습니다!</string>
+    <string name="scanner_not_found">제품을 찾을 수 없습니다</string>
+
+    <!-- Shopping List -->
+    <string name="shopping_title">쇼핑 목록</string>
+    <string name="add_to_shopping">쇼핑 목록에 추가</string>
+    <string name="empty_shopping">쇼핑 목록이 비어 있습니다</string>
+    <string name="mark_purchased">구매 완료 표시</string>
+    <string name="clear_purchased">구매 완료 항목 지우기</string>
+    <string name="item_name">항목 이름</string>
+    <string name="quantity">수량</string>
+
+    <!-- Profile Screen -->
+    <string name="profile_title">프로필</string>
+    <string name="sign_in">로그인</string>
+    <string name="sign_up">등록</string>
+    <string name="sign_out">로그아웃</string>
+    <string name="email">이메일</string>
+    <string name="password">비밀번호</string>
+    <string name="confirm_password">비밀번호 확인</string>
+
+    <!-- Settings -->
+    <string name="settings_title">설정</string>
+    <string name="notifications_settings">알림 설정</string>
+    <string name="notify_7_days">7일 전 알림</string>
+    <string name="notify_3_days">3일 전 알림</string>
+    <string name="notify_1_day">1일 전 알림</string>
+    <string name="language_settings">언어</string>
+    <string name="theme_settings">테마</string>
+    <string name="about">정보</string>
+
+    <!-- Errors -->
+    <string name="error_generic">오류가 발생했습니다</string>
+    <string name="error_network">네트워크 오류</string>
+    <string name="error_auth">인증 오류</string>
+    <string name="error_empty_field">이 필드는 비워둘 수 없습니다</string>
+    <string name="error_invalid_email">잘못된 이메일 주소</string>
+    <string name="error_weak_password">비밀번호가 너무 약합니다</string>
+    <string name="error_passwords_mismatch">비밀번호가 일치하지 않습니다</string>
+
+    <!-- Notifications -->
+    <string name="notification_channel_name">만료 알림</string>
+    <string name="notification_channel_description">제품 만료에 대한 알림</string>
+    <string name="notification_title_expiring">곧 만료됩니다</string>
+    <string name="notification_title_expired">만료됨</string>
+    <string name="notification_message_expiring">%s이(가) %d일 후에 만료됩니다</string>
+    <string name="notification_message_expired">%s이(가) 만료되었습니다</string>
+
+    <!-- Confirmation -->
+    <string name="delete_product_confirm">이 제품을 삭제하시겠습니까?</string>
+    <string name="delete_shopping_item_confirm">이 항목을 삭제하시겠습니까?</string>
+    <string name="yes">예</string>
+    <string name="no">아니오</string>
+</resources>
