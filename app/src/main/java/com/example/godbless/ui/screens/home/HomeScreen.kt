@@ -15,12 +15,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -65,27 +67,81 @@ fun HomeScreen(
         }
     }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(stringResource(R.string.home_title)) }
-            )
-        },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = { showAddProductDialog = true },
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary,
-                shape = RoundedCornerShape(16.dp)
-            ) {
-                Icon(
-                    Icons.Default.Add,
-                    contentDescription = stringResource(R.string.add_product),
-                    modifier = Modifier.size(28.dp)
+    // Анимация для FAB
+    val infiniteTransition = rememberInfiniteTransition(label = "fab")
+    val fabScale by infiniteTransition.animateFloat(
+        initialValue = 1f,
+        targetValue = 1.1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1500, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "fab_scale"
+    )
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Gradient background
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp)
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            com.example.godbless.ui.theme.GradientStart,
+                            com.example.godbless.ui.theme.GradientMiddle,
+                            com.example.godbless.ui.theme.GradientEnd.copy(alpha = 0.3f)
+                        )
+                    )
                 )
+        )
+
+        Scaffold(
+            containerColor = Color.Transparent,
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Column {
+                            Text(
+                                stringResource(R.string.home_title),
+                                style = MaterialTheme.typography.headlineMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White
+                            )
+                            Text(
+                                text = "${products.size} ${if (products.size == 1) "продукт" else "продуктов"}",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = Color.White.copy(alpha = 0.8f)
+                            )
+                        }
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = Color.Transparent
+                    )
+                )
+            },
+            floatingActionButton = {
+                FloatingActionButton(
+                    onClick = { showAddProductDialog = true },
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                    shape = RoundedCornerShape(20.dp),
+                    modifier = Modifier
+                        .scale(if (products.isEmpty()) fabScale else 1f)
+                        .shadow(
+                            elevation = 8.dp,
+                            shape = RoundedCornerShape(20.dp),
+                            spotColor = MaterialTheme.colorScheme.primary
+                        )
+                ) {
+                    Icon(
+                        Icons.Default.Add,
+                        contentDescription = stringResource(R.string.add_product),
+                        modifier = Modifier.size(32.dp)
+                    )
+                }
             }
-        }
-    ) { padding ->
+        ) { padding ->
         if (isLoading && products.isEmpty()) {
             Box(
                 modifier = Modifier
@@ -102,11 +158,45 @@ fun HomeScreen(
                     .padding(padding),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = stringResource(R.string.empty_products),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier.padding(32.dp)
+                ) {
+                    // Animated empty state icon
+                    val rotation by infiniteTransition.animateFloat(
+                        initialValue = -10f,
+                        targetValue = 10f,
+                        animationSpec = infiniteRepeatable(
+                            animation = tween(2000, easing = FastOutSlowInEasing),
+                            repeatMode = RepeatMode.Reverse
+                        ),
+                        label = "rotation"
+                    )
+
+                    Icon(
+                        Icons.Default.ShoppingBag,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(140.dp)
+                            .rotate(rotation),
+                        tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)
+                    )
+                    Spacer(modifier = Modifier.height(32.dp))
+                    Text(
+                        text = stringResource(R.string.empty_products),
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Text(
+                        text = "Нажмите + чтобы добавить первый продукт",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
         } else {
             LazyColumn(
@@ -138,6 +228,7 @@ fun HomeScreen(
                     )
                 }
             }
+        }
         }
     }
 
@@ -377,12 +468,23 @@ fun ProductCard(
     val infiniteTransition = rememberInfiniteTransition(label = "pulse")
     val pulseScale by infiniteTransition.animateFloat(
         initialValue = 1f,
-        targetValue = if (product.isExpired()) 1.05f else 1f,
+        targetValue = if (product.isExpired()) 1.03f else 1f,
         animationSpec = infiniteRepeatable(
-            animation = tween(1000, easing = FastOutSlowInEasing),
+            animation = tween(1200, easing = FastOutSlowInEasing),
             repeatMode = RepeatMode.Reverse
         ),
         label = "pulse"
+    )
+
+    // Анимация свечения для критических продуктов
+    val glowAlpha by infiniteTransition.animateFloat(
+        initialValue = 0.3f,
+        targetValue = if (product.isExpired() || product.getDaysUntilExpiry() <= 1) 0.7f else 0.3f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1500, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "glow"
     )
 
     Card(
@@ -390,12 +492,13 @@ fun ProductCard(
             .fillMaxWidth()
             .scale(if (product.isExpired()) pulseScale else 1f)
             .shadow(
-                elevation = if (product.isExpired()) 8.dp else 2.dp,
-                shape = RoundedCornerShape(16.dp),
-                spotColor = statusColor.copy(alpha = 0.3f)
+                elevation = 6.dp,
+                shape = RoundedCornerShape(24.dp),
+                spotColor = statusColor.copy(alpha = glowAlpha),
+                ambientColor = statusColor.copy(alpha = 0.2f)
             )
             .clickable { isExpanded = !isExpanded },
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         )
@@ -404,18 +507,21 @@ fun ProductCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(
-                    brush = Brush.horizontalGradient(
+                    brush = Brush.linearGradient(
                         colors = listOf(
-                            statusColor.copy(alpha = 0.08f),
+                            statusColor.copy(alpha = 0.12f),
+                            MaterialTheme.colorScheme.surface,
                             MaterialTheme.colorScheme.surface
-                        )
+                        ),
+                        start = androidx.compose.ui.geometry.Offset(0f, 0f),
+                        end = androidx.compose.ui.geometry.Offset(1000f, 500f)
                     )
                 )
         ) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
+                    .padding(20.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.Top
             ) {
@@ -424,19 +530,31 @@ fun ProductCard(
                     modifier = Modifier.weight(1f),
                     verticalAlignment = Alignment.Top
                 ) {
-                    // Статус иконка с анимацией
+                    // Статус иконка с анимацией и градиентом
                     Box(
                         modifier = Modifier
-                            .size(56.dp)
+                            .size(64.dp)
+                            .shadow(
+                                elevation = 4.dp,
+                                shape = CircleShape,
+                                spotColor = statusColor.copy(alpha = 0.5f)
+                            )
                             .clip(CircleShape)
-                            .background(statusColor.copy(alpha = 0.15f)),
+                            .background(
+                                brush = Brush.radialGradient(
+                                    colors = listOf(
+                                        statusColor.copy(alpha = 0.25f),
+                                        statusColor.copy(alpha = 0.1f)
+                                    )
+                                )
+                            ),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
                             imageVector = statusIcon,
                             contentDescription = null,
                             tint = statusColor,
-                            modifier = Modifier.size(32.dp)
+                            modifier = Modifier.size(36.dp)
                         )
                     }
 

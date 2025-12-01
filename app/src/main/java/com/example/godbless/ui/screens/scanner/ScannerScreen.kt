@@ -8,6 +8,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
+import androidx.compose.animation.core.*
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -20,6 +22,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -124,55 +128,162 @@ fun ScannerScreen(
                     }
                 )
 
-                // Overlay с прицелом
+                // Futuristic overlay с анимированным прицелом
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
+                    // Animated scan line
+                    val infiniteTransition = rememberInfiniteTransition(label = "scan")
+                    val scanLineY by infiniteTransition.animateFloat(
+                        initialValue = -75f,
+                        targetValue = 75f,
+                        animationSpec = infiniteRepeatable(
+                            animation = tween(2000, easing = LinearEasing),
+                            repeatMode = RepeatMode.Restart
+                        ),
+                        label = "scan_line"
+                    )
+
+                    val cornerAlpha by infiniteTransition.animateFloat(
+                        initialValue = 0.5f,
+                        targetValue = 1f,
+                        animationSpec = infiniteRepeatable(
+                            animation = tween(1000, easing = FastOutSlowInEasing),
+                            repeatMode = RepeatMode.Reverse
+                        ),
+                        label = "corner_alpha"
+                    )
+
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier.padding(32.dp)
                     ) {
                         Text(
                             text = "Наведите камеру на штрихкод",
-                            style = MaterialTheme.typography.titleMedium,
+                            style = MaterialTheme.typography.titleLarge,
                             color = Color.White,
                             fontWeight = FontWeight.Bold,
                             textAlign = TextAlign.Center,
                             modifier = Modifier
-                                .background(
-                                    Color.Black.copy(alpha = 0.7f),
-                                    RoundedCornerShape(12.dp)
-                                )
-                                .padding(16.dp)
-                        )
-
-                        Spacer(modifier = Modifier.height(32.dp))
-
-                        // Прицел для сканирования
-                        Box(
-                            modifier = Modifier
-                                .size(250.dp, 150.dp)
-                                .border(
-                                    width = 4.dp,
-                                    color = MaterialTheme.colorScheme.primary,
+                                .shadow(
+                                    elevation = 8.dp,
                                     shape = RoundedCornerShape(16.dp)
                                 )
+                                .background(
+                                    Color.Black.copy(alpha = 0.8f),
+                                    RoundedCornerShape(16.dp)
+                                )
+                                .padding(20.dp)
                         )
 
-                        Spacer(modifier = Modifier.height(32.dp))
+                        Spacer(modifier = Modifier.height(40.dp))
+
+                        // Futuristic scan target with animated corners
+                        Box(
+                            modifier = Modifier.size(280.dp, 180.dp)
+                        ) {
+                            // Corner brackets
+                            Canvas(modifier = Modifier.fillMaxSize()) {
+                                val cornerSize = 40f
+                                val strokeWidth = 8f
+                                val color = androidx.compose.ui.graphics.Color(0xFF6366F1)
+                                    .copy(alpha = cornerAlpha)
+
+                                // Top-left corner
+                                drawLine(
+                                    color = color,
+                                    start = androidx.compose.ui.geometry.Offset(0f, cornerSize),
+                                    end = androidx.compose.ui.geometry.Offset(0f, 0f),
+                                    strokeWidth = strokeWidth
+                                )
+                                drawLine(
+                                    color = color,
+                                    start = androidx.compose.ui.geometry.Offset(0f, 0f),
+                                    end = androidx.compose.ui.geometry.Offset(cornerSize, 0f),
+                                    strokeWidth = strokeWidth
+                                )
+
+                                // Top-right corner
+                                drawLine(
+                                    color = color,
+                                    start = androidx.compose.ui.geometry.Offset(size.width - cornerSize, 0f),
+                                    end = androidx.compose.ui.geometry.Offset(size.width, 0f),
+                                    strokeWidth = strokeWidth
+                                )
+                                drawLine(
+                                    color = color,
+                                    start = androidx.compose.ui.geometry.Offset(size.width, 0f),
+                                    end = androidx.compose.ui.geometry.Offset(size.width, cornerSize),
+                                    strokeWidth = strokeWidth
+                                )
+
+                                // Bottom-left corner
+                                drawLine(
+                                    color = color,
+                                    start = androidx.compose.ui.geometry.Offset(0f, size.height - cornerSize),
+                                    end = androidx.compose.ui.geometry.Offset(0f, size.height),
+                                    strokeWidth = strokeWidth
+                                )
+                                drawLine(
+                                    color = color,
+                                    start = androidx.compose.ui.geometry.Offset(0f, size.height),
+                                    end = androidx.compose.ui.geometry.Offset(cornerSize, size.height),
+                                    strokeWidth = strokeWidth
+                                )
+
+                                // Bottom-right corner
+                                drawLine(
+                                    color = color,
+                                    start = androidx.compose.ui.geometry.Offset(size.width - cornerSize, size.height),
+                                    end = androidx.compose.ui.geometry.Offset(size.width, size.height),
+                                    strokeWidth = strokeWidth
+                                )
+                                drawLine(
+                                    color = color,
+                                    start = androidx.compose.ui.geometry.Offset(size.width, size.height - cornerSize),
+                                    end = androidx.compose.ui.geometry.Offset(size.width, size.height),
+                                    strokeWidth = strokeWidth
+                                )
+                            }
+
+                            // Animated scan line
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(3.dp)
+                                    .offset(y = scanLineY.dp)
+                                    .align(Alignment.Center)
+                                    .background(
+                                        brush = Brush.horizontalGradient(
+                                            colors = listOf(
+                                                Color.Transparent,
+                                                com.example.godbless.ui.theme.Primary.copy(alpha = 0.8f),
+                                                com.example.godbless.ui.theme.Secondary.copy(alpha = 0.8f),
+                                                Color.Transparent
+                                            )
+                                        )
+                                    )
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(40.dp))
 
                         Text(
                             text = "Штрихкод будет отсканирован автоматически",
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = MaterialTheme.typography.bodyLarge,
                             color = Color.White,
                             textAlign = TextAlign.Center,
                             modifier = Modifier
+                                .shadow(
+                                    elevation = 8.dp,
+                                    shape = RoundedCornerShape(12.dp)
+                                )
                                 .background(
-                                    Color.Black.copy(alpha = 0.7f),
+                                    Color.Black.copy(alpha = 0.8f),
                                     RoundedCornerShape(12.dp)
                                 )
-                                .padding(12.dp)
+                                .padding(16.dp)
                         )
                     }
                 }
