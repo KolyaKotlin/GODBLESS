@@ -143,12 +143,14 @@ fun MainScreen(rootNavController: NavHostController) {
     val shoppingItems by shoppingViewModel.shoppingItems.collectAsState()
 
     // Северокорейские уведомления
+    var nkNotificationFlags by remember { mutableStateOf<String?>(null) }
     var nkNotificationMessage by remember { mutableStateOf<String?>(null) }
 
     // Запускаем уведомления если выбран северокорейский язык
     DisposableEffect(Unit) {
         if (NorthKoreanNotificationManager.isNorthKoreanLanguageSelected(context)) {
-            NorthKoreanNotificationManager.startNotifications(context) { message ->
+            NorthKoreanNotificationManager.startNotifications(context) { flags, message ->
+                nkNotificationFlags = flags
                 nkNotificationMessage = message
             }
         }
@@ -203,8 +205,12 @@ fun MainScreen(rootNavController: NavHostController) {
         // Overlay для северокорейских уведомлений
         NorthKoreanNotificationOverlay(
             context = context,
+            flags = nkNotificationFlags,
             message = nkNotificationMessage,
-            onDismiss = { nkNotificationMessage = null }
+            onDismiss = {
+                nkNotificationFlags = null
+                nkNotificationMessage = null
+            }
         )
     }
 }
