@@ -281,17 +281,6 @@ fun AuthScreen(
                                 style = MaterialTheme.typography.bodyLarge
                             )
                         }
-
-                        // Кнопка "Войти без регистрации" (для тестирования)
-                        Spacer(modifier = Modifier.height(8.dp))
-                        OutlinedButton(
-                            onClick = { onAuthSuccess() },
-                            modifier = Modifier.fillMaxWidth(),
-                            enabled = !isLoading,
-                            shape = RoundedCornerShape(12.dp)
-                        ) {
-                            Text("Войти без регистрации")
-                        }
                     }
                 }
 

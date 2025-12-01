@@ -36,6 +36,7 @@ import com.example.godbless.domain.model.StorageLocation
 import com.example.godbless.ui.navigation.Screen
 import com.example.godbless.ui.screens.home.HomeViewModel
 import com.example.godbless.ui.screens.home.HomeViewModelFactory
+import com.example.godbless.utils.CategoryMapper
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
@@ -362,6 +363,8 @@ fun AddScannedProductDialog(
     LaunchedEffect(scannedProduct) {
         scannedProduct?.let { product ->
             productName = product.productName ?: ""
+            // Автоматически определяем категорию из данных OpenFoodFacts
+            selectedCategory = CategoryMapper.mapFromOpenFoodFacts(product.categories)
         }
     }
 

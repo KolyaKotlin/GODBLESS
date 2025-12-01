@@ -735,7 +735,7 @@ fun LanguageSelectionDialog(
     onLanguageSelected: (String) -> Unit,
     onDismiss: () -> Unit
 ) {
-    val languages = listOf("Русский", "English")
+    val languages = listOf("Русский", "English", "中文")
 
     AlertDialog(
         onDismissRequest = onDismiss,
