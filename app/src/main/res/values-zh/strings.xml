@@ -1,0 +1,114 @@
+<resources>
+    <string name="app_name">保鲜追踪！</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">主页</string>
+    <string name="nav_scanner">扫描仪</string>
+    <string name="nav_shopping">购物清单</string>
+    <string name="nav_profile">个人资料</string>
+
+    <!-- Home Screen -->
+    <string name="home_title">我的产品</string>
+    <string name="add_product">添加产品</string>
+    <string name="empty_products">您还没有产品</string>
+    <string name="days_left">剩余天数：%d</string>
+    <string name="expired">已过期</string>
+    <string name="expires_today">今天到期</string>
+    <string name="sort_by">排序</string>
+    <string name="filter">筛选</string>
+
+    <!-- Product Details -->
+    <string name="product_name">名称</string>
+    <string name="product_brand">品牌</string>
+    <string name="product_category">类别</string>
+    <string name="product_location">存储位置</string>
+    <string name="product_expiry">到期日期</string>
+    <string name="product_barcode">条形码</string>
+    <string name="product_notes">备注</string>
+
+    <!-- Categories -->
+    <string name="category_dairy">乳制品</string>
+    <string name="category_meat">肉类和家禽</string>
+    <string name="category_fish">鱼和海鲜</string>
+    <string name="category_vegetables">蔬菜</string>
+    <string name="category_fruits">水果</string>
+    <string name="category_bakery">烘焙产品</string>
+    <string name="category_frozen">冷冻食品</string>
+    <string name="category_canned">罐头食品</string>
+    <string name="category_beverages">饮料</string>
+    <string name="category_other">其他</string>
+
+    <!-- Storage Locations -->
+    <string name="location_fridge">冰箱</string>
+    <string name="location_freezer">冷冻室</string>
+    <string name="location_pantry">储藏室</string>
+    <string name="location_counter">台面</string>
+
+    <!-- Add/Edit Product -->
+    <string name="add_product_title">添加产品</string>
+    <string name="edit_product_title">编辑产品</string>
+    <string name="save">保存</string>
+    <string name="cancel">取消</string>
+    <string name="delete">删除</string>
+    <string name="scan_barcode">扫描条形码</string>
+    <string name="enter_manually">手动输入</string>
+    <string name="search_openfoodfacts">搜索 OpenFoodFacts</string>
+    <string name="select_product">选择产品</string>
+
+    <!-- Scanner Screen -->
+    <string name="scanner_title">条形码扫描仪</string>
+    <string name="scanner_hint">将相机对准条形码</string>
+    <string name="scanner_success">检测到条形码！</string>
+    <string name="camera_permission_required">需要相机权限</string>
+    <string name="grant_permission">授予权限</string>
+
+    <!-- Shopping List -->
+    <string name="shopping_title">购物清单</string>
+    <string name="add_to_shopping">添加到清单</string>
+    <string name="empty_shopping">购物清单为空</string>
+    <string name="mark_bought">标记为已购买</string>
+    <string name="item_name">商品名称</string>
+    <string name="quantity">数量</string>
+
+    <!-- Profile Screen -->
+    <string name="profile_title">个人资料</string>
+    <string name="sign_in">登录</string>
+    <string name="sign_up">注册</string>
+    <string name="sign_out">退出</string>
+    <string name="email">电子邮件</string>
+    <string name="password">密码</string>
+    <string name="confirm_password">确认密码</string>
+    <string name="forgot_password">忘记密码？</string>
+
+    <!-- Notifications Settings -->
+    <string name="notifications_settings">通知设置</string>
+    <string name="notify_7_days">提前7天通知</string>
+    <string name="notify_3_days">提前3天通知</string>
+    <string name="notify_1_day">提前24小时通知</string>
+    <string name="notification_title">产品即将过期</string>
+    <string name="notification_message">%s - 剩余%d天</string>
+
+    <!-- Errors -->
+    <string name="error_empty_field">此字段不能为空</string>
+    <string name="error_invalid_email">无效的电子邮件格式</string>
+    <string name="error_passwords_not_match">密码不匹配</string>
+    <string name="error_network">网络错误。请检查您的互联网连接</string>
+    <string name="error_auth_failed">身份验证失败</string>
+    <string name="error_generic">发生错误。请重试</string>
+
+    <!-- Success Messages -->
+    <string name="success_product_added">产品已添加</string>
+    <string name="success_product_updated">产品已更新</string>
+    <string name="success_product_deleted">产品已删除</string>
+    <string name="success_signed_in">登录成功</string>
+
+    <!-- Dialogs -->
+    <string name="dialog_delete_title">删除产品？</string>
+    <string name="dialog_delete_message">您确定要删除此产品吗？</string>
+    <string name="yes">是</string>
+    <string name="no">否</string>
+
+    <!-- Date Format -->
+    <string name="date_format">yyyy/MM/dd</string>
+    <string name="select_date">选择日期</string>
+</resources>

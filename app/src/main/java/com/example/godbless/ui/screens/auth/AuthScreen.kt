@@ -1,7 +1,9 @@
 package com.example.godbless.ui.screens.auth
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,6 +17,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -65,30 +70,83 @@ fun AuthScreen(
         }
     }
 
-    Scaffold { padding ->
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Animated gradient background
+        val infiniteTransition = rememberInfiniteTransition(label = "background")
+        val colorShift by infiniteTransition.animateFloat(
+            initialValue = 0f,
+            targetValue = 1f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(8000, easing = LinearEasing),
+                repeatMode = RepeatMode.Reverse
+            ),
+            label = "color_shift"
+        )
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
-        ) {
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            com.example.godbless.ui.theme.GradientStart.copy(alpha = 0.3f + colorShift * 0.2f),
+                            com.example.godbless.ui.theme.GradientMiddle.copy(alpha = 0.4f),
+                            com.example.godbless.ui.theme.GradientEnd.copy(alpha = 0.5f - colorShift * 0.2f),
+                            MaterialTheme.colorScheme.background
+                        )
+                    )
+                )
+        )
+
+        Scaffold(
+            containerColor = Color.Transparent
+        ) { padding ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .padding(padding)
                     .verticalScroll(rememberScrollState())
                     .padding(24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                // Логотип/Иконка приложения
+                // Логотип/Иконка приложения с анимацией
+                val logoScale by infiniteTransition.animateFloat(
+                    initialValue = 1f,
+                    targetValue = 1.05f,
+                    animationSpec = infiniteRepeatable(
+                        animation = tween(2000, easing = FastOutSlowInEasing),
+                        repeatMode = RepeatMode.Reverse
+                    ),
+                    label = "logo_scale"
+                )
+
                 Card(
-                    modifier = Modifier.size(120.dp),
-                    shape = RoundedCornerShape(24.dp),
+                    modifier = Modifier
+                        .size(140.dp)
+                        .scale(logoScale)
+                        .shadow(
+                            elevation = 16.dp,
+                            shape = RoundedCornerShape(32.dp),
+                            spotColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f)
+                        ),
+                    shape = RoundedCornerShape(32.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer
+                        containerColor = Color.White
                     )
                 ) {
                     Box(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(
+                                brush = Brush.linearGradient(
+                                    colors = listOf(
+                                        com.example.godbless.ui.theme.GradientStart,
+                                        com.example.godbless.ui.theme.GradientMiddle,
+                                        com.example.godbless.ui.theme.GradientEnd
+                                    )
+                                )
+                            ),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
@@ -120,12 +178,18 @@ fun AuthScreen(
 
                 Spacer(modifier = Modifier.height(40.dp))
 
-                // Форма авторизации
+                // Форма авторизации с glassmorphism
                 Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .shadow(
+                            elevation = 12.dp,
+                            shape = RoundedCornerShape(28.dp),
+                            spotColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)
+                        ),
+                    shape = RoundedCornerShape(28.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surface
+                        containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.95f)
                     )
                 ) {
                     Column(
@@ -234,7 +298,7 @@ fun AuthScreen(
 
                         Spacer(modifier = Modifier.height(24.dp))
 
-                        // Кнопка входа/регистрации
+                        // Кнопка входа/регистрации с градиентом
                         Button(
                             onClick = {
                                 if (isSignUp) {
@@ -245,19 +309,30 @@ fun AuthScreen(
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(56.dp),
+                                .height(60.dp)
+                                .shadow(
+                                    elevation = 8.dp,
+                                    shape = RoundedCornerShape(16.dp),
+                                    spotColor = MaterialTheme.colorScheme.primary
+                                ),
                             enabled = !isLoading && email.isNotBlank() && password.isNotBlank(),
-                            shape = RoundedCornerShape(12.dp)
+                            shape = RoundedCornerShape(16.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.primary
+                            )
                         ) {
                             if (isLoading) {
                                 CircularProgressIndicator(
-                                    modifier = Modifier.size(24.dp),
-                                    color = MaterialTheme.colorScheme.onPrimary
+                                    modifier = Modifier.size(28.dp),
+                                    color = MaterialTheme.colorScheme.onPrimary,
+                                    strokeWidth = 3.dp
                                 )
                             } else {
                                 Text(
                                     text = if (isSignUp) "Зарегистрироваться" else "Войти",
-                                    style = MaterialTheme.typography.titleMedium
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = MaterialTheme.typography.titleMedium.fontSize * 1.1f
                                 )
                             }
                         }
@@ -295,6 +370,7 @@ fun AuthScreen(
                     lineHeight = MaterialTheme.typography.bodyMedium.lineHeight * 1.5f
                 )
             }
+        }
         }
     }
 }
