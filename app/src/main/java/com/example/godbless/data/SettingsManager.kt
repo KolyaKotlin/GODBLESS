@@ -16,6 +16,7 @@ class SettingsManager(context: Context) {
 
         const val LANG_RUSSIAN = "Русский"
         const val LANG_ENGLISH = "English"
+        const val LANG_CHINESE = "中文" // Китайский
     }
 
     fun getTheme(): String {

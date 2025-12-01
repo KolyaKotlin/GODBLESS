@@ -33,15 +33,30 @@ import com.example.godbless.ui.screens.shopping.ShoppingScreen
 import com.example.godbless.ui.screens.shopping.ShoppingViewModel
 import com.example.godbless.ui.screens.shopping.ShoppingViewModelFactory
 import com.example.godbless.ui.theme.GODBLESSTheme
+import com.example.godbless.utils.LocaleHelper
+import android.content.Context
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Применяем сохранённый язык
+        val settingsManager = NeprosrochApp.instance.settingsManager
+        LocaleHelper.applyLanguage(this, settingsManager.getLanguage())
+
         setContent {
             AppThemeWrapper {
                 MainApp()
             }
         }
+    }
+
+    override fun attachBaseContext(newBase: Context?) {
+        val settingsManager = NeprosrochApp.instance.settingsManager
+        val context = newBase?.let {
+            LocaleHelper.setLocale(it, settingsManager.getLanguage())
+        }
+        super.attachBaseContext(context ?: newBase)
     }
 }
 
