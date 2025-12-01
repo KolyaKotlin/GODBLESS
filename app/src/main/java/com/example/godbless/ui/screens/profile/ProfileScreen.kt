@@ -363,29 +363,64 @@ fun AdditionalSettings() {
     var selectedLanguage by remember { mutableStateOf(settingsManager.getLanguage()) }
 
     Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(
+                elevation = 4.dp,
+                shape = RoundedCornerShape(20.dp),
+                spotColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
+            ),
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        )
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    brush = Brush.linearGradient(
+                        colors = listOf(
+                            MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.1f),
+                            MaterialTheme.colorScheme.surface
+                        )
+                    )
+                )
+                .padding(20.dp)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    Icons.Default.Settings,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary
-                )
-                Spacer(modifier = Modifier.width(8.dp))
+                Box(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .clip(CircleShape)
+                        .background(
+                            brush = Brush.linearGradient(
+                                colors = listOf(
+                                    com.example.godbless.ui.theme.GradientStart.copy(alpha = 0.2f),
+                                    com.example.godbless.ui.theme.GradientMiddle.copy(alpha = 0.2f)
+                                )
+                            )
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        Icons.Default.Settings,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
+                Spacer(modifier = Modifier.width(12.dp))
                 Text(
                     text = "Дополнительно",
-                    style = MaterialTheme.typography.titleMedium,
+                    style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold
                 )
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             SettingItem(
                 icon = Icons.Default.Palette,
@@ -394,7 +429,10 @@ fun AdditionalSettings() {
                 onClick = { showThemeDialog = true }
             )
 
-            Divider(modifier = Modifier.padding(vertical = 8.dp))
+            Divider(
+                modifier = Modifier.padding(vertical = 12.dp),
+                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
+            )
 
             SettingItem(
                 icon = Icons.Default.Language,
@@ -510,8 +548,6 @@ fun AboutSection() {
             InfoRow("Версия", "1.0.0")
             Divider(modifier = Modifier.padding(vertical = 8.dp))
             InfoRow("Разработчик", "GODBLESS Team")
-            Divider(modifier = Modifier.padding(vertical = 8.dp))
-            InfoRow("Описание", "НеПросрочь! - ваш помощник в контроле сроков годности продуктов")
         }
     }
 }
@@ -735,7 +771,7 @@ fun LanguageSelectionDialog(
     onLanguageSelected: (String) -> Unit,
     onDismiss: () -> Unit
 ) {
-    val languages = listOf("Русский", "English", "中文")
+    val languages = listOf("Русский", "English", "中文", "🇰🇵 조선말")
 
     AlertDialog(
         onDismissRequest = onDismiss,

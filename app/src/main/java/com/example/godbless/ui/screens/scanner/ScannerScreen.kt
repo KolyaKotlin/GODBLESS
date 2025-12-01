@@ -44,8 +44,10 @@ import com.example.godbless.utils.CategoryMapper
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
+import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
+import java.util.Locale
 import java.util.concurrent.Executors
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -463,7 +465,13 @@ fun AddScannedProductDialog(
     var productName by remember { mutableStateOf("") }
     var selectedCategory by remember { mutableStateOf(ProductCategory.OTHER) }
     var selectedLocation by remember { mutableStateOf(StorageLocation.FRIDGE) }
+
+    // Режим ввода даты: 0 = дни, 1 = производство+истечение, 2 = только истечение
+    var dateInputMode by remember { mutableStateOf(0) }
+
     var daysUntilExpiry by remember { mutableStateOf("7") }
+    var productionDate by remember { mutableStateOf("") }
+    var expirationDate by remember { mutableStateOf("") }
 
     var showCategoryMenu by remember { mutableStateOf(false) }
     var showLocationMenu by remember { mutableStateOf(false) }
@@ -683,29 +691,126 @@ fun AddScannedProductDialog(
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                OutlinedTextField(
-                    value = daysUntilExpiry,
-                    onValueChange = { if (it.all { char -> char.isDigit() }) daysUntilExpiry = it },
-                    label = { Text("Срок годности (дней)") },
-                    placeholder = { Text("7") },
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp)
+                // Выбор режима ввода даты
+                Text(
+                    "Способ указания срока годности:",
+                    style = MaterialTheme.typography.labelLarge,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(bottom = 8.dp)
                 )
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    // Кнопка "Дни"
+                    FilterChip(
+                        selected = dateInputMode == 0,
+                        onClick = { dateInputMode = 0 },
+                        label = { Text("Дни") },
+                        modifier = Modifier.weight(1f)
+                    )
+                    // Кнопка "Даты"
+                    FilterChip(
+                        selected = dateInputMode == 1,
+                        onClick = { dateInputMode = 1 },
+                        label = { Text("Даты") },
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                // Поля ввода в зависимости от режима
+                when (dateInputMode) {
+                    0 -> {
+                        // Режим "Дни"
+                        OutlinedTextField(
+                            value = daysUntilExpiry,
+                            onValueChange = { if (it.all { char -> char.isDigit() }) daysUntilExpiry = it },
+                            label = { Text("Срок годности (дней)") },
+                            placeholder = { Text("7") },
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(12.dp),
+                            leadingIcon = {
+                                Icon(
+                                    Icons.Default.CalendarToday,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
+                            }
+                        )
+                    }
+                    1 -> {
+                        // Режим "Даты производства и истечения"
+                        OutlinedTextField(
+                            value = productionDate,
+                            onValueChange = { productionDate = it },
+                            label = { Text("Дата производства (ДД.MM.ГГГГ)") },
+                            placeholder = { Text("01.01.2024") },
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(12.dp),
+                            leadingIcon = {
+                                Icon(
+                                    Icons.Default.Event,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.secondary
+                                )
+                            }
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        OutlinedTextField(
+                            value = expirationDate,
+                            onValueChange = { expirationDate = it },
+                            label = { Text("Дата истечения (ДД.MM.ГГГГ)") },
+                            placeholder = { Text("31.12.2024") },
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(12.dp),
+                            leadingIcon = {
+                                Icon(
+                                    Icons.Default.EventAvailable,
+                                    contentDescription = null,
+                                    tint = com.example.godbless.ui.theme.StatusRed
+                                )
+                            }
+                        )
+                    }
+                }
             }
         },
         confirmButton = {
             Button(
                 onClick = {
-                    if (productName.isNotBlank() && daysUntilExpiry.isNotBlank()) {
-                        val days = daysUntilExpiry.toIntOrNull() ?: 7
-                        val expiryDate = Calendar.getInstance().apply {
-                            add(Calendar.DAY_OF_YEAR, days)
-                        }.time
+                    if (productName.isNotBlank()) {
+                        val finalExpiryDate: Date? = when (dateInputMode) {
+                            0 -> {
+                                // Режим дней
+                                if (daysUntilExpiry.isNotBlank()) {
+                                    val days = daysUntilExpiry.toIntOrNull() ?: 7
+                                    Calendar.getInstance().apply {
+                                        add(Calendar.DAY_OF_YEAR, days)
+                                    }.time
+                                } else null
+                            }
+                            1 -> {
+                                // Режим дат
+                                if (expirationDate.isNotBlank()) {
+                                    parseDateString(expirationDate)
+                                } else null
+                            }
+                            else -> null
+                        }
 
-                        onAddProduct(productName, selectedCategory, selectedLocation, expiryDate)
+                        finalExpiryDate?.let { date ->
+                            onAddProduct(productName, selectedCategory, selectedLocation, date)
+                        }
                     }
                 },
-                enabled = productName.isNotBlank() && daysUntilExpiry.isNotBlank(),
+                enabled = when (dateInputMode) {
+                    0 -> productName.isNotBlank() && daysUntilExpiry.isNotBlank()
+                    1 -> productName.isNotBlank() && expirationDate.isNotBlank()
+                    else -> false
+                },
                 shape = RoundedCornerShape(12.dp)
             ) {
                 Text("Добавить", fontWeight = FontWeight.Bold)
@@ -740,4 +845,23 @@ fun getLocationName(location: StorageLocation): String = when (location) {
     StorageLocation.FREEZER -> "Морозилка"
     StorageLocation.PANTRY -> "Кладовая"
     StorageLocation.COUNTER -> "На столе"
+}
+
+fun parseDateString(dateStr: String): Date? {
+    return try {
+        val formats = listOf(
+            SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()),
+            SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()),
+            SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+        )
+        formats.firstNotNullOfOrNull { format ->
+            try {
+                format.parse(dateStr)
+            } catch (e: Exception) {
+                null
+            }
+        }
+    } catch (e: Exception) {
+        null
+    }
 }
