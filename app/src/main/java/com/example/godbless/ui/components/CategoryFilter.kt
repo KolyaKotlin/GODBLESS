@@ -15,6 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.godbless.R
 import com.example.godbless.domain.model.ProductCategory
+import com.example.godbless.ui.utils.getLocalizedName
 
 @Composable
 fun CategoryFilter(
@@ -76,7 +77,7 @@ fun CategoryFilter(
                     FilterChip(
                         selected = selectedCategory == category,
                         onClick = { onCategorySelected(category) },
-                        label = { Text(category.displayName) },
+                        label = { Text(category.getLocalizedName()) },
                         shape = RoundedCornerShape(20.dp)
                     )
                 }

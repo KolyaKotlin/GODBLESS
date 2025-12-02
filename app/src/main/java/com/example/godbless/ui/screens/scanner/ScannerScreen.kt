@@ -40,6 +40,7 @@ import com.example.godbless.R
 import com.example.godbless.domain.model.ProductCategory
 import com.example.godbless.domain.model.StorageLocation
 import com.example.godbless.ui.navigation.Screen
+import com.example.godbless.ui.utils.getLocalizedName
 import com.example.godbless.ui.screens.home.HomeViewModel
 import com.example.godbless.ui.screens.home.HomeViewModelFactory
 import com.example.godbless.utils.CategoryMapper
@@ -631,7 +632,7 @@ fun AddScannedProductDialog(
                     onExpandedChange = { showCategoryMenu = it }
                 ) {
                     OutlinedTextField(
-                        value = getCategoryName(selectedCategory),
+                        value = selectedCategory.getLocalizedName(),
                         onValueChange = {},
                         readOnly = true,
                         label = { Text(stringResource(R.string.category_label)) },
@@ -647,7 +648,7 @@ fun AddScannedProductDialog(
                     ) {
                         ProductCategory.values().forEach { category ->
                             DropdownMenuItem(
-                                text = { Text(getCategoryName(category)) },
+                                text = { Text(category.getLocalizedName()) },
                                 onClick = {
                                     selectedCategory = category
                                     showCategoryMenu = false
@@ -665,7 +666,7 @@ fun AddScannedProductDialog(
                     onExpandedChange = { showLocationMenu = it }
                 ) {
                     OutlinedTextField(
-                        value = getLocationName(selectedLocation),
+                        value = selectedLocation.getLocalizedName(),
                         onValueChange = {},
                         readOnly = true,
                         label = { Text(stringResource(R.string.storage_location_label)) },
@@ -681,7 +682,7 @@ fun AddScannedProductDialog(
                     ) {
                         StorageLocation.values().forEach { location ->
                             DropdownMenuItem(
-                                text = { Text(getLocationName(location)) },
+                                text = { Text(location.getLocalizedName()) },
                                 onClick = {
                                     selectedLocation = location
                                     showLocationMenu = false
@@ -827,26 +828,6 @@ fun AddScannedProductDialog(
             }
         }
     )
-}
-
-fun getCategoryName(category: ProductCategory): String = when (category) {
-    ProductCategory.DAIRY -> "Молочные продукты"
-    ProductCategory.MEAT -> "Мясо"
-    ProductCategory.FISH -> "Рыба"
-    ProductCategory.VEGETABLES -> "Овощи"
-    ProductCategory.FRUITS -> "Фрукты"
-    ProductCategory.BAKERY -> "Хлеб и выпечка"
-    ProductCategory.BEVERAGES -> "Напитки"
-    ProductCategory.FROZEN -> "Замороженное"
-    ProductCategory.CANNED -> "Консервы"
-    ProductCategory.OTHER -> "Другое"
-}
-
-fun getLocationName(location: StorageLocation): String = when (location) {
-    StorageLocation.FRIDGE -> "Холодильник"
-    StorageLocation.FREEZER -> "Морозилка"
-    StorageLocation.PANTRY -> "Кладовая"
-    StorageLocation.COUNTER -> "На столе"
 }
 
 fun parseDateString(dateStr: String): Date? {
