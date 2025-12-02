@@ -202,15 +202,6 @@
     <string name="switch_to_signin">Already have account? Sign in</string>
     <string name="auth_benefits">Track product expiry dates\nGet notifications on time\nDon\'t waste money!</string>
 
-    <!-- Product Status -->
-    <string name="status_expired">Expired</string>
-    <string name="status_today">Today!</string>
-    <string name="status_urgent">Urgent!</string>
-    <string name="status_ok">Good</string>
-    <string name="expired_days_ago">Expired %d days ago</string>
-    <string name="expires_today">Expires today!</string>
-    <string name="days_left">%d days left</string>
-
     <!-- Content Descriptions -->
     <string name="cd_toggle_flashlight">Toggle flashlight</string>
     <string name="cd_add_to_shopping">Add to shopping list</string>
