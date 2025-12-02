@@ -197,15 +197,6 @@
     <string name="switch_to_signin">已有账户？登录</string>
     <string name="auth_benefits">追踪产品保质期\n及时收到通知\n不浪费金钱！</string>
 
-    <!-- Product Status -->
-    <string name="status_expired">已过期</string>
-    <string name="status_today">今天！</string>
-    <string name="status_urgent">紧急！</string>
-    <string name="status_ok">良好</string>
-    <string name="expired_days_ago">已过期%d天</string>
-    <string name="expires_today">今天到期！</string>
-    <string name="days_left">剩余%d天</string>
-
     <!-- Content Descriptions -->
     <string name="cd_toggle_flashlight">开关闪光灯</string>
     <string name="cd_add_to_shopping">添加到购物清单</string>

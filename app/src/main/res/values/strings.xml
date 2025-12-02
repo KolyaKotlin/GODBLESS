@@ -197,15 +197,6 @@
     <string name="switch_to_signin">Уже есть аккаунт? Войдите</string>
     <string name="auth_benefits">Отслеживайте сроки годности продуктов\nПолучайте уведомления вовремя\nНе выбрасывайте деньги на ветер!</string>
 
-    <!-- Product Status -->
-    <string name="status_expired">Просрочен</string>
-    <string name="status_today">Сегодня!</string>
-    <string name="status_urgent">Срочно!</string>
-    <string name="status_ok">В порядке</string>
-    <string name="expired_days_ago">Просрочено на %d дн.</string>
-    <string name="expires_today">Истекает сегодня!</string>
-    <string name="days_left">Осталось %d дн.</string>
-
     <!-- Content Descriptions -->
     <string name="cd_toggle_flashlight">Вкл/выкл фонарик</string>
     <string name="cd_add_to_shopping">В список покупок</string>
