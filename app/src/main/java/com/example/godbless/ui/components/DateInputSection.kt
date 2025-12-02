@@ -32,7 +32,7 @@ fun DateInputSection(
     var productionDate by remember { mutableStateOf<Date?>(null) }
     var expiryDate by remember { mutableStateOf<Date?>(null) }
 
-    val dateFormat = remember { SimpleDateFormat("dd.MM.yyyy", Locale("ru")) }
+    val dateFormat = remember { SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()) }
 
     // Календарь состояния
     var showProductionDatePicker by remember { mutableStateOf(false) }

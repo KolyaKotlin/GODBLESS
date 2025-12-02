@@ -170,7 +170,7 @@ fun AuthScreen(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = "Контроль сроков годности продуктов",
+                    text = stringResource(R.string.app_subtitle),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center
@@ -196,7 +196,7 @@ fun AuthScreen(
                         modifier = Modifier.padding(20.dp)
                     ) {
                         Text(
-                            text = if (isSignUp) "Регистрация" else "Вход",
+                            text = if (isSignUp) stringResource(R.string.auth_title_register) else stringResource(R.string.auth_title_login),
                             style = MaterialTheme.typography.headlineSmall,
                             fontWeight = FontWeight.Bold
                         )
@@ -329,7 +329,7 @@ fun AuthScreen(
                                 )
                             } else {
                                 Text(
-                                    text = if (isSignUp) "Зарегистрироваться" else "Войти",
+                                    text = if (isSignUp) stringResource(R.string.auth_button_register) else stringResource(R.string.auth_button_login),
                                     style = MaterialTheme.typography.titleMedium,
                                     fontWeight = FontWeight.Bold,
                                     fontSize = MaterialTheme.typography.titleMedium.fontSize * 1.1f
@@ -350,9 +350,9 @@ fun AuthScreen(
                         ) {
                             Text(
                                 text = if (isSignUp)
-                                    "Уже есть аккаунт? Войти"
+                                    stringResource(R.string.auth_switch_to_login)
                                 else
-                                    "Нет аккаунта? Зарегистрироваться",
+                                    stringResource(R.string.auth_switch_to_register),
                                 style = MaterialTheme.typography.bodyLarge
                             )
                         }

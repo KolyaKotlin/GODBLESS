@@ -3,6 +3,8 @@ package com.example.godbless.ui.screens.addproduct
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.godbless.NeprosrochApp
+import com.example.godbless.R
 import com.example.godbless.data.remote.OpenFoodProduct
 import com.example.godbless.data.repository.ProductRepository
 import com.example.godbless.domain.model.Product
@@ -123,7 +125,7 @@ class AddEditProductViewModel(
                     _barcode.value = barcode
                 }
             }.onFailure { exception ->
-                _error.value = exception.message ?: "Продукт не найден"
+                _error.value = exception.message ?: NeprosrochApp.instance.getString(R.string.error_product_not_found)
             }
             _isLoading.value = false
         }
@@ -137,7 +139,7 @@ class AddEditProductViewModel(
             result.onSuccess { products ->
                 _searchResults.value = products
             }.onFailure { exception ->
-                _error.value = exception.message ?: "Ошибка поиска"
+                _error.value = exception.message ?: NeprosrochApp.instance.getString(R.string.error_search_failed)
             }
             _isLoading.value = false
         }
@@ -154,7 +156,7 @@ class AddEditProductViewModel(
     fun saveProduct(onSuccess: () -> Unit) {
         viewModelScope.launch {
             if (_name.value.isBlank()) {
-                _error.value = "Название не может быть пустым"
+                _error.value = NeprosrochApp.instance.getString(R.string.error_name_empty)
                 return@launch
             }
 
