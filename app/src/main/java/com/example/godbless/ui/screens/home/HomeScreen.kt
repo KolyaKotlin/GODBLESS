@@ -34,6 +34,7 @@ import com.example.godbless.domain.model.ProductStatus
 import com.example.godbless.domain.model.StorageLocation
 import com.example.godbless.ui.components.CategoryFilter
 import com.example.godbless.ui.components.DateInputSection
+import com.example.godbless.ui.utils.getLocalizedName
 import com.example.godbless.ui.screens.shopping.ShoppingViewModel
 import com.example.godbless.ui.screens.shopping.ShoppingViewModelFactory
 import com.example.godbless.ui.theme.StatusGreen
@@ -328,7 +329,7 @@ fun AddProductDialog(
                     onExpandedChange = { showCategoryMenu = it }
                 ) {
                     OutlinedTextField(
-                        value = selectedCategory.displayName,
+                        value = selectedCategory.getLocalizedName(),
                         onValueChange = {},
                         readOnly = true,
                         label = { Text(stringResource(R.string.category_label)) },
@@ -344,7 +345,7 @@ fun AddProductDialog(
                     ) {
                         ProductCategory.values().forEach { category ->
                             DropdownMenuItem(
-                                text = { Text(category.displayName) },
+                                text = { Text(category.getLocalizedName()) },
                                 onClick = {
                                     selectedCategory = category
                                     showCategoryMenu = false
@@ -362,7 +363,7 @@ fun AddProductDialog(
                     onExpandedChange = { showLocationMenu = it }
                 ) {
                     OutlinedTextField(
-                        value = selectedLocation.displayName,
+                        value = selectedLocation.getLocalizedName(),
                         onValueChange = {},
                         readOnly = true,
                         label = { Text(stringResource(R.string.storage_location_label)) },
@@ -378,7 +379,7 @@ fun AddProductDialog(
                     ) {
                         StorageLocation.values().forEach { location ->
                             DropdownMenuItem(
-                                text = { Text(location.displayName) },
+                                text = { Text(location.getLocalizedName()) },
                                 onClick = {
                                     selectedLocation = location
                                     showLocationMenu = false
@@ -687,7 +688,7 @@ fun ProductCard(
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = product.storageLocation.displayName,
+                            text = product.storageLocation.getLocalizedName(),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurface
                         )
