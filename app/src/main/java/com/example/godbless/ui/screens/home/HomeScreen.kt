@@ -303,8 +303,8 @@ fun AddProductDialog(
                 OutlinedTextField(
                     value = productName,
                     onValueChange = { productName = it },
-                    label = { Text("Название продукта") },
-                    placeholder = { Text("Например: Молоко") },
+                    label = { Text(stringResource(R.string.product_name_label)) },
+                    placeholder = { Text(stringResource(R.string.example_product_milk)) },
                     leadingIcon = {
                         Icon(
                             Icons.Default.ShoppingBag,
@@ -331,7 +331,7 @@ fun AddProductDialog(
                         value = selectedCategory.displayName,
                         onValueChange = {},
                         readOnly = true,
-                        label = { Text("Категория") },
+                        label = { Text(stringResource(R.string.category_label)) },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = showCategoryMenu) },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -365,7 +365,7 @@ fun AddProductDialog(
                         value = selectedLocation.displayName,
                         onValueChange = {},
                         readOnly = true,
-                        label = { Text("Место хранения") },
+                        label = { Text(stringResource(R.string.storage_location_label)) },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = showLocationMenu) },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -422,7 +422,7 @@ fun AddProductDialog(
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("Добавить", fontWeight = FontWeight.Bold)
+                Text(stringResource(R.string.add_button), fontWeight = FontWeight.Bold)
             }
         },
         dismissButton = {
@@ -430,7 +430,7 @@ fun AddProductDialog(
                 onClick = onDismiss,
                 shape = RoundedCornerShape(12.dp)
             ) {
-                Text("Отмена")
+                Text(stringResource(R.string.cancel))
             }
         }
     )

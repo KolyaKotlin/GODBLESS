@@ -34,10 +34,7 @@ import com.example.godbless.ui.screens.shopping.ShoppingViewModel
 import com.example.godbless.ui.screens.shopping.ShoppingViewModelFactory
 import com.example.godbless.ui.theme.GODBLESSTheme
 import com.example.godbless.utils.LocaleHelper
-import com.example.godbless.utils.NorthKoreanNotificationManager
-import com.example.godbless.utils.NorthKoreanNotificationOverlay
 import android.content.Context
-import androidx.compose.ui.platform.LocalContext
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -135,32 +132,12 @@ fun MainScreen(rootNavController: NavHostController) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    val context = LocalContext.current
 
     val shoppingViewModel: ShoppingViewModel = viewModel(
         factory = ShoppingViewModelFactory(NeprosrochApp.instance.shoppingRepository)
     )
     val shoppingItems by shoppingViewModel.shoppingItems.collectAsState()
 
-    // Северокорейские уведомления
-    var nkNotificationFlags by remember { mutableStateOf<String?>(null) }
-    var nkNotificationMessage by remember { mutableStateOf<String?>(null) }
-
-    // Запускаем уведомления если выбран северокорейский язык
-    DisposableEffect(Unit) {
-        if (NorthKoreanNotificationManager.isNorthKoreanLanguageSelected(context)) {
-            NorthKoreanNotificationManager.startNotifications(context) { flags, message ->
-                nkNotificationFlags = flags
-                nkNotificationMessage = message
-            }
-        }
-
-        onDispose {
-            NorthKoreanNotificationManager.stopNotifications()
-        }
-    }
-
-    Box(modifier = Modifier.fillMaxSize()) {
     Scaffold(
         bottomBar = {
             if (currentRoute in listOf(
@@ -200,18 +177,6 @@ fun MainScreen(rootNavController: NavHostController) {
                 })
             }
         }
-    }
-
-        // Overlay для северокорейских уведомлений
-        NorthKoreanNotificationOverlay(
-            context = context,
-            flags = nkNotificationFlags,
-            message = nkNotificationMessage,
-            onDismiss = {
-                nkNotificationFlags = null
-                nkNotificationMessage = null
-            }
-        )
     }
 }
 

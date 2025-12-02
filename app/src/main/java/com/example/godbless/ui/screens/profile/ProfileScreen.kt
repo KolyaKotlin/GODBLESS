@@ -759,7 +759,7 @@ fun ThemeSelectionDialog(
         },
         confirmButton = {
             TextButton(onClick = onDismiss) {
-                Text("Закрыть")
+                Text(stringResource(R.string.close))
             }
         }
     )
@@ -771,7 +771,7 @@ fun LanguageSelectionDialog(
     onLanguageSelected: (String) -> Unit,
     onDismiss: () -> Unit
 ) {
-    val languages = listOf("Русский", "English", "中文", "🇰🇵 조선말")
+    val languages = listOf("Русский", "English", "中文")
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -787,7 +787,7 @@ fun LanguageSelectionDialog(
                 )
                 Spacer(modifier = Modifier.width(12.dp))
                 Text(
-                    "Язык приложения",
+                    stringResource(R.string.app_language),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold
                 )
@@ -828,7 +828,7 @@ fun LanguageSelectionDialog(
         },
         confirmButton = {
             TextButton(onClick = onDismiss) {
-                Text("Закрыть")
+                Text(stringResource(R.string.close))
             }
         }
     )
@@ -855,7 +855,7 @@ fun BackupDialog(
                 )
                 Spacer(modifier = Modifier.width(12.dp))
                 Text(
-                    "Резервное копирование",
+                    stringResource(R.string.backup),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold
                 )

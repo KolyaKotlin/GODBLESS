@@ -392,7 +392,7 @@ fun AddShoppingItemDialog(
                     value = name,
                     onValueChange = { name = it },
                     label = { Text(stringResource(R.string.item_name)) },
-                    placeholder = { Text("Например: Молоко, Хлеб...") },
+                    placeholder = { Text(stringResource(R.string.example_milk_bread)) },
                     leadingIcon = {
                         Icon(
                             Icons.Default.ShoppingBag,
@@ -412,7 +412,7 @@ fun AddShoppingItemDialog(
                     value = quantity,
                     onValueChange = { quantity = it },
                     label = { Text(stringResource(R.string.quantity)) },
-                    placeholder = { Text("Например: 2 шт, 1 л...") },
+                    placeholder = { Text(stringResource(R.string.example_quantity)) },
                     leadingIcon = {
                         Icon(
                             Icons.Default.Add,

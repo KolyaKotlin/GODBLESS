@@ -10,8 +10,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.godbless.R
 import com.example.godbless.domain.model.ProductCategory
 
 @Composable
@@ -40,7 +42,7 @@ fun CategoryFilter(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    "Фильтр по категориям",
+                    stringResource(R.string.filter_by_categories),
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold
                 )
@@ -55,7 +57,7 @@ fun CategoryFilter(
                     FilterChip(
                         selected = selectedCategory == null,
                         onClick = { onCategorySelected(null) },
-                        label = { Text("Все") },
+                        label = { Text(stringResource(R.string.all)) },
                         leadingIcon = if (selectedCategory == null) {
                             {
                                 Icon(

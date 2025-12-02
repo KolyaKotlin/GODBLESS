@@ -311,7 +311,7 @@ fun ScannerScreen(
                         },
                         shape = RoundedCornerShape(12.dp)
                     ) {
-                        Text("Предоставить разрешение")
+                        Text(stringResource(R.string.grant_permission))
                     }
                 }
             }
@@ -579,8 +579,8 @@ fun AddScannedProductDialog(
                             scannerViewModel.searchProducts(it)
                         }
                     },
-                    label = { Text("Название продукта") },
-                    placeholder = { Text("Например: Молоко") },
+                    label = { Text(stringResource(R.string.product_name_label)) },
+                    placeholder = { Text(stringResource(R.string.example_product_milk)) },
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     enabled = !isLoading
@@ -597,7 +597,7 @@ fun AddScannedProductDialog(
                     ) {
                         Column(modifier = Modifier.padding(8.dp)) {
                             Text(
-                                "Выберите из найденных:",
+                                stringResource(R.string.select_from_found),
                                 style = MaterialTheme.typography.labelMedium,
                                 modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -611,7 +611,7 @@ fun AddScannedProductDialog(
                                     modifier = Modifier.fillMaxWidth()
                                 ) {
                                     Text(
-                                        product.productName ?: "Неизвестно",
+                                        product.productName ?: stringResource(R.string.unknown),
                                         modifier = Modifier.fillMaxWidth(),
                                         textAlign = TextAlign.Start
                                     )
@@ -632,7 +632,7 @@ fun AddScannedProductDialog(
                         value = getCategoryName(selectedCategory),
                         onValueChange = {},
                         readOnly = true,
-                        label = { Text("Категория") },
+                        label = { Text(stringResource(R.string.category_label)) },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = showCategoryMenu) },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -666,7 +666,7 @@ fun AddScannedProductDialog(
                         value = getLocationName(selectedLocation),
                         onValueChange = {},
                         readOnly = true,
-                        label = { Text("Место хранения") },
+                        label = { Text(stringResource(R.string.storage_location_label)) },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = showLocationMenu) },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -707,14 +707,14 @@ fun AddScannedProductDialog(
                     FilterChip(
                         selected = dateInputMode == 0,
                         onClick = { dateInputMode = 0 },
-                        label = { Text("Дни") },
+                        label = { Text(stringResource(R.string.days)) },
                         modifier = Modifier.weight(1f)
                     )
                     // Кнопка "Даты"
                     FilterChip(
                         selected = dateInputMode == 1,
                         onClick = { dateInputMode = 1 },
-                        label = { Text("Даты") },
+                        label = { Text(stringResource(R.string.dates)) },
                         modifier = Modifier.weight(1f)
                     )
                 }
@@ -728,8 +728,8 @@ fun AddScannedProductDialog(
                         OutlinedTextField(
                             value = daysUntilExpiry,
                             onValueChange = { if (it.all { char -> char.isDigit() }) daysUntilExpiry = it },
-                            label = { Text("Срок годности (дней)") },
-                            placeholder = { Text("7") },
+                            label = { Text(stringResource(R.string.expiry_days)) },
+                            placeholder = { Text(stringResource(R.string.placeholder_7)) },
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(12.dp),
                             leadingIcon = {
@@ -746,8 +746,8 @@ fun AddScannedProductDialog(
                         OutlinedTextField(
                             value = productionDate,
                             onValueChange = { productionDate = it },
-                            label = { Text("Дата производства (ДД.MM.ГГГГ)") },
-                            placeholder = { Text("01.01.2024") },
+                            label = { Text(stringResource(R.string.production_date_label)) },
+                            placeholder = { Text(stringResource(R.string.date_example)) },
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(12.dp),
                             leadingIcon = {
@@ -762,8 +762,8 @@ fun AddScannedProductDialog(
                         OutlinedTextField(
                             value = expirationDate,
                             onValueChange = { expirationDate = it },
-                            label = { Text("Дата истечения (ДД.MM.ГГГГ)") },
-                            placeholder = { Text("31.12.2024") },
+                            label = { Text(stringResource(R.string.expiration_date)) },
+                            placeholder = { Text(stringResource(R.string.date_example_end)) },
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(12.dp),
                             leadingIcon = {
@@ -813,7 +813,7 @@ fun AddScannedProductDialog(
                 },
                 shape = RoundedCornerShape(12.dp)
             ) {
-                Text("Добавить", fontWeight = FontWeight.Bold)
+                Text(stringResource(R.string.add_button), fontWeight = FontWeight.Bold)
             }
         },
         dismissButton = {
@@ -821,7 +821,7 @@ fun AddScannedProductDialog(
                 onClick = onDismiss,
                 shape = RoundedCornerShape(12.dp)
             ) {
-                Text("Отмена")
+                Text(stringResource(R.string.cancel))
             }
         }
     )

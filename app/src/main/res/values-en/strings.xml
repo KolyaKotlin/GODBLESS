@@ -16,6 +16,7 @@
     <string name="expires_today">Expires today</string>
     <string name="sort_by">Sort by</string>
     <string name="filter">Filter</string>
+    <string name="filter_by_categories">Filter by Categories</string>
 
     <!-- Product Details -->
     <string name="product_name">Name</string>
@@ -124,6 +125,16 @@
     <string name="tap_plus_to_add_item">Tap + to add item</string>
     <string name="barcode_auto_scanned">Barcode will be scanned automatically</string>
     <string name="point_camera_to_barcode">Point camera at barcode</string>
+    <string name="all">All</string>
+    <string name="close">Close</string>
+    <string name="ok">OK</string>
+    <string name="day">Day</string>
+    <string name="month">Month</string>
+    <string name="year">Year</string>
+    <string name="num_days">Days count</string>
+    <string name="dates">Dates</string>
+    <string name="days">Days</string>
+    <string name="placeholder_7">7</string>
 
     <!-- Product Status -->
     <string name="status_expired">Expired</string>
@@ -153,11 +164,18 @@
     <string name="days_mode">Days</string>
     <string name="dates_mode">Dates</string>
     <string name="expiry_days">Expiry (days)</string>
-    <string name="production_date">Production Date (DD.MM.YYYY)</string>
+    <string name="production_date_label">Production Date (DD.MM.YYYY)</string>
+    <string name="production_date_short">Production Date</string>
     <string name="expiration_date">Expiration Date (DD.MM.YYYY)</string>
+    <string name="expiry_until">Expires on</string>
+    <string name="not_selected">Not selected</string>
+    <string name="days_remaining">Remaining: %d days</string>
     <string name="date_example">01.01.2024</string>
     <string name="date_example_end">12.31.2024</string>
     <string name="add_button">Add</string>
+    <string name="product_name_label">Product Name</string>
+    <string name="category_label">Category</string>
+    <string name="storage_location_label">Storage Location</string>
 
     <!-- Settings & Profile -->
     <string name="additional_settings">Additional</string>
@@ -171,6 +189,8 @@
     <string name="theme_system">System</string>
     <string name="select_theme">Select theme</string>
     <string name="select_language">Select language</string>
+    <string name="app_language">App Language</string>
+    <string name="backup">Backup</string>
 
     <!-- Auth Screen -->
     <string name="app_subtitle">Product Expiry Tracking</string>

@@ -16,6 +16,7 @@
     <string name="expires_today">Истекает сегодня</string>
     <string name="sort_by">Сортировать</string>
     <string name="filter">Фильтр</string>
+    <string name="filter_by_categories">Фильтр по категориям</string>
 
     <!-- Product Details -->
     <string name="product_name">Название</string>
@@ -119,6 +120,16 @@
     <string name="tap_plus_to_add_item">Нажмите + чтобы добавить товар</string>
     <string name="barcode_auto_scanned">Штрихкод будет отсканирован автоматически</string>
     <string name="point_camera_to_barcode">Наведите камеру на штрихкод</string>
+    <string name="all">Все</string>
+    <string name="close">Закрыть</string>
+    <string name="ok">OK</string>
+    <string name="day">День</string>
+    <string name="month">Месяц</string>
+    <string name="year">Год</string>
+    <string name="num_days">Кол-во дней</string>
+    <string name="dates">Даты</string>
+    <string name="days">Дни</string>
+    <string name="placeholder_7">7</string>
 
     <!-- Product Status -->
     <string name="status_expired">Просрочен</string>
@@ -148,11 +159,18 @@
     <string name="days_mode">Дни</string>
     <string name="dates_mode">Даты</string>
     <string name="expiry_days">Срок годности (дней)</string>
-    <string name="production_date">Дата производства (ДД.MM.ГГГГ)</string>
+    <string name="production_date_label">Дата производства (ДД.MM.ГГГГ)</string>
+    <string name="production_date_short">Дата выработки</string>
     <string name="expiration_date">Дата истечения (ДД.MM.ГГГГ)</string>
+    <string name="expiry_until">Срок годности до</string>
+    <string name="not_selected">Не выбрана</string>
+    <string name="days_remaining">Осталось: %d дней</string>
     <string name="date_example">01.01.2024</string>
     <string name="date_example_end">31.12.2024</string>
     <string name="add_button">Добавить</string>
+    <string name="product_name_label">Название продукта</string>
+    <string name="category_label">Категория</string>
+    <string name="storage_location_label">Место хранения</string>
 
     <!-- Settings & Profile -->
     <string name="additional_settings">Дополнительно</string>
@@ -166,6 +184,8 @@
     <string name="theme_system">Системная</string>
     <string name="select_theme">Выберите тему</string>
     <string name="select_language">Выберите язык</string>
+    <string name="app_language">Язык приложения</string>
+    <string name="backup">Резервное копирование</string>
 
     <!-- Auth Screen -->
     <string name="app_subtitle">Контроль сроков годности продуктов</string>
