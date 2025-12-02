@@ -181,8 +181,8 @@ fun AuthSection(viewModel: ProfileViewModel, error: String?) {
             enabled = !isLoading
         ) {
             Text(
-                if (isSignUp) "Уже есть аккаунт? Войти"
-                else "Нет аккаунта? Зарегистрироваться"
+                if (isSignUp) stringResource(R.string.auth_switch_to_login)
+                else stringResource(R.string.auth_switch_to_register)
             )
         }
     }
@@ -230,7 +230,7 @@ fun UserProfileCard(email: String) {
 
             Column {
                 Text(
-                    text = "Добро пожаловать!",
+                    text = stringResource(R.string.welcome),
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
                 )
@@ -270,7 +270,7 @@ fun StatsSection(products: List<com.example.godbless.domain.model.Product>) {
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Статистика",
+                    text = stringResource(R.string.statistics),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
@@ -285,25 +285,25 @@ fun StatsSection(products: List<com.example.godbless.domain.model.Product>) {
                 StatItem(
                     icon = Icons.Default.Kitchen,
                     value = totalProducts.toString(),
-                    label = "Всего",
+                    label = stringResource(R.string.stat_total),
                     color = MaterialTheme.colorScheme.primary
                 )
                 StatItem(
                     icon = Icons.Default.CheckCircle,
                     value = goodProducts.toString(),
-                    label = "Свежих",
+                    label = stringResource(R.string.stat_fresh),
                     color = com.example.godbless.ui.theme.StatusGreen
                 )
                 StatItem(
                     icon = Icons.Default.Warning,
                     value = expiringSoonProducts.toString(),
-                    label = "Скоро",
+                    label = stringResource(R.string.stat_soon),
                     color = com.example.godbless.ui.theme.StatusYellow
                 )
                 StatItem(
                     icon = Icons.Default.Error,
                     value = expiredProducts.toString(),
-                    label = "Просрочено",
+                    label = stringResource(R.string.stat_expired),
                     color = com.example.godbless.ui.theme.StatusRed
                 )
             }
@@ -414,7 +414,7 @@ fun AdditionalSettings() {
                 }
                 Spacer(modifier = Modifier.width(12.dp))
                 Text(
-                    text = "Дополнительно",
+                    text = stringResource(R.string.additional_settings),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold
                 )
@@ -424,7 +424,7 @@ fun AdditionalSettings() {
 
             SettingItem(
                 icon = Icons.Default.Palette,
-                title = "Тема оформления",
+                title = stringResource(R.string.theme_settings),
                 subtitle = selectedTheme,
                 onClick = { showThemeDialog = true }
             )
@@ -436,7 +436,7 @@ fun AdditionalSettings() {
 
             SettingItem(
                 icon = Icons.Default.Language,
-                title = "Язык",
+                title = stringResource(R.string.language_settings),
                 subtitle = selectedLanguage,
                 onClick = { showLanguageDialog = true }
             )
@@ -537,7 +537,7 @@ fun AboutSection() {
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "О приложении",
+                    text = stringResource(R.string.about_app),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
@@ -545,9 +545,9 @@ fun AboutSection() {
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            InfoRow("Версия", "1.0.0")
+            InfoRow(stringResource(R.string.version), "1.0.0")
             Divider(modifier = Modifier.padding(vertical = 8.dp))
-            InfoRow("Разработчик", "GODBLESS Team")
+            InfoRow(stringResource(R.string.developer), "GODBLESS Team")
         }
     }
 }
@@ -702,7 +702,7 @@ fun ThemeSelectionDialog(
     onThemeSelected: (String) -> Unit,
     onDismiss: () -> Unit
 ) {
-    val themes = listOf("Светлая", "Темная", "Системная")
+    val themes = listOf(stringResource(R.string.theme_light), stringResource(R.string.theme_dark), stringResource(R.string.theme_system))
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -718,7 +718,7 @@ fun ThemeSelectionDialog(
                 )
                 Spacer(modifier = Modifier.width(12.dp))
                 Text(
-                    "Тема оформления",
+                    stringResource(R.string.theme_settings),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold
                 )

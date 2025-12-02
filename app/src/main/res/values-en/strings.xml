@@ -258,4 +258,20 @@
     <!-- Home Screen -->
     <string name="products_count_single">product</string>
     <string name="products_count_plural">products</string>
+
+    <!-- Profile Screen -->
+    <string name="welcome">Welcome!</string>
+    <string name="statistics">Statistics</string>
+    <string name="stat_total">Total</string>
+    <string name="stat_fresh">Fresh</string>
+    <string name="stat_soon">Soon</string>
+    <string name="stat_expired">Expired</string>
+    <string name="additional_settings">Additional</string>
+    <string name="theme_settings">Theme</string>
+    <string name="language_settings">Language</string>
+    <string name="about_app">About</string>
+    <string name="backup_created">Backup created!</string>
+    <string name="backup_confirm_message">Create backup of all data?</string>
+    <string name="backup_creating">Creating…</string>
+    <string name="backup_create">Create</string>
 </resources>

@@ -253,4 +253,23 @@
     <!-- Home Screen -->
     <string name="products_count_single">продукт</string>
     <string name="products_count_plural">продуктов</string>
+
+    <!-- Profile Screen -->
+    <string name="welcome">Добро пожаловать!</string>
+    <string name="statistics">Статистика</string>
+    <string name="stat_total">Всего</string>
+    <string name="stat_fresh">Свежих</string>
+    <string name="stat_soon">Скоро</string>
+    <string name="stat_expired">Просрочено</string>
+    <string name="additional_settings">Дополнительно</string>
+    <string name="theme_settings">Тема оформления</string>
+    <string name="language_settings">Язык</string>
+    <string name="about_app">О приложении</string>
+    <string name="backup_created">Резервная копия создана!</string>
+    <string name="backup_confirm_message">Создать резервную копию всех данных?</string>
+    <string name="backup_creating">Создание…</string>
+    <string name="backup_create">Создать</string>
+    <string name="backup_saved">Данные сохранены в папке Downloads</string>
+    <string name="backup_in_progress">Создание резервной копии…</string>
+    <string name="backup_items">Будут сохранены:\n• Продукты\n• Список покупок\n• Настройки</string>
 </resources>
