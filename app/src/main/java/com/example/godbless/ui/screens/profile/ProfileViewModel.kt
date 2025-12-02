@@ -2,6 +2,8 @@ package com.example.godbless.ui.screens.profile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.godbless.NeprosrochApp
+import com.example.godbless.R
 import com.example.godbless.data.repository.AuthRepository
 import com.example.godbless.data.repository.MockUser
 import com.example.godbless.data.repository.PreferencesRepository
@@ -49,13 +51,13 @@ class ProfileViewModel(
             _error.value = null
 
             if (!isValidEmail(email)) {
-                _error.value = "Неверный формат email"
+                _error.value = NeprosrochApp.instance.getString(R.string.error_invalid_email)
                 _isLoading.value = false
                 return@launch
             }
 
             if (password.length < 6) {
-                _error.value = "Пароль должен содержать минимум 6 символов"
+                _error.value = NeprosrochApp.instance.getString(R.string.error_password_length)
                 _isLoading.value = false
                 return@launch
             }
@@ -63,9 +65,9 @@ class ProfileViewModel(
             val result = authRepository.signIn(email, password)
             result.onSuccess { user ->
                 _currentUser.value = user
-                _successMessage.value = "Вы успешно вошли"
+                _successMessage.value = NeprosrochApp.instance.getString(R.string.success_login)
             }.onFailure { exception ->
-                _error.value = exception.message ?: "Ошибка авторизации"
+                _error.value = exception.message ?: NeprosrochApp.instance.getString(R.string.error_auth_failed)
             }
 
             _isLoading.value = false
@@ -78,19 +80,19 @@ class ProfileViewModel(
             _error.value = null
 
             if (!isValidEmail(email)) {
-                _error.value = "Неверный формат email"
+                _error.value = NeprosrochApp.instance.getString(R.string.error_invalid_email)
                 _isLoading.value = false
                 return@launch
             }
 
             if (password.length < 6) {
-                _error.value = "Пароль должен содержать минимум 6 символов"
+                _error.value = NeprosrochApp.instance.getString(R.string.error_password_length)
                 _isLoading.value = false
                 return@launch
             }
 
             if (password != confirmPassword) {
-                _error.value = "Пароли не совпадают"
+                _error.value = NeprosrochApp.instance.getString(R.string.error_passwords_mismatch)
                 _isLoading.value = false
                 return@launch
             }
@@ -98,9 +100,9 @@ class ProfileViewModel(
             val result = authRepository.signUp(email, password)
             result.onSuccess { user ->
                 _currentUser.value = user
-                _successMessage.value = "Регистрация успешна"
+                _successMessage.value = NeprosrochApp.instance.getString(R.string.success_registration)
             }.onFailure { exception ->
-                _error.value = exception.message ?: "Ошибка регистрации"
+                _error.value = exception.message ?: NeprosrochApp.instance.getString(R.string.error_registration_failed)
             }
 
             _isLoading.value = false

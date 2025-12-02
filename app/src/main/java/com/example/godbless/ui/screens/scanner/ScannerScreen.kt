@@ -101,7 +101,7 @@ fun ScannerScreen(
             TopAppBar(
                 title = {
                     Text(
-                        "Сканер штрихкодов",
+                        stringResource(R.string.scanner_title),
                         fontWeight = FontWeight.Bold
                     )
                 },
@@ -110,7 +110,7 @@ fun ScannerScreen(
                         IconButton(onClick = { torchEnabled = !torchEnabled }) {
                             Icon(
                                 if (torchEnabled) Icons.Default.FlashOn else Icons.Default.FlashOff,
-                                contentDescription = "Вкл/выкл фонарик"
+                                contentDescription = stringResource(R.string.cd_toggle_flashlight)
                             )
                         }
                     }
@@ -165,7 +165,7 @@ fun ScannerScreen(
                         modifier = Modifier.padding(32.dp)
                     ) {
                         Text(
-                            text = "Наведите камеру на штрихкод",
+                            text = stringResource(R.string.scanner_instruction),
                             style = MaterialTheme.typography.titleLarge,
                             color = Color.White,
                             fontWeight = FontWeight.Bold,
@@ -275,7 +275,7 @@ fun ScannerScreen(
                         Spacer(modifier = Modifier.height(40.dp))
 
                         Text(
-                            text = "Штрихкод будет отсканирован автоматически",
+                            text = stringResource(R.string.scanner_auto_scan),
                             style = MaterialTheme.typography.bodyLarge,
                             color = Color.White,
                             textAlign = TextAlign.Center,
@@ -302,7 +302,7 @@ fun ScannerScreen(
                     verticalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = "Для сканирования штрихкодов необходимо разрешение камеры",
+                        text = stringResource(R.string.scanner_permission_required),
                         style = MaterialTheme.typography.titleMedium,
                         textAlign = TextAlign.Center,
                         fontWeight = FontWeight.Bold
@@ -496,7 +496,7 @@ fun AddScannedProductDialog(
         title = {
             Column {
                 Text(
-                    "Отсканирован штрихкод",
+                    stringResource(R.string.barcode_scanned),
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold
                 )
@@ -546,7 +546,7 @@ fun AddScannedProductDialog(
                                 )
                                 Spacer(modifier = Modifier.width(8.dp))
                                 Text(
-                                    "Продукт найден в базе!",
+                                    stringResource(R.string.product_found_in_db),
                                     style = MaterialTheme.typography.bodyMedium,
                                     fontWeight = FontWeight.Bold,
                                     color = MaterialTheme.colorScheme.onPrimaryContainer

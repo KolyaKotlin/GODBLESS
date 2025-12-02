@@ -273,7 +273,7 @@ fun ShoppingItemCard(
                                 Icons.Default.CheckCircle
                             else
                                 Icons.Default.RadioButtonUnchecked,
-                            contentDescription = if (item.isPurchased) "Куплено" else "Не куплено",
+                            contentDescription = if (item.isPurchased) stringResource(R.string.cd_purchased) else stringResource(R.string.cd_not_purchased),
                             tint = iconColor,
                             modifier = Modifier.size(28.dp)
                         )

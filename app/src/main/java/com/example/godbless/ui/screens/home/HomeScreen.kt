@@ -59,6 +59,8 @@ fun HomeScreen(
     var showAddProductDialog by remember { mutableStateOf(false) }
     var selectedCategory by remember { mutableStateOf<ProductCategory?>(null) }
 
+    val defaultQuantity = stringResource(R.string.default_quantity)
+
     // Фильтрация продуктов
     val filteredProducts = remember(products, selectedCategory) {
         if (selectedCategory == null) {
@@ -110,7 +112,7 @@ fun HomeScreen(
                                 color = Color.White
                             )
                             Text(
-                                text = "${products.size} ${if (products.size == 1) "продукт" else "продуктов"}",
+                                text = "${products.size} ${if (products.size == 1) stringResource(R.string.products_count_single) else stringResource(R.string.products_count_plural)}",
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = Color.White.copy(alpha = 0.8f)
                             )
@@ -223,7 +225,7 @@ fun HomeScreen(
                         onAddToShopping = {
                             shoppingViewModel.addShoppingItem(
                                 name = product.name,
-                                quantity = "1 шт"
+                                quantity = defaultQuantity
                             )
                         }
                     )
@@ -293,7 +295,7 @@ fun AddProductDialog(
                 )
                 Spacer(modifier = Modifier.width(12.dp))
                 Text(
-                    text = "Добавить продукт",
+                    text = stringResource(R.string.add_product_dialog_title),
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold
                 )
@@ -456,13 +458,13 @@ fun ProductCard(
     }
 
     val statusText = when {
-        product.isExpired() -> "Просрочен"
-        product.getDaysUntilExpiry() == 0 -> "Сегодня!"
-        product.getDaysUntilExpiry() <= 3 -> "Срочно!"
-        else -> "В порядке"
+        product.isExpired() -> stringResource(R.string.status_expired)
+        product.getDaysUntilExpiry() == 0 -> stringResource(R.string.status_today)
+        product.getDaysUntilExpiry() <= 3 -> stringResource(R.string.status_urgent)
+        else -> stringResource(R.string.status_ok)
     }
 
-    val dateFormat = remember { SimpleDateFormat("dd.MM.yyyy", Locale("ru")) }
+    val dateFormat = remember { SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()) }
     var isExpanded by remember { mutableStateOf(false) }
 
     // Анимация пульсации для просроченных продуктов
@@ -628,11 +630,11 @@ fun ProductCard(
                             Spacer(modifier = Modifier.width(4.dp))
                             Text(
                                 text = if (daysLeft < 0) {
-                                    "Просрочено на ${-daysLeft} дн."
+                                    stringResource(R.string.expired_days_ago, -daysLeft)
                                 } else if (daysLeft == 0) {
-                                    "Истекает сегодня!"
+                                    stringResource(R.string.expires_today)
                                 } else {
-                                    "Осталось $daysLeft дн."
+                                    stringResource(R.string.days_left, daysLeft)
                                 },
                                 style = MaterialTheme.typography.bodyMedium,
                                 fontWeight = FontWeight.Bold,
@@ -653,7 +655,7 @@ fun ProductCard(
                     ) {
                         Icon(
                             Icons.Default.ShoppingCart,
-                            contentDescription = "В список покупок"
+                            contentDescription = stringResource(R.string.cd_add_to_shopping)
                         )
                     }
 
