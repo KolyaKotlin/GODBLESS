@@ -68,6 +68,12 @@
     <string name="clear_purchased">Clear purchased</string>
     <string name="item_name">Item name</string>
     <string name="quantity">Quantity</string>
+    <string name="open_in_store">Open in store</string>
+    <string name="select_store">Select store</string>
+    <string name="installed_apps">Installed apps</string>
+    <string name="all_stores">All stores</string>
+    <string name="app_installed">App installed</string>
+    <string name="open_in_browser">Will open in browser</string>
 
     <!-- Profile Screen -->
     <string name="profile_title">Profile</string>
