@@ -468,13 +468,8 @@ fun AddScannedProductDialog(
     var productName by remember { mutableStateOf("") }
     var selectedCategory by remember { mutableStateOf(ProductCategory.OTHER) }
     var selectedLocation by remember { mutableStateOf(StorageLocation.FRIDGE) }
-
-    // Режим ввода даты: 0 = дни, 1 = производство+истечение, 2 = только истечение
-    var dateInputMode by remember { mutableStateOf(0) }
-
-    var daysUntilExpiry by remember { mutableStateOf("7") }
-    var productionDate by remember { mutableStateOf("") }
-    var expirationDate by remember { mutableStateOf("") }
+    var calculatedDays by remember { mutableStateOf(7) }
+    var expiryDate by remember { mutableStateOf<Date?>(null) }
 
     var showCategoryMenu by remember { mutableStateOf(false) }
     var showLocationMenu by remember { mutableStateOf(false) }
@@ -490,22 +485,42 @@ fun AddScannedProductDialog(
         }
     }
 
+    // Рассчитываем дату окончания срока годности на основе дней
+    LaunchedEffect(calculatedDays) {
+        if (expiryDate == null) {
+            expiryDate = java.util.Calendar.getInstance().apply {
+                add(java.util.Calendar.DAY_OF_YEAR, calculatedDays)
+            }.time
+        }
+    }
+
     AlertDialog(
         onDismissRequest = onDismiss,
         shape = RoundedCornerShape(24.dp),
         title = {
-            Column {
-                Text(
-                    stringResource(R.string.barcode_scanned),
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.Bold
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(bottom = 8.dp)
+            ) {
+                Icon(
+                    Icons.Default.QrCodeScanner,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(28.dp)
                 )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    barcode,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.primary
-                )
+                Spacer(modifier = Modifier.width(12.dp))
+                Column {
+                    Text(
+                        stringResource(R.string.barcode_scanned),
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        barcode,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
             }
         },
         text = {
@@ -584,8 +599,19 @@ fun AddScannedProductDialog(
                     },
                     label = { Text(stringResource(R.string.product_name_label)) },
                     placeholder = { Text(stringResource(R.string.example_product_milk)) },
+                    leadingIcon = {
+                        Icon(
+                            Icons.Default.ShoppingBag,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        focusedLabelColor = MaterialTheme.colorScheme.primary
+                    ),
                     enabled = !isLoading
                 )
 
@@ -694,126 +720,30 @@ fun AddScannedProductDialog(
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                // Выбор режима ввода даты
-                Text(
-                    "Способ указания срока годности:",
-                    style = MaterialTheme.typography.labelLarge,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(bottom = 8.dp)
+                // Ввод даты с использованием DateInputSection
+                DateInputSection(
+                    onDaysCalculated = { days ->
+                        calculatedDays = days
+                        expiryDate = java.util.Calendar.getInstance().apply {
+                            add(java.util.Calendar.DAY_OF_YEAR, days)
+                        }.time
+                    },
+                    onExpiryDateChanged = { date ->
+                        if (date != null) {
+                            expiryDate = date
+                        }
+                    }
                 )
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    // Кнопка "Дни"
-                    FilterChip(
-                        selected = dateInputMode == 0,
-                        onClick = { dateInputMode = 0 },
-                        label = { Text(stringResource(R.string.days)) },
-                        modifier = Modifier.weight(1f)
-                    )
-                    // Кнопка "Даты"
-                    FilterChip(
-                        selected = dateInputMode == 1,
-                        onClick = { dateInputMode = 1 },
-                        label = { Text(stringResource(R.string.dates)) },
-                        modifier = Modifier.weight(1f)
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                // Поля ввода в зависимости от режима
-                when (dateInputMode) {
-                    0 -> {
-                        // Режим "Дни"
-                        OutlinedTextField(
-                            value = daysUntilExpiry,
-                            onValueChange = { if (it.all { char -> char.isDigit() }) daysUntilExpiry = it },
-                            label = { Text(stringResource(R.string.expiry_days)) },
-                            placeholder = { Text(stringResource(R.string.placeholder_7)) },
-                            modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(12.dp),
-                            leadingIcon = {
-                                Icon(
-                                    Icons.Default.CalendarToday,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.primary
-                                )
-                            }
-                        )
-                    }
-                    1 -> {
-                        // Режим "Даты производства и истечения"
-                        OutlinedTextField(
-                            value = productionDate,
-                            onValueChange = { productionDate = it },
-                            label = { Text(stringResource(R.string.production_date_label)) },
-                            placeholder = { Text(stringResource(R.string.date_example)) },
-                            modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(12.dp),
-                            leadingIcon = {
-                                Icon(
-                                    Icons.Default.Event,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.secondary
-                                )
-                            }
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        OutlinedTextField(
-                            value = expirationDate,
-                            onValueChange = { expirationDate = it },
-                            label = { Text(stringResource(R.string.expiration_date)) },
-                            placeholder = { Text(stringResource(R.string.date_example_end)) },
-                            modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(12.dp),
-                            leadingIcon = {
-                                Icon(
-                                    Icons.Default.EventAvailable,
-                                    contentDescription = null,
-                                    tint = com.example.godbless.ui.theme.StatusRed
-                                )
-                            }
-                        )
-                    }
-                }
             }
         },
         confirmButton = {
             Button(
                 onClick = {
-                    if (productName.isNotBlank()) {
-                        val finalExpiryDate: Date? = when (dateInputMode) {
-                            0 -> {
-                                // Режим дней
-                                if (daysUntilExpiry.isNotBlank()) {
-                                    val days = daysUntilExpiry.toIntOrNull() ?: 7
-                                    Calendar.getInstance().apply {
-                                        add(Calendar.DAY_OF_YEAR, days)
-                                    }.time
-                                } else null
-                            }
-                            1 -> {
-                                // Режим дат
-                                if (expirationDate.isNotBlank()) {
-                                    parseDateString(expirationDate)
-                                } else null
-                            }
-                            else -> null
-                        }
-
-                        finalExpiryDate?.let { date ->
-                            onAddProduct(productName, selectedCategory, selectedLocation, date)
-                        }
+                    if (productName.isNotBlank() && expiryDate != null) {
+                        onAddProduct(productName, selectedCategory, selectedLocation, expiryDate!!)
                     }
                 },
-                enabled = when (dateInputMode) {
-                    0 -> productName.isNotBlank() && daysUntilExpiry.isNotBlank()
-                    1 -> productName.isNotBlank() && expirationDate.isNotBlank()
-                    else -> false
-                },
+                enabled = productName.isNotBlank() && expiryDate != null,
                 shape = RoundedCornerShape(12.dp)
             ) {
                 Text(stringResource(R.string.add_button), fontWeight = FontWeight.Bold)

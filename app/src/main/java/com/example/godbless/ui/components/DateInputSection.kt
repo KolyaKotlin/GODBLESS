@@ -64,32 +64,51 @@ fun DateInputSection(
 
         when (inputMode) {
             DateInputMode.DAYS_COUNT -> {
-                // Ввод количества дней
-                OutlinedTextField(
-                    value = daysCount,
-                    onValueChange = {
-                        if (it.all { char -> char.isDigit() } || it.isEmpty()) {
-                            daysCount = it
-                            val days = it.toIntOrNull() ?: 0
-                            onDaysCalculated(days)
-                        }
-                    },
-                    label = { Text(stringResource(R.string.expiry_days)) },
-                    placeholder = { Text(stringResource(R.string.placeholder_7)) },
-                    leadingIcon = {
-                        Icon(
-                            Icons.Default.Event,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = MaterialTheme.colorScheme.primary,
-                        focusedLabelColor = MaterialTheme.colorScheme.primary
+                // Ввод количества дней с улучшенной маской
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    OutlinedTextField(
+                        value = daysCount,
+                        onValueChange = {
+                            // Ограничиваем ввод только цифрами и максимум 4 символа
+                            if ((it.all { char -> char.isDigit() } && it.length <= 4) || it.isEmpty()) {
+                                daysCount = it
+                                val days = it.toIntOrNull() ?: 0
+                                onDaysCalculated(days)
+                            }
+                        },
+                        label = { Text(stringResource(R.string.expiry_days)) },
+                        placeholder = { Text("7") },
+                        leadingIcon = {
+                            Icon(
+                                Icons.Default.Event,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                        },
+                        supportingText = {
+                            val days = daysCount.toIntOrNull() ?: 0
+                            val expiryDate = Calendar.getInstance().apply {
+                                add(Calendar.DAY_OF_YEAR, days)
+                            }
+                            val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+                            if (days > 0) {
+                                Text(
+                                    stringResource(R.string.expiry_date_calculated, dateFormat.format(expiryDate.time)),
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(12.dp),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = MaterialTheme.colorScheme.primary,
+                            focusedLabelColor = MaterialTheme.colorScheme.primary
+                        ),
+                        singleLine = true
                     )
-                )
+                }
             }
 
             DateInputMode.DATE_RANGE -> {
@@ -191,10 +210,9 @@ fun DateInputSection(
         }
     }
 
-    // Date Picker диалоги (упрощенная версия - используем просто AlertDialog с текстовым вводом)
-    // В реальной версии лучше использовать материал DatePicker, но это требует API 26+
+    // Material3 Date Picker диалоги с календарем
     if (showProductionDatePicker) {
-        DatePickerDialog(
+        MaterialDatePickerDialog(
             title = stringResource(R.string.production_date_short),
             onDismiss = { showProductionDatePicker = false },
             onDateSelected = { date ->
@@ -205,7 +223,7 @@ fun DateInputSection(
     }
 
     if (showExpiryDatePicker) {
-        DatePickerDialog(
+        MaterialDatePickerDialog(
             title = stringResource(R.string.expiry_until),
             onDismiss = { showExpiryDatePicker = false },
             onDateSelected = { date ->
@@ -216,59 +234,26 @@ fun DateInputSection(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DatePickerDialog(
+fun MaterialDatePickerDialog(
     title: String,
     onDismiss: () -> Unit,
     onDateSelected: (Date) -> Unit
 ) {
-    var day by remember { mutableStateOf("") }
-    var month by remember { mutableStateOf("") }
-    var year by remember { mutableStateOf("") }
+    val datePickerState = rememberDatePickerState(
+        initialSelectedDateMillis = System.currentTimeMillis()
+    )
 
-    AlertDialog(
+    DatePickerDialog(
         onDismissRequest = onDismiss,
-        title = { Text(title) },
-        text = {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                OutlinedTextField(
-                    value = day,
-                    onValueChange = { if (it.length <= 2 && it.all { c -> c.isDigit() }) day = it },
-                    label = { Text(stringResource(R.string.day)) },
-                    modifier = Modifier.weight(1f)
-                )
-                OutlinedTextField(
-                    value = month,
-                    onValueChange = { if (it.length <= 2 && it.all { c -> c.isDigit() }) month = it },
-                    label = { Text(stringResource(R.string.month)) },
-                    modifier = Modifier.weight(1f)
-                )
-                OutlinedTextField(
-                    value = year,
-                    onValueChange = { if (it.length <= 4 && it.all { c -> c.isDigit() }) year = it },
-                    label = { Text(stringResource(R.string.year)) },
-                    modifier = Modifier.weight(1.2f)
-                )
-            }
-        },
         confirmButton = {
-            Button(
+            TextButton(
                 onClick = {
-                    try {
-                        val calendar = Calendar.getInstance()
-                        calendar.set(
-                            year.toInt(),
-                            month.toInt() - 1,
-                            day.toInt()
-                        )
-                        onDateSelected(calendar.time)
-                    } catch (e: Exception) {
-                        // Handle invalid date
+                    datePickerState.selectedDateMillis?.let { millis ->
+                        onDateSelected(Date(millis))
                     }
-                },
-                enabled = day.isNotBlank() && month.isNotBlank() && year.isNotBlank()
+                }
             ) {
                 Text(stringResource(R.string.ok))
             }
@@ -278,5 +263,15 @@ fun DatePickerDialog(
                 Text(stringResource(R.string.cancel))
             }
         }
-    )
+    ) {
+        DatePicker(
+            state = datePickerState,
+            title = {
+                Text(
+                    text = title,
+                    modifier = Modifier.padding(start = 24.dp, top = 16.dp)
+                )
+            }
+        )
+    }
 }

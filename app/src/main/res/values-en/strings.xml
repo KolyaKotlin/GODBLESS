@@ -211,4 +211,53 @@
 
     <!-- Defaults -->
     <string name="default_quantity">1 pc</string>
+    <string name="expiry_date_calculated">Best before: %1$s</string>
+
+    <!-- Additional Error Messages -->
+    <string name="error_product_not_found">Product not found</string>
+    <string name="error_search_failed">Search failed</string>
+    <string name="error_name_empty">Name cannot be empty</string>
+    <string name="error_passwords_mismatch">Passwords do not match</string>
+    <string name="error_registration_failed">Registration failed</string>
+    <string name="error_password_length">Password must be at least 6 characters</string>
+
+    <!-- Additional Success Messages -->
+    <string name="success_login">Successfully logged in</string>
+    <string name="success_registration">Registration successful</string>
+
+    <!-- Scanner Screen Texts -->
+    <string name="scanner_title">Barcode Scanner</string>
+    <string name="scanner_instruction">Point camera at barcode</string>
+    <string name="scanner_auto_scan">Barcode will be scanned automatically</string>
+    <string name="scanner_permission_required">Camera permission is required to scan barcodes</string>
+    <string name="barcode_scanned">Barcode scanned</string>
+    <string name="product_found_in_db">Product found in database!</string>
+
+    <!-- Shopping Content Descriptions -->
+    <string name="cd_purchased">Purchased</string>
+    <string name="cd_not_purchased">Not purchased</string>
+
+    <!-- Auth Screen Texts -->
+    <string name="auth_title_register">Registration</string>
+    <string name="auth_title_login">Login</string>
+    <string name="auth_button_register">Sign Up</string>
+    <string name="auth_button_login">Sign In</string>
+    <string name="auth_switch_to_login">Already have account? Sign in</string>
+    <string name="auth_switch_to_register">No account? Sign up</string>
+
+    <!-- Home Screen Texts -->
+    <string name="products_count_single">product</string>
+    <string name="products_count_plural">products</string>
+
+    <!-- Profile Screen Texts -->
+    <string name="welcome">Welcome!</string>
+    <string name="statistics">Statistics</string>
+    <string name="stat_total">Total</string>
+    <string name="stat_fresh">Fresh</string>
+    <string name="stat_soon">Soon</string>
+    <string name="stat_expired">Expired</string>
+    <string name="additional_settings">Additional</string>
+    <string name="theme_settings">Theme</string>
+    <string name="language_settings">Language</string>
+    <string name="about_app">About</string>
 </resources>

@@ -13,6 +13,9 @@ class ShoppingRepository(
     suspend fun getShoppingItemById(id: Long): ShoppingItem? =
         shoppingItemDao.getShoppingItemById(id)
 
+    suspend fun getShoppingItemByName(name: String): ShoppingItem? =
+        shoppingItemDao.getShoppingItemByName(name)
+
     suspend fun insertShoppingItem(item: ShoppingItem): Long =
         shoppingItemDao.insertShoppingItem(item)
 

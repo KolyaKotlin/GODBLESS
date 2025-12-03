@@ -1,13 +1,14 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
 
-    <!-- Gradient Background Circle -->
+    <!-- Фоновый круг с градиентом -->
     <path
         android:pathData="M54,54m-50,0a50,50 0,1 1,100 0a50,50 0,1 1,-100 0">
-        <aapt:attr xmlns:aapt="http://schemas.android.com/aapt" name="android:fillColor">
+        <aapt:attr name="android:fillColor">
             <gradient
                 android:startX="54"
                 android:startY="4"
@@ -21,53 +22,53 @@
         </aapt:attr>
     </path>
 
-    <!-- Calendar Base -->
+    <!-- Календарь - основание (более крупное) -->
     <path
-        android:pathData="M32,38 L76,38 Q78,38 78,40 L78,72 Q78,74 76,74 L32,74 Q30,74 30,72 L30,40 Q30,38 32,38 Z"
+        android:pathData="M30,36 L78,36 Q81,36 81,39 L81,76 Q81,79 78,79 L30,79 Q27,79 27,76 L27,39 Q27,36 30,36 Z"
         android:fillColor="#FFFFFF"/>
 
-    <!-- Calendar Header -->
+    <!-- Календарь - верхняя часть header (более выразительная) -->
     <path
-        android:pathData="M32,38 L76,38 Q78,38 78,40 L78,46 L30,46 L30,40 Q30,38 32,38 Z"
+        android:pathData="M30,36 L78,36 Q81,36 81,39 L81,44 L27,44 L27,39 Q27,36 30,36 Z"
         android:fillColor="#EC4899"/>
 
-    <!-- Calendar Rings -->
+    <!-- Календарь - кольца для подвешивания (более толстые и заметные) -->
     <path
-        android:pathData="M40,36 L40,42"
-        android:strokeColor="#FFFFFF"
-        android:strokeWidth="2.5"
+        android:pathData="M38,34 L38,40"
+        android:strokeColor="#EC4899"
+        android:strokeWidth="3"
         android:strokeLineCap="round"/>
     <path
-        android:pathData="M54,36 L54,42"
-        android:strokeColor="#FFFFFF"
-        android:strokeWidth="2.5"
+        android:pathData="M54,34 L54,40"
+        android:strokeColor="#EC4899"
+        android:strokeWidth="3"
         android:strokeLineCap="round"/>
     <path
-        android:pathData="M68,36 L68,42"
-        android:strokeColor="#FFFFFF"
-        android:strokeWidth="2.5"
+        android:pathData="M70,34 L70,40"
+        android:strokeColor="#EC4899"
+        android:strokeWidth="3"
         android:strokeLineCap="round"/>
 
-    <!-- Check Mark -->
+    <!-- Большая галочка "свежесть" (более толстая и заметная) -->
     <path
-        android:pathData="M42,58 L48,64 L66,52"
-        android:strokeColor="#00C853"
-        android:strokeWidth="4"
+        android:pathData="M36,58 L46,68 L72,50"
+        android:strokeColor="#10B981"
+        android:strokeWidth="5"
         android:strokeLineCap="round"
         android:strokeLineJoin="round"/>
 
-    <!-- Small Fresh Indicator (Sparkle) -->
+    <!-- Звездочка-искорка свежести (более яркая) -->
     <path
-        android:pathData="M70,56 L72,58 L70,60 L68,58 Z"
+        android:pathData="M74,56 L76,58 L74,60 L72,58 Z"
         android:fillColor="#14B8A6"/>
     <path
-        android:pathData="M70,54 L70,62"
+        android:pathData="M74,54 L74,62"
         android:strokeColor="#14B8A6"
-        android:strokeWidth="1"
+        android:strokeWidth="1.5"
         android:strokeLineCap="round"/>
     <path
-        android:pathData="M66,58 L74,58"
+        android:pathData="M70,58 L78,58"
         android:strokeColor="#14B8A6"
-        android:strokeWidth="1"
+        android:strokeWidth="1.5"
         android:strokeLineCap="round"/>
 </vector>

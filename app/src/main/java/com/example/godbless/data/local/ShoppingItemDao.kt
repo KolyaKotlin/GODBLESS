@@ -12,6 +12,9 @@ interface ShoppingItemDao {
     @Query("SELECT * FROM shopping_items WHERE id = :id")
     suspend fun getShoppingItemById(id: Long): ShoppingItem?
 
+    @Query("SELECT * FROM shopping_items WHERE LOWER(name) = LOWER(:name) AND isPurchased = 0 LIMIT 1")
+    suspend fun getShoppingItemByName(name: String): ShoppingItem?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertShoppingItem(item: ShoppingItem): Long
 
