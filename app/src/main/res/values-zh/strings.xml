@@ -11,9 +11,7 @@
     <string name="home_title">我的产品</string>
     <string name="add_product">添加产品</string>
     <string name="empty_products">您还没有产品</string>
-    <string name="days_left">剩余天数：%d</string>
     <string name="expired">已过期</string>
-    <string name="expires_today">今天到期</string>
     <string name="sort_by">排序</string>
     <string name="filter">筛选</string>
     <string name="filter_by_categories">按类别筛选</string>

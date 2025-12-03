@@ -11,9 +11,7 @@
     <string name="home_title">My Products</string>
     <string name="add_product">Add Product</string>
     <string name="empty_products">You have no products yet</string>
-    <string name="days_left">Days left: %d</string>
     <string name="expired">Expired</string>
-    <string name="expires_today">Expires today</string>
     <string name="sort_by">Sort by</string>
     <string name="filter">Filter</string>
     <string name="filter_by_categories">Filter by Categories</string>
