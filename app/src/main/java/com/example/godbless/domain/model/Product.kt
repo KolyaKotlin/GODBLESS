@@ -20,8 +20,24 @@ data class Product(
     val updatedAt: Date = Date()
 ) {
     fun getDaysUntilExpiry(): Int {
-        val now = Date()
-        val diff = expiryDate.time - now.time
+        // Обнуляем время для корректного подсчета полных дней
+        val nowCal = java.util.Calendar.getInstance().apply {
+            time = Date()
+            set(java.util.Calendar.HOUR_OF_DAY, 0)
+            set(java.util.Calendar.MINUTE, 0)
+            set(java.util.Calendar.SECOND, 0)
+            set(java.util.Calendar.MILLISECOND, 0)
+        }
+
+        val expiryCal = java.util.Calendar.getInstance().apply {
+            time = expiryDate
+            set(java.util.Calendar.HOUR_OF_DAY, 0)
+            set(java.util.Calendar.MINUTE, 0)
+            set(java.util.Calendar.SECOND, 0)
+            set(java.util.Calendar.MILLISECOND, 0)
+        }
+
+        val diff = expiryCal.timeInMillis - nowCal.timeInMillis
         return (diff / (1000 * 60 * 60 * 24)).toInt()
     }
 
