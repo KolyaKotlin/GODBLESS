@@ -11,9 +11,7 @@
     <string name="home_title">Мои продукты</string>
     <string name="add_product">Добавить продукт</string>
     <string name="empty_products">У вас пока нет продуктов</string>
-    <string name="days_left">Осталось дней: %d</string>
     <string name="expired">Просрочен</string>
-    <string name="expires_today">Истекает сегодня</string>
     <string name="sort_by">Сортировать</string>
     <string name="filter">Фильтр</string>
     <string name="filter_by_categories">Фильтр по категориям</string>
