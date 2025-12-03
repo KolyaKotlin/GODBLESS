@@ -135,6 +135,10 @@
     <string name="status_today">今天！</string>
     <string name="status_urgent">紧急！</string>
     <string name="status_good">良好</string>
+    <string name="status_ok">正常</string>
+    <string name="expired_days_ago">过期%d天</string>
+    <string name="expires_today">今天到期</string>
+    <string name="days_left">剩余%d天</string>
 
     <!-- Shopping -->
     <string name="need_to_buy">待购买（%d）</string>

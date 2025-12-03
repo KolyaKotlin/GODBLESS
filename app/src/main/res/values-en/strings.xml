@@ -137,6 +137,10 @@
     <string name="status_today">Today!</string>
     <string name="status_urgent">Urgent!</string>
     <string name="status_good">Good</string>
+    <string name="status_ok">OK</string>
+    <string name="expired_days_ago">Expired %d days ago</string>
+    <string name="expires_today">Expires today</string>
+    <string name="days_left">%d days left</string>
 
     <!-- Shopping -->
     <string name="need_to_buy">To Buy (%d)</string>

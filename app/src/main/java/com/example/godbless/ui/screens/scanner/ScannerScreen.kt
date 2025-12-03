@@ -18,6 +18,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.FlashOff
 import androidx.compose.material.icons.filled.FlashOn
+import androidx.compose.material.icons.filled.QrCodeScanner
+import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -39,6 +41,7 @@ import com.example.godbless.NeprosrochApp
 import com.example.godbless.R
 import com.example.godbless.domain.model.ProductCategory
 import com.example.godbless.domain.model.StorageLocation
+import com.example.godbless.ui.components.DateInputSection
 import com.example.godbless.ui.navigation.Screen
 import com.example.godbless.ui.utils.getLocalizedName
 import com.example.godbless.ui.screens.home.HomeViewModel
