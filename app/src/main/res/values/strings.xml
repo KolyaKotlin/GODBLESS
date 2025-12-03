@@ -56,8 +56,7 @@
     <string name="search_openfoodfacts">Поиск в OpenFoodFacts</string>
     <string name="select_product">Выберите продукт</string>
 
-    <!-- Scanner Screen -->
-    <string name="scanner_title">Сканер штрихкодов</string>
+    <!-- Scanner Screen (Old - kept for compatibility) -->
     <string name="scanner_hint">Наведите камеру на штрихкод</string>
     <string name="scanner_success">Штрихкод обнаружен!</string>
     <string name="camera_permission_required">Требуется разрешение на использование камеры</string>
@@ -206,4 +205,52 @@
 
     <!-- Defaults -->
     <string name="default_quantity">1 шт</string>
+
+    <!-- Additional Error Messages -->
+    <string name="error_product_not_found">Продукт не найден</string>
+    <string name="error_search_failed">Ошибка поиска</string>
+    <string name="error_name_empty">Название не может быть пустым</string>
+    <string name="error_passwords_mismatch">Пароли не совпадают</string>
+    <string name="error_registration_failed">Ошибка регистрации</string>
+    <string name="error_password_length">Пароль должен содержать минимум 6 символов</string>
+
+    <!-- Additional Success Messages -->
+    <string name="success_login">Вы успешно вошли</string>
+    <string name="success_registration">Регистрация успешна</string>
+
+    <!-- Scanner Screen Texts -->
+    <string name="scanner_title">Сканер штрихкодов</string>
+    <string name="scanner_instruction">Наведите камеру на штрихкод</string>
+    <string name="scanner_auto_scan">Штрихкод будет отсканирован автоматически</string>
+    <string name="scanner_permission_required">Для сканирования штрихкодов необходимо разрешение камеры</string>
+    <string name="barcode_scanned">Отсканирован штрихкод</string>
+    <string name="product_found_in_db">Продукт найден в базе!</string>
+
+    <!-- Shopping Content Descriptions -->
+    <string name="cd_purchased">Куплено</string>
+    <string name="cd_not_purchased">Не куплено</string>
+
+    <!-- Auth Screen Texts -->
+    <string name="auth_title_register">Регистрация</string>
+    <string name="auth_title_login">Вход</string>
+    <string name="auth_button_register">Зарегистрироваться</string>
+    <string name="auth_button_login">Войти</string>
+    <string name="auth_switch_to_login">Уже есть аккаунт? Войти</string>
+    <string name="auth_switch_to_register">Нет аккаунта? Зарегистрироваться</string>
+
+    <!-- Home Screen Texts -->
+    <string name="products_count_single">продукт</string>
+    <string name="products_count_plural">продуктов</string>
+
+    <!-- Profile Screen Texts -->
+    <string name="welcome">Добро пожаловать!</string>
+    <string name="statistics">Статистика</string>
+    <string name="stat_total">Всего</string>
+    <string name="stat_fresh">Свежих</string>
+    <string name="stat_soon">Скоро</string>
+    <string name="stat_expired">Просрочено</string>
+    <string name="additional_settings">Дополнительно</string>
+    <string name="theme_settings">Тема оформления</string>
+    <string name="language_settings">Язык</string>
+    <string name="about_app">О приложении</string>
 </resources>
