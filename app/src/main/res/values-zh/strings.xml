@@ -56,8 +56,7 @@
     <string name="search_openfoodfacts">搜索 OpenFoodFacts</string>
     <string name="select_product">选择产品</string>
 
-    <!-- Scanner Screen -->
-    <string name="scanner_title">条形码扫描仪</string>
+    <!-- Scanner Screen (Old - kept for compatibility) -->
     <string name="scanner_hint">将相机对准条形码</string>
     <string name="scanner_success">检测到条形码！</string>
     <string name="camera_permission_required">需要相机权限</string>
@@ -172,11 +171,6 @@
     <string name="category_label">类别</string>
     <string name="storage_location_label">存储位置</string>
 
-    <!-- Settings & Profile -->
-    <string name="additional_settings">附加设置</string>
-    <string name="theme_setting">主题</string>
-    <string name="language_setting">语言</string>
-    <string name="about_app">关于</string>
     <string name="version">版本</string>
     <string name="developer">开发者</string>
     <string name="theme_light">浅色</string>
