@@ -67,6 +67,12 @@
     <string name="mark_bought">Отметить как купленное</string>
     <string name="item_name">Название товара</string>
     <string name="quantity">Количество</string>
+    <string name="open_in_store">Открыть в магазине</string>
+    <string name="select_store">Выберите магазин</string>
+    <string name="installed_apps">Установленные приложения</string>
+    <string name="all_stores">Все магазины</string>
+    <string name="app_installed">Приложение установлено</string>
+    <string name="open_in_browser">Откроется в браузере</string>
 
     <!-- Profile Screen -->
     <string name="profile_title">Профиль</string>
