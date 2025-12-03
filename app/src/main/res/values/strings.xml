@@ -171,11 +171,6 @@
     <string name="category_label">Категория</string>
     <string name="storage_location_label">Место хранения</string>
 
-    <!-- Settings & Profile -->
-    <string name="additional_settings">Дополнительно</string>
-    <string name="theme_setting">Тема оформления</string>
-    <string name="language_setting">Язык</string>
-    <string name="about_app">О приложении</string>
     <string name="version">Версия</string>
     <string name="developer">Разработчик</string>
     <string name="theme_light">Светлая</string>

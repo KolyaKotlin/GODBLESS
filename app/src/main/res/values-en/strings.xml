@@ -56,8 +56,7 @@
     <string name="search_openfoodfacts">Search OpenFoodFacts</string>
     <string name="select_product">Select Product</string>
 
-    <!-- Scanner Screen -->
-    <string name="scanner_title">Barcode Scanner</string>
+    <!-- Scanner Screen (Old - kept for compatibility) -->
     <string name="scanner_hint">Point camera at barcode</string>
     <string name="scanner_searching">Searching...</string>
     <string name="scanner_found">Product found!</string>
@@ -87,8 +86,6 @@
     <string name="notify_7_days">Notify 7 days before</string>
     <string name="notify_3_days">Notify 3 days before</string>
     <string name="notify_1_day">Notify 1 day before</string>
-    <string name="language_settings">Language</string>
-    <string name="theme_settings">Theme</string>
     <string name="about">About</string>
 
     <!-- Errors -->
@@ -98,7 +95,6 @@
     <string name="error_empty_field">This field cannot be empty</string>
     <string name="error_invalid_email">Invalid email address</string>
     <string name="error_weak_password">Password is too weak</string>
-    <string name="error_passwords_mismatch">Passwords do not match</string>
 
     <!-- Notifications -->
     <string name="notification_channel_name">Expiry Notifications</string>
@@ -177,11 +173,6 @@
     <string name="category_label">Category</string>
     <string name="storage_location_label">Storage Location</string>
 
-    <!-- Settings & Profile -->
-    <string name="additional_settings">Additional</string>
-    <string name="theme_setting">Theme</string>
-    <string name="language_setting">Language</string>
-    <string name="about_app">About</string>
     <string name="version">Version</string>
     <string name="developer">Developer</string>
     <string name="theme_light">Light</string>
