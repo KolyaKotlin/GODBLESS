@@ -135,6 +135,10 @@
     <string name="status_today">Сегодня!</string>
     <string name="status_urgent">Срочно!</string>
     <string name="status_good">В порядке</string>
+    <string name="status_ok">В порядке</string>
+    <string name="expired_days_ago">Просрочено %d дн. назад</string>
+    <string name="expires_today">Истекает сегодня</string>
+    <string name="days_left">Осталось %d дн.</string>
 
     <!-- Shopping -->
     <string name="need_to_buy">Нужно купить (%d)</string>
