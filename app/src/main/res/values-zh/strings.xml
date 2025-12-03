@@ -206,6 +206,7 @@
 
     <!-- Defaults -->
     <string name="default_quantity">1件</string>
+    <string name="expiry_date_calculated">保质期至: %1$s</string>
 
     <!-- Additional Error Messages -->
     <string name="error_product_not_found">未找到产品</string>

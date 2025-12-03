@@ -205,6 +205,7 @@
 
     <!-- Defaults -->
     <string name="default_quantity">1 шт</string>
+    <string name="expiry_date_calculated">Срок годности до: %1$s</string>
 
     <!-- Additional Error Messages -->
     <string name="error_product_not_found">Продукт не найден</string>

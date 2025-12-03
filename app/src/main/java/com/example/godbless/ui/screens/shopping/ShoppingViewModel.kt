@@ -36,13 +36,57 @@ class ShoppingViewModel(
     fun addShoppingItem(name: String, quantity: String? = null) {
         viewModelScope.launch {
             if (name.isNotBlank()) {
-                val item = ShoppingItem(
-                    name = name,
-                    quantity = quantity
-                )
-                shoppingRepository.insertShoppingItem(item)
+                // Проверяем, существует ли уже такой товар в списке (непокупленный)
+                val existingItem = shoppingRepository.getShoppingItemByName(name)
+
+                if (existingItem != null) {
+                    // Товар уже существует - увеличиваем количество
+                    val newQuantity = mergeQuantities(existingItem.quantity, quantity)
+                    val updatedItem = existingItem.copy(quantity = newQuantity)
+                    shoppingRepository.updateShoppingItem(updatedItem)
+                } else {
+                    // Товар не существует - создаем новый
+                    val item = ShoppingItem(
+                        name = name,
+                        quantity = quantity
+                    )
+                    shoppingRepository.insertShoppingItem(item)
+                }
             }
         }
+    }
+
+    // Вспомогательная функция для объединения количества
+    private fun mergeQuantities(existingQuantity: String?, newQuantity: String?): String {
+        val existingNum = parseQuantityNumber(existingQuantity)
+        val newNum = parseQuantityNumber(newQuantity)
+        val totalNum = existingNum + newNum
+
+        // Извлекаем единицу измерения из существующего или нового количества
+        val unit = extractUnit(existingQuantity ?: newQuantity)
+
+        return if (unit.isNotBlank()) {
+            "$totalNum $unit"
+        } else {
+            totalNum.toString()
+        }
+    }
+
+    // Извлечь числовое значение из строки количества
+    private fun parseQuantityNumber(quantity: String?): Int {
+        if (quantity.isNullOrBlank()) return 1
+
+        // Пытаемся найти число в начале строки
+        val numberMatch = Regex("^\\d+").find(quantity)
+        return numberMatch?.value?.toIntOrNull() ?: 1
+    }
+
+    // Извлечь единицу измерения из строки количества
+    private fun extractUnit(quantity: String?): String {
+        if (quantity.isNullOrBlank()) return ""
+
+        // Удаляем число и пробелы в начале, оставляя только единицу измерения
+        return quantity.replace(Regex("^\\d+\\s*"), "").trim()
     }
 
     fun togglePurchased(item: ShoppingItem) {

@@ -21,6 +21,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -121,40 +122,16 @@ fun AuthScreen(
                     label = "logo_scale"
                 )
 
-                Card(
+                Box(
                     modifier = Modifier
                         .size(140.dp)
                         .scale(logoScale)
-                        .shadow(
-                            elevation = 16.dp,
-                            shape = RoundedCornerShape(32.dp),
-                            spotColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f)
-                        ),
-                    shape = RoundedCornerShape(32.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color.White
-                    )
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(
-                                brush = Brush.linearGradient(
-                                    colors = listOf(
-                                        com.example.godbless.ui.theme.GradientStart,
-                                        com.example.godbless.ui.theme.GradientMiddle,
-                                        com.example.godbless.ui.theme.GradientEnd
-                                    )
-                                )
-                            ),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = "🛒",
-                            style = MaterialTheme.typography.displayLarge,
-                            fontSize = MaterialTheme.typography.displayLarge.fontSize * 1.5f
-                        )
-                    }
+                    Image(
+                        painter = painterResource(id = R.drawable.app_logo),
+                        contentDescription = stringResource(R.string.app_name),
+                        modifier = Modifier.fillMaxSize()
+                    )
                 }
 
                 Spacer(modifier = Modifier.height(24.dp))
@@ -298,7 +275,7 @@ fun AuthScreen(
 
                         Spacer(modifier = Modifier.height(24.dp))
 
-                        // Кнопка входа/регистрации с градиентом
+                        // Кнопка входа/регистрации с градиентным фоном
                         Button(
                             onClick = {
                                 if (isSignUp) {
@@ -309,16 +286,17 @@ fun AuthScreen(
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(60.dp)
-                                .shadow(
-                                    elevation = 8.dp,
-                                    shape = RoundedCornerShape(16.dp),
-                                    spotColor = MaterialTheme.colorScheme.primary
-                                ),
+                                .height(60.dp),
                             enabled = !isLoading && email.isNotBlank() && password.isNotBlank(),
                             shape = RoundedCornerShape(16.dp),
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.primary
+                                containerColor = MaterialTheme.colorScheme.primary,
+                                disabledContainerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
+                            ),
+                            elevation = ButtonDefaults.buttonElevation(
+                                defaultElevation = 6.dp,
+                                pressedElevation = 10.dp,
+                                disabledElevation = 0.dp
                             )
                         ) {
                             if (isLoading) {

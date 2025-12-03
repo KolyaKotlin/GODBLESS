@@ -211,6 +211,7 @@
 
     <!-- Defaults -->
     <string name="default_quantity">1 pc</string>
+    <string name="expiry_date_calculated">Best before: %1$s</string>
 
     <!-- Additional Error Messages -->
     <string name="error_product_not_found">Product not found</string>

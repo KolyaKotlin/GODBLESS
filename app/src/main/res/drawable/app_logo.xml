@@ -1,0 +1,61 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+
+    <!-- Круглый фон с градиентом -->
+    <path
+        android:pathData="M60,60m-55,0a55,55 0,1 1,110 0a55,55 0,1 1,-110 0"
+        android:fillColor="#6366F1"/>
+
+    <!-- Календарь - основание -->
+    <path
+        android:pathData="M35,42 L85,42 Q88,42 88,45 L88,85 Q88,88 85,88 L35,88 Q32,88 32,85 L32,45 Q32,42 35,42 Z"
+        android:fillColor="#FFFFFF"/>
+
+    <!-- Календарь - верхняя часть (header) -->
+    <path
+        android:pathData="M35,42 L85,42 Q88,42 88,45 L88,52 L32,52 L32,45 Q32,42 35,42 Z"
+        android:fillColor="#EC4899"/>
+
+    <!-- Календарь - кольца для подвешивания -->
+    <path
+        android:pathData="M45,40 L45,47"
+        android:strokeColor="#EC4899"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round"/>
+    <path
+        android:pathData="M60,40 L60,47"
+        android:strokeColor="#EC4899"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round"/>
+    <path
+        android:pathData="M75,40 L75,47"
+        android:strokeColor="#EC4899"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round"/>
+
+    <!-- Галочка "свежесть" -->
+    <path
+        android:pathData="M42,66 L52,76 L78,58"
+        android:strokeColor="#10B981"
+        android:strokeWidth="6"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"/>
+
+    <!-- Звездочка-искорка свежести -->
+    <path
+        android:pathData="M78,68 L80,70 L78,72 L76,70 Z"
+        android:fillColor="#14B8A6"/>
+    <path
+        android:pathData="M78,66 L78,74"
+        android:strokeColor="#14B8A6"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"/>
+    <path
+        android:pathData="M74,70 L82,70"
+        android:strokeColor="#14B8A6"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"/>
+</vector>
