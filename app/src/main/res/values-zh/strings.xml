@@ -67,12 +67,6 @@
     <string name="mark_bought">标记为已购买</string>
     <string name="item_name">商品名称</string>
     <string name="quantity">数量</string>
-    <string name="open_in_store">在商店中打开</string>
-    <string name="select_store">选择商店</string>
-    <string name="installed_apps">已安装的应用</string>
-    <string name="all_stores">所有商店</string>
-    <string name="app_installed">应用已安装</string>
-    <string name="open_in_browser">将在浏览器中打开</string>
 
     <!-- Profile Screen -->
     <string name="profile_title">个人资料</string>

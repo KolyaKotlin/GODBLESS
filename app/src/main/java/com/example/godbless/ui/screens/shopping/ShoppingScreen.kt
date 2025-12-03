@@ -18,7 +18,6 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.RadioButtonUnchecked
 import androidx.compose.material.icons.filled.ShoppingBag
-import androidx.compose.material.icons.filled.Storefront
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -29,7 +28,6 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -37,9 +35,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.godbless.NeprosrochApp
 import com.example.godbless.R
 import com.example.godbless.domain.model.ShoppingItem
-import com.example.godbless.domain.model.Store
-import com.example.godbless.domain.model.StoreProvider
-import com.example.godbless.util.StoreIntentHelper
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,9 +45,6 @@ fun ShoppingScreen(
 ) {
     val shoppingItems by viewModel.shoppingItems.collectAsState()
     var showAddDialog by remember { mutableStateOf(false) }
-    var showStoreSheet by remember { mutableStateOf(false) }
-    var selectedProductForStore by remember { mutableStateOf<ShoppingItem?>(null) }
-    val context = LocalContext.current
 
     Scaffold(
         topBar = {
@@ -148,11 +140,7 @@ fun ShoppingScreen(
                             ShoppingItemCard(
                                 item = item,
                                 onToggle = { viewModel.togglePurchased(item) },
-                                onDelete = { viewModel.deleteItem(item) },
-                                onOpenStore = {
-                                    selectedProductForStore = item
-                                    showStoreSheet = true
-                                }
+                                onDelete = { viewModel.deleteItem(item) }
                             )
                         }
                     }
@@ -178,11 +166,7 @@ fun ShoppingScreen(
                             ShoppingItemCard(
                                 item = item,
                                 onToggle = { viewModel.togglePurchased(item) },
-                                onDelete = { viewModel.deleteItem(item) },
-                                onOpenStore = {
-                                    selectedProductForStore = item
-                                    showStoreSheet = true
-                                }
+                                onDelete = { viewModel.deleteItem(item) }
                             )
                         }
                     }
@@ -200,27 +184,13 @@ fun ShoppingScreen(
             }
         )
     }
-
-    if (showStoreSheet && selectedProductForStore != null) {
-        StoreSelectionBottomSheet(
-            productName = selectedProductForStore!!.name,
-            onDismiss = {
-                showStoreSheet = false
-                selectedProductForStore = null
-            },
-            onStoreSelected = { store ->
-                StoreIntentHelper.openStore(context, store, selectedProductForStore!!.name)
-            }
-        )
-    }
 }
 
 @Composable
 fun ShoppingItemCard(
     item: ShoppingItem,
     onToggle: () -> Unit,
-    onDelete: () -> Unit,
-    onOpenStore: () -> Unit
+    onDelete: () -> Unit
 ) {
     // Анимация для купленных товаров
     val alpha by animateFloatAsState(
@@ -367,34 +337,18 @@ fun ShoppingItemCard(
                 }
             }
 
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                // Кнопка магазина
-                IconButton(
-                    onClick = onOpenStore,
-                    colors = IconButtonDefaults.iconButtonColors(
-                        contentColor = MaterialTheme.colorScheme.primary
-                    )
-                ) {
-                    Icon(
-                        Icons.Default.Storefront,
-                        contentDescription = stringResource(R.string.open_in_store),
-                        modifier = Modifier.size(24.dp)
-                    )
-                }
-
-                // Кнопка удаления
-                IconButton(
-                    onClick = onDelete,
-                    colors = IconButtonDefaults.iconButtonColors(
-                        contentColor = MaterialTheme.colorScheme.error
-                    )
-                ) {
-                    Icon(
-                        Icons.Default.Delete,
-                        contentDescription = stringResource(R.string.delete),
-                        modifier = Modifier.size(24.dp)
-                    )
-                }
+            // Кнопка удаления
+            IconButton(
+                onClick = onDelete,
+                colors = IconButtonDefaults.iconButtonColors(
+                    contentColor = MaterialTheme.colorScheme.error
+                )
+            ) {
+                Icon(
+                    Icons.Default.Delete,
+                    contentDescription = stringResource(R.string.delete),
+                    modifier = Modifier.size(24.dp)
+                )
             }
         }
     }
@@ -507,189 +461,6 @@ fun AddShoppingItemDialog(
             }
         }
     )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun StoreSelectionBottomSheet(
-    productName: String,
-    onDismiss: () -> Unit,
-    onStoreSelected: (Store) -> Unit
-) {
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    val context = LocalContext.current
-    val stores = StoreProvider.stores
-    val installedStores = remember { StoreIntentHelper.getInstalledStores(context, stores) }
-
-    ModalBottomSheet(
-        onDismissRequest = onDismiss,
-        sheetState = sheetState,
-        shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
-        dragHandle = {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Box(
-                    modifier = Modifier
-                        .padding(top = 12.dp, bottom = 8.dp)
-                        .width(40.dp)
-                        .height(4.dp)
-                        .clip(RoundedCornerShape(2.dp))
-                        .background(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f))
-                )
-            }
-        }
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp)
-                .padding(bottom = 32.dp)
-        ) {
-            // Заголовок
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(bottom = 16.dp)
-            ) {
-                Icon(
-                    Icons.Default.Storefront,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(32.dp)
-                )
-                Spacer(modifier = Modifier.width(16.dp))
-                Column {
-                    Text(
-                        text = stringResource(R.string.select_store),
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = productName,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(top = 4.dp)
-                    )
-                }
-            }
-
-            // Установленные приложения (если есть)
-            if (installedStores.isNotEmpty()) {
-                Text(
-                    text = stringResource(R.string.installed_apps),
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.padding(bottom = 12.dp)
-                )
-
-                installedStores.forEach { store ->
-                    StoreItem(
-                        store = store,
-                        isInstalled = true,
-                        onClick = {
-                            onStoreSelected(store)
-                            onDismiss()
-                        }
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-            }
-
-            // Все магазины
-            Text(
-                text = stringResource(R.string.all_stores),
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(bottom = 12.dp)
-            )
-
-            stores.forEach { store ->
-                StoreItem(
-                    store = store,
-                    isInstalled = installedStores.contains(store),
-                    onClick = {
-                        onStoreSelected(store)
-                        onDismiss()
-                    }
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-            }
-        }
-    }
-}
-
-@Composable
-fun StoreItem(
-    store: Store,
-    isInstalled: Boolean,
-    onClick: () -> Unit
-) {
-    Card(
-        onClick = onClick,
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = if (isInstalled)
-                MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
-            else
-                MaterialTheme.colorScheme.surfaceVariant
-        )
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.weight(1f)
-            ) {
-                Text(
-                    text = store.iconEmoji,
-                    style = MaterialTheme.typography.headlineMedium,
-                    modifier = Modifier.padding(end = 16.dp)
-                )
-                Column {
-                    Text(
-                        text = store.name,
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-                    if (isInstalled) {
-                        Text(
-                            text = stringResource(R.string.app_installed),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.primary,
-                            fontWeight = FontWeight.Medium
-                        )
-                    } else {
-                        Text(
-                            text = stringResource(R.string.open_in_browser),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                }
-            }
-
-            Icon(
-                Icons.Default.Storefront,
-                contentDescription = null,
-                tint = if (isInstalled)
-                    MaterialTheme.colorScheme.primary
-                else
-                    MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(24.dp)
-            )
-        }
-    }
 }
 
 // ViewModelFactory
