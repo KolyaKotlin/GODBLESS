@@ -1,14 +1,11 @@
 package com.example.godbless.data.remote
-
 import com.google.gson.annotations.SerializedName
-
 data class OpenFoodFactsResponse(
     @SerializedName("status")
     val status: Int,
     @SerializedName("product")
     val product: OpenFoodProduct?
 )
-
 data class OpenFoodProduct(
     @SerializedName("product_name")
     val productName: String?,
@@ -21,7 +18,6 @@ data class OpenFoodProduct(
     @SerializedName("code")
     val barcode: String?
 )
-
 data class OpenFoodFactsSearchResponse(
     @SerializedName("count")
     val count: Int,

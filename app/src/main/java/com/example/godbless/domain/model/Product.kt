@@ -1,9 +1,7 @@
 package com.example.godbless.domain.model
-
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.Date
-
 @Entity(tableName = "products")
 data class Product(
     @PrimaryKey(autoGenerate = true)
@@ -20,7 +18,6 @@ data class Product(
     val updatedAt: Date = Date()
 ) {
     fun getDaysUntilExpiry(): Int {
-        // Обнуляем время для корректного подсчета полных дней
         val nowCal = java.util.Calendar.getInstance().apply {
             time = Date()
             set(java.util.Calendar.HOUR_OF_DAY, 0)
@@ -28,7 +25,6 @@ data class Product(
             set(java.util.Calendar.SECOND, 0)
             set(java.util.Calendar.MILLISECOND, 0)
         }
-
         val expiryCal = java.util.Calendar.getInstance().apply {
             time = expiryDate
             set(java.util.Calendar.HOUR_OF_DAY, 0)
@@ -36,18 +32,14 @@ data class Product(
             set(java.util.Calendar.SECOND, 0)
             set(java.util.Calendar.MILLISECOND, 0)
         }
-
         val diff = expiryCal.timeInMillis - nowCal.timeInMillis
         return (diff / (1000 * 60 * 60 * 24)).toInt()
     }
-
     fun isExpired(): Boolean = getDaysUntilExpiry() < 0
-
     fun isExpiringSoon(): Boolean {
         val days = getDaysUntilExpiry()
         return days in 0..7
     }
-
     fun getStatusColor(): ProductStatus {
         return when {
             isExpired() -> ProductStatus.EXPIRED
@@ -56,7 +48,6 @@ data class Product(
         }
     }
 }
-
 enum class ProductCategory(val displayName: String) {
     DAIRY("Молочные продукты"),
     MEAT("Мясо и птица"),
@@ -69,16 +60,14 @@ enum class ProductCategory(val displayName: String) {
     BEVERAGES("Напитки"),
     OTHER("Другое")
 }
-
 enum class StorageLocation(val displayName: String) {
     FRIDGE("Холодильник"),
     FREEZER("Морозильник"),
     PANTRY("Кладовая"),
     COUNTER("На столе")
 }
-
 enum class ProductStatus {
-    GOOD,      // Зеленый
-    WARNING,   // Желтый
-    EXPIRED    // Красный
+    GOOD,      
+    WARNING,   
+    EXPIRED    
 }

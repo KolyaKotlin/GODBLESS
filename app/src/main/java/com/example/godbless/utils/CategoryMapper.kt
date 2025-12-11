@@ -1,16 +1,10 @@
 package com.example.godbless.utils
-
 import com.example.godbless.domain.model.ProductCategory
-
 object CategoryMapper {
-
     fun mapFromOpenFoodFacts(categories: String?): ProductCategory {
         if (categories.isNullOrBlank()) return ProductCategory.OTHER
-
         val lowerCategories = categories.lowercase()
-
         return when {
-            // Молочные продукты
             lowerCategories.contains("dairy") ||
             lowerCategories.contains("milk") ||
             lowerCategories.contains("cheese") ||
@@ -22,8 +16,6 @@ object CategoryMapper {
             lowerCategories.contains("кефир") ||
             lowerCategories.contains("творог") ||
             lowerCategories.contains("сметана") -> ProductCategory.DAIRY
-
-            // Мясо и мясные продукты
             lowerCategories.contains("meat") ||
             lowerCategories.contains("chicken") ||
             lowerCategories.contains("pork") ||
@@ -35,8 +27,6 @@ object CategoryMapper {
             lowerCategories.contains("говядина") ||
             lowerCategories.contains("колбас") ||
             lowerCategories.contains("сосиск") -> ProductCategory.MEAT
-
-            // Рыба и морепродукты
             lowerCategories.contains("fish") ||
             lowerCategories.contains("seafood") ||
             lowerCategories.contains("salmon") ||
@@ -45,8 +35,6 @@ object CategoryMapper {
             lowerCategories.contains("морепродукт") ||
             lowerCategories.contains("креветк") ||
             lowerCategories.contains("лосось") -> ProductCategory.FISH
-
-            // Овощи
             lowerCategories.contains("vegetable") ||
             lowerCategories.contains("томат") ||
             lowerCategories.contains("огурец") ||
@@ -56,8 +44,6 @@ object CategoryMapper {
             lowerCategories.contains("морковь") ||
             lowerCategories.contains("salad") ||
             lowerCategories.contains("томат") -> ProductCategory.VEGETABLES
-
-            // Фрукты
             lowerCategories.contains("fruit") ||
             lowerCategories.contains("apple") ||
             lowerCategories.contains("banana") ||
@@ -68,8 +54,6 @@ object CategoryMapper {
             lowerCategories.contains("апельсин") ||
             lowerCategories.contains("груша") ||
             lowerCategories.contains("ягод") -> ProductCategory.FRUITS
-
-            // Хлеб и выпечка
             lowerCategories.contains("bread") ||
             lowerCategories.contains("bakery") ||
             lowerCategories.contains("pastry") ||
@@ -80,8 +64,6 @@ object CategoryMapper {
             lowerCategories.contains("выпечк") ||
             lowerCategories.contains("торт") ||
             lowerCategories.contains("печенье") -> ProductCategory.BAKERY
-
-            // Напитки
             lowerCategories.contains("beverage") ||
             lowerCategories.contains("drink") ||
             lowerCategories.contains("juice") ||
@@ -93,22 +75,16 @@ object CategoryMapper {
             lowerCategories.contains("газировк") ||
             lowerCategories.contains("чай") ||
             lowerCategories.contains("кофе") -> ProductCategory.BEVERAGES
-
-            // Замороженные продукты
             lowerCategories.contains("frozen") ||
             lowerCategories.contains("ice cream") ||
             lowerCategories.contains("замороженн") ||
             lowerCategories.contains("мороженое") ||
             lowerCategories.contains("пельмен") -> ProductCategory.FROZEN
-
-            // Консервы
             lowerCategories.contains("canned") ||
             lowerCategories.contains("preserved") ||
             lowerCategories.contains("консерв") ||
             lowerCategories.contains("тушенк") ||
             lowerCategories.contains("маринованн") -> ProductCategory.CANNED
-
-            // По умолчанию
             else -> ProductCategory.OTHER
         }
     }

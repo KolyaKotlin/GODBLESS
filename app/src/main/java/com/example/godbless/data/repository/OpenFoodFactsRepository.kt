@@ -1,8 +1,6 @@
 package com.example.godbless.data.repository
-
 import com.example.godbless.data.remote.OpenFoodFactsApi
 import com.example.godbless.data.remote.OpenFoodProduct
-
 class OpenFoodFactsRepository(
     private val api: OpenFoodFactsApi
 ) {
@@ -18,7 +16,6 @@ class OpenFoodFactsRepository(
             Result.failure(e)
         }
     }
-
     suspend fun searchProducts(query: String): Result<List<OpenFoodProduct>> {
         return try {
             val response = api.searchProducts(query)

@@ -1,5 +1,4 @@
 package com.example.godbless.ui.screens.home
-
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -42,7 +41,6 @@ import com.example.godbless.ui.theme.StatusRed
 import com.example.godbless.ui.theme.StatusYellow
 import java.text.SimpleDateFormat
 import java.util.Locale
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
@@ -58,10 +56,7 @@ fun HomeScreen(
     val isLoading by viewModel.isLoading.collectAsState()
     var showAddProductDialog by remember { mutableStateOf(false) }
     var selectedCategory by remember { mutableStateOf<ProductCategory?>(null) }
-
     val defaultQuantity = stringResource(R.string.default_quantity)
-
-    // Фильтрация продуктов
     val filteredProducts = remember(products, selectedCategory) {
         if (selectedCategory == null) {
             products
@@ -69,8 +64,6 @@ fun HomeScreen(
             products.filter { it.category == selectedCategory }
         }
     }
-
-    // Анимация для FAB
     val infiniteTransition = rememberInfiniteTransition(label = "fab")
     val fabScale by infiniteTransition.animateFloat(
         initialValue = 1f,
@@ -81,9 +74,7 @@ fun HomeScreen(
         ),
         label = "fab_scale"
     )
-
     Box(modifier = Modifier.fillMaxSize()) {
-        // Gradient background
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -98,7 +89,6 @@ fun HomeScreen(
                     )
                 )
         )
-
         Scaffold(
             containerColor = Color.Transparent,
             topBar = {
@@ -166,7 +156,6 @@ fun HomeScreen(
                     verticalArrangement = Arrangement.Center,
                     modifier = Modifier.padding(32.dp)
                 ) {
-                    // Animated empty state icon
                     val rotation by infiniteTransition.animateFloat(
                         initialValue = -10f,
                         targetValue = 10f,
@@ -176,7 +165,6 @@ fun HomeScreen(
                         ),
                         label = "rotation"
                     )
-
                     Icon(
                         Icons.Default.ShoppingBag,
                         contentDescription = null,
@@ -209,15 +197,12 @@ fun HomeScreen(
                 contentPadding = PaddingValues(16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                // Фильтр по категориям
                 item {
                     CategoryFilter(
                         selectedCategory = selectedCategory,
                         onCategorySelected = { selectedCategory = it }
                     )
                 }
-
-                // Список продуктов
                 items(filteredProducts, key = { it.id }) { product ->
                     ProductCard(
                         product = product,
@@ -234,8 +219,6 @@ fun HomeScreen(
         }
         }
     }
-
-    // Диалог добавления продукта
     if (showAddProductDialog) {
         AddProductDialog(
             onDismiss = { showAddProductDialog = false },
@@ -254,7 +237,6 @@ fun HomeScreen(
         )
     }
 }
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddProductDialog(
@@ -266,11 +248,8 @@ fun AddProductDialog(
     var selectedLocation by remember { mutableStateOf(StorageLocation.FRIDGE) }
     var calculatedDays by remember { mutableStateOf(7) }
     var expiryDate by remember { mutableStateOf<java.util.Date?>(null) }
-
     var showCategoryMenu by remember { mutableStateOf(false) }
     var showLocationMenu by remember { mutableStateOf(false) }
-
-    // Рассчитываем дату окончания срока годности на основе дней
     LaunchedEffect(calculatedDays) {
         if (expiryDate == null) {
             expiryDate = java.util.Calendar.getInstance().apply {
@@ -278,7 +257,6 @@ fun AddProductDialog(
             }.time
         }
     }
-
     AlertDialog(
         onDismissRequest = onDismiss,
         shape = RoundedCornerShape(24.dp),
@@ -322,10 +300,7 @@ fun AddProductDialog(
                         focusedLabelColor = MaterialTheme.colorScheme.primary
                     )
                 )
-
                 Spacer(modifier = Modifier.height(12.dp))
-
-                // Категория
                 ExposedDropdownMenuBox(
                     expanded = showCategoryMenu,
                     onExpandedChange = { showCategoryMenu = it }
@@ -356,10 +331,7 @@ fun AddProductDialog(
                         }
                     }
                 }
-
                 Spacer(modifier = Modifier.height(12.dp))
-
-                // Место хранения
                 ExposedDropdownMenuBox(
                     expanded = showLocationMenu,
                     onExpandedChange = { showLocationMenu = it }
@@ -390,10 +362,7 @@ fun AddProductDialog(
                         }
                     }
                 }
-
                 Spacer(modifier = Modifier.height(12.dp))
-
-                // Ввод даты
                 DateInputSection(
                     onDaysCalculated = { days ->
                         calculatedDays = days
@@ -438,7 +407,6 @@ fun AddProductDialog(
         }
     )
 }
-
 @Composable
 fun ProductCard(
     product: Product,
@@ -450,24 +418,19 @@ fun ProductCard(
         ProductStatus.WARNING -> StatusYellow
         ProductStatus.EXPIRED -> StatusRed
     }
-
     val statusIcon = when (product.getStatusColor()) {
         ProductStatus.GOOD -> Icons.Default.CheckCircle
         ProductStatus.WARNING -> Icons.Default.Warning
         ProductStatus.EXPIRED -> Icons.Default.Error
     }
-
     val statusText = when {
         product.isExpired() -> stringResource(R.string.status_expired)
         product.getDaysUntilExpiry() == 0 -> stringResource(R.string.status_today)
         product.getDaysUntilExpiry() <= 3 -> stringResource(R.string.status_urgent)
         else -> stringResource(R.string.status_ok)
     }
-
     val dateFormat = remember { SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()) }
     var isExpanded by remember { mutableStateOf(false) }
-
-    // Анимация пульсации для просроченных продуктов
     val infiniteTransition = rememberInfiniteTransition(label = "pulse")
     val pulseScale by infiniteTransition.animateFloat(
         initialValue = 1f,
@@ -478,8 +441,6 @@ fun ProductCard(
         ),
         label = "pulse"
     )
-
-    // Анимация свечения для критических продуктов
     val glowAlpha by infiniteTransition.animateFloat(
         initialValue = 0.3f,
         targetValue = if (product.isExpired() || product.getDaysUntilExpiry() <= 1) 0.7f else 0.3f,
@@ -489,7 +450,6 @@ fun ProductCard(
         ),
         label = "glow"
     )
-
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -528,12 +488,10 @@ fun ProductCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.Top
             ) {
-                // Левая часть с иконкой статуса
                 Row(
                     modifier = Modifier.weight(1f),
                     verticalAlignment = Alignment.Top
                 ) {
-                    // Статус иконка с анимацией и градиентом
                     Box(
                         modifier = Modifier
                             .size(64.dp)
@@ -560,17 +518,13 @@ fun ProductCard(
                             modifier = Modifier.size(36.dp)
                         )
                     }
-
                     Spacer(modifier = Modifier.width(16.dp))
-
-                    // Информация о продукте
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
                             text = product.name,
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Bold
                         )
-
                         if (product.brand != null) {
                             Spacer(modifier = Modifier.height(4.dp))
                             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -588,10 +542,7 @@ fun ProductCard(
                                 )
                             }
                         }
-
                         Spacer(modifier = Modifier.height(8.dp))
-
-                        // Срок годности
                         Surface(
                             shape = RoundedCornerShape(8.dp),
                             color = statusColor.copy(alpha = 0.1f)
@@ -615,10 +566,7 @@ fun ProductCard(
                                 )
                             }
                         }
-
                         Spacer(modifier = Modifier.height(6.dp))
-
-                        // Дни до истечения
                         val daysLeft = product.getDaysUntilExpiry()
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(
@@ -643,10 +591,7 @@ fun ProductCard(
                         }
                     }
                 }
-
-                // Кнопки действий
                 Column {
-                    // Кнопка добавления в список покупок
                     IconButton(
                         onClick = onAddToShopping,
                         colors = IconButtonDefaults.iconButtonColors(
@@ -658,8 +603,6 @@ fun ProductCard(
                             contentDescription = stringResource(R.string.cd_add_to_shopping)
                         )
                     }
-
-                    // Кнопка удаления
                     IconButton(
                         onClick = onDelete,
                         colors = IconButtonDefaults.iconButtonColors(
@@ -673,8 +616,6 @@ fun ProductCard(
                     }
                 }
             }
-
-            // Дополнительная информация (раскрывается при клике)
             if (isExpanded && (product.notes != null || product.storageLocation != null)) {
                 Divider(modifier = Modifier.padding(horizontal = 16.dp))
                 Column(modifier = Modifier.padding(16.dp)) {
@@ -695,7 +636,6 @@ fun ProductCard(
                             color = MaterialTheme.colorScheme.onSurface
                         )
                     }
-
                     if (product.notes != null) {
                         Row(verticalAlignment = Alignment.Top) {
                             Icon(
@@ -717,8 +657,6 @@ fun ProductCard(
         }
     }
 }
-
-// ViewModelFactory
 class HomeViewModelFactory(
     private val repository: com.example.godbless.data.repository.ProductRepository
 ) : androidx.lifecycle.ViewModelProvider.Factory {

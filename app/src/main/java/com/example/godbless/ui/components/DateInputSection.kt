@@ -1,5 +1,4 @@
 package com.example.godbless.ui.components
-
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -14,12 +13,10 @@ import androidx.compose.ui.unit.dp
 import com.example.godbless.R
 import java.text.SimpleDateFormat
 import java.util.*
-
 enum class DateInputMode {
-    DAYS_COUNT,      // Просто количество дней
-    DATE_RANGE       // Дата выработки + дата окончания
+    DAYS_COUNT,      
+    DATE_RANGE       
 }
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DateInputSection(
@@ -31,17 +28,12 @@ fun DateInputSection(
     var daysCount by remember { mutableStateOf("7") }
     var productionDate by remember { mutableStateOf<Date?>(null) }
     var expiryDate by remember { mutableStateOf<Date?>(null) }
-
     val dateFormat = remember { SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()) }
-
-    // Календарь состояния
     var showProductionDatePicker by remember { mutableStateOf(false) }
     var showExpiryDatePicker by remember { mutableStateOf(false) }
-
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
-        // Переключатель режимов
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -59,19 +51,15 @@ fun DateInputSection(
                 modifier = Modifier.weight(1f)
             )
         }
-
         Spacer(modifier = Modifier.height(12.dp))
-
         when (inputMode) {
             DateInputMode.DAYS_COUNT -> {
-                // Ввод количества дней с улучшенной маской
                 Column(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     OutlinedTextField(
                         value = daysCount,
                         onValueChange = {
-                            // Ограничиваем ввод только цифрами и максимум 4 символа
                             if ((it.all { char -> char.isDigit() } && it.length <= 4) || it.isEmpty()) {
                                 daysCount = it
                                 val days = it.toIntOrNull() ?: 0
@@ -110,13 +98,10 @@ fun DateInputSection(
                     )
                 }
             }
-
             DateInputMode.DATE_RANGE -> {
-                // Выбор диапазона дат
                 Column(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    // Дата выработки
                     OutlinedCard(
                         onClick = { showProductionDatePicker = true },
                         modifier = Modifier.fillMaxWidth(),
@@ -148,8 +133,6 @@ fun DateInputSection(
                             )
                         }
                     }
-
-                    // Дата окончания срока годности
                     OutlinedCard(
                         onClick = { showExpiryDatePicker = true },
                         modifier = Modifier.fillMaxWidth(),
@@ -181,8 +164,6 @@ fun DateInputSection(
                             )
                         }
                     }
-
-                    // Расчет дней
                     if (productionDate != null && expiryDate != null) {
                         val days = ((expiryDate!!.time - Date().time) / (1000 * 60 * 60 * 24)).toInt()
                         LaunchedEffect(productionDate, expiryDate) {
@@ -209,8 +190,6 @@ fun DateInputSection(
             }
         }
     }
-
-    // Material3 Date Picker диалоги с календарем
     if (showProductionDatePicker) {
         MaterialDatePickerDialog(
             title = stringResource(R.string.production_date_short),
@@ -221,7 +200,6 @@ fun DateInputSection(
             }
         )
     }
-
     if (showExpiryDatePicker) {
         MaterialDatePickerDialog(
             title = stringResource(R.string.expiry_until),
@@ -233,7 +211,6 @@ fun DateInputSection(
         )
     }
 }
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MaterialDatePickerDialog(
@@ -244,7 +221,6 @@ fun MaterialDatePickerDialog(
     val datePickerState = rememberDatePickerState(
         initialSelectedDateMillis = System.currentTimeMillis()
     )
-
     DatePickerDialog(
         onDismissRequest = onDismiss,
         confirmButton = {
