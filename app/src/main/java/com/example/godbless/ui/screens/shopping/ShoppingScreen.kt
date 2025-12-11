@@ -1,5 +1,4 @@
 package com.example.godbless.ui.screens.shopping
-
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -35,7 +34,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.godbless.NeprosrochApp
 import com.example.godbless.R
 import com.example.godbless.domain.model.ShoppingItem
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShoppingScreen(
@@ -45,7 +43,6 @@ fun ShoppingScreen(
 ) {
     val shoppingItems by viewModel.shoppingItems.collectAsState()
     var showAddDialog by remember { mutableStateOf(false) }
-
     Scaffold(
         topBar = {
             TopAppBar(
@@ -117,10 +114,8 @@ fun ShoppingScreen(
                 contentPadding = PaddingValues(16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                // Разделяем на куплено и не куплено
                 val unpurchasedItems = shoppingItems.filter { !it.isPurchased }
                 val purchasedItems = shoppingItems.filter { it.isPurchased }
-
                 if (unpurchasedItems.isNotEmpty()) {
                     item {
                         Text(
@@ -145,7 +140,6 @@ fun ShoppingScreen(
                         }
                     }
                 }
-
                 if (purchasedItems.isNotEmpty()) {
                     item {
                         Spacer(modifier = Modifier.height(8.dp))
@@ -174,7 +168,6 @@ fun ShoppingScreen(
             }
         }
     }
-
     if (showAddDialog) {
         AddShoppingItemDialog(
             onDismiss = { showAddDialog = false },
@@ -185,20 +178,17 @@ fun ShoppingScreen(
         )
     }
 }
-
 @Composable
 fun ShoppingItemCard(
     item: ShoppingItem,
     onToggle: () -> Unit,
     onDelete: () -> Unit
 ) {
-    // Анимация для купленных товаров
     val alpha by animateFloatAsState(
         targetValue = if (item.isPurchased) 0.6f else 1f,
         animationSpec = tween(300),
         label = "alpha"
     )
-
     val backgroundColor by animateColorAsState(
         targetValue = if (item.isPurchased)
             MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
@@ -207,12 +197,10 @@ fun ShoppingItemCard(
         animationSpec = tween(300),
         label = "background"
     )
-
     val iconColor = if (item.isPurchased)
         MaterialTheme.colorScheme.primary
     else
         MaterialTheme.colorScheme.onSurfaceVariant
-
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -254,7 +242,6 @@ fun ShoppingItemCard(
                 modifier = Modifier.weight(1f),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Кастомная иконка вместо стандартного чекбокса
                 Box(
                     modifier = Modifier
                         .size(48.dp)
@@ -279,9 +266,7 @@ fun ShoppingItemCard(
                         )
                     }
                 }
-
                 Spacer(modifier = Modifier.width(16.dp))
-
                 Column(modifier = Modifier.weight(1f)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
@@ -308,7 +293,6 @@ fun ShoppingItemCard(
                                 MaterialTheme.colorScheme.onSurface
                         )
                     }
-
                     if (item.quantity != null) {
                         Spacer(modifier = Modifier.height(4.dp))
                         Surface(
@@ -324,7 +308,6 @@ fun ShoppingItemCard(
                             )
                         }
                     }
-
                     if (item.isPurchased) {
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
@@ -336,8 +319,6 @@ fun ShoppingItemCard(
                     }
                 }
             }
-
-            // Кнопка удаления
             IconButton(
                 onClick = onDelete,
                 colors = IconButtonDefaults.iconButtonColors(
@@ -353,7 +334,6 @@ fun ShoppingItemCard(
         }
     }
 }
-
 @Composable
 fun AddShoppingItemDialog(
     onDismiss: () -> Unit,
@@ -361,7 +341,6 @@ fun AddShoppingItemDialog(
 ) {
     var name by remember { mutableStateOf("") }
     var quantity by remember { mutableStateOf("") }
-
     AlertDialog(
         onDismissRequest = onDismiss,
         shape = RoundedCornerShape(24.dp),
@@ -462,8 +441,6 @@ fun AddShoppingItemDialog(
         }
     )
 }
-
-// ViewModelFactory
 class ShoppingViewModelFactory(
     private val repository: com.example.godbless.data.repository.ShoppingRepository
 ) : androidx.lifecycle.ViewModelProvider.Factory {

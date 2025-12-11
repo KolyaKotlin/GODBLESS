@@ -1,5 +1,4 @@
 package com.example.godbless.ui.screens.scanner
-
 import android.Manifest
 import android.content.pm.PackageManager
 import android.util.Log
@@ -55,7 +54,6 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import java.util.concurrent.Executors
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScannerScreen(
@@ -69,7 +67,6 @@ fun ScannerScreen(
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
-
     var hasCameraPermission by remember {
         mutableStateOf(
             ContextCompat.checkSelfPermission(
@@ -78,27 +75,22 @@ fun ScannerScreen(
             ) == PackageManager.PERMISSION_GRANTED
         )
     }
-
     var scannedBarcode by remember { mutableStateOf<String?>(null) }
     var torchEnabled by remember { mutableStateOf(false) }
     var showAddProductDialog by remember { mutableStateOf(false) }
-
     val scannedProduct by scannerViewModel.scannedProduct.collectAsState()
     val isLoading by scannerViewModel.isLoading.collectAsState()
     val error by scannerViewModel.error.collectAsState()
-
     val cameraPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
     ) { isGranted ->
         hasCameraPermission = isGranted
     }
-
     LaunchedEffect(Unit) {
         if (!hasCameraPermission) {
             cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
         }
     }
-
     Scaffold(
         topBar = {
             TopAppBar(
@@ -135,13 +127,10 @@ fun ScannerScreen(
                         showAddProductDialog = true
                     }
                 )
-
-                // Futuristic overlay с анимированным прицелом
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    // Animated scan line
                     val infiniteTransition = rememberInfiniteTransition(label = "scan")
                     val scanLineY by infiniteTransition.animateFloat(
                         initialValue = -75f,
@@ -152,7 +141,6 @@ fun ScannerScreen(
                         ),
                         label = "scan_line"
                     )
-
                     val cornerAlpha by infiniteTransition.animateFloat(
                         initialValue = 0.5f,
                         targetValue = 1f,
@@ -162,7 +150,6 @@ fun ScannerScreen(
                         ),
                         label = "corner_alpha"
                     )
-
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier.padding(32.dp)
@@ -184,21 +171,15 @@ fun ScannerScreen(
                                 )
                                 .padding(20.dp)
                         )
-
                         Spacer(modifier = Modifier.height(40.dp))
-
-                        // Futuristic scan target with animated corners
                         Box(
                             modifier = Modifier.size(280.dp, 180.dp)
                         ) {
-                            // Corner brackets
                             Canvas(modifier = Modifier.fillMaxSize()) {
                                 val cornerSize = 40f
                                 val strokeWidth = 8f
                                 val color = androidx.compose.ui.graphics.Color(0xFF6366F1)
                                     .copy(alpha = cornerAlpha)
-
-                                // Top-left corner
                                 drawLine(
                                     color = color,
                                     start = androidx.compose.ui.geometry.Offset(0f, cornerSize),
@@ -211,8 +192,6 @@ fun ScannerScreen(
                                     end = androidx.compose.ui.geometry.Offset(cornerSize, 0f),
                                     strokeWidth = strokeWidth
                                 )
-
-                                // Top-right corner
                                 drawLine(
                                     color = color,
                                     start = androidx.compose.ui.geometry.Offset(size.width - cornerSize, 0f),
@@ -225,8 +204,6 @@ fun ScannerScreen(
                                     end = androidx.compose.ui.geometry.Offset(size.width, cornerSize),
                                     strokeWidth = strokeWidth
                                 )
-
-                                // Bottom-left corner
                                 drawLine(
                                     color = color,
                                     start = androidx.compose.ui.geometry.Offset(0f, size.height - cornerSize),
@@ -239,8 +216,6 @@ fun ScannerScreen(
                                     end = androidx.compose.ui.geometry.Offset(cornerSize, size.height),
                                     strokeWidth = strokeWidth
                                 )
-
-                                // Bottom-right corner
                                 drawLine(
                                     color = color,
                                     start = androidx.compose.ui.geometry.Offset(size.width - cornerSize, size.height),
@@ -254,8 +229,6 @@ fun ScannerScreen(
                                     strokeWidth = strokeWidth
                                 )
                             }
-
-                            // Animated scan line
                             Box(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -274,9 +247,7 @@ fun ScannerScreen(
                                     )
                             )
                         }
-
                         Spacer(modifier = Modifier.height(40.dp))
-
                         Text(
                             text = stringResource(R.string.scanner_auto_scan),
                             style = MaterialTheme.typography.bodyLarge,
@@ -296,7 +267,6 @@ fun ScannerScreen(
                     }
                 }
             } else {
-                // Сообщение о необходимости разрешения
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -323,8 +293,6 @@ fun ScannerScreen(
             }
         }
     }
-
-    // Диалог добавления продукта после сканирования
     if (showAddProductDialog && scannedBarcode != null) {
         AddScannedProductDialog(
             barcode = scannedBarcode!!,
@@ -357,7 +325,6 @@ fun ScannerScreen(
         )
     }
 }
-
 @Composable
 fun CameraPreview(
     torchEnabled: Boolean,
@@ -367,24 +334,19 @@ fun CameraPreview(
     val lifecycleOwner = LocalLifecycleOwner.current
     val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
     var camera by remember { mutableStateOf<Camera?>(null) }
-
     DisposableEffect(torchEnabled) {
         camera?.cameraControl?.enableTorch(torchEnabled)
         onDispose { }
     }
-
     AndroidView(
         factory = { ctx ->
             val previewView = PreviewView(ctx)
             val executor = Executors.newSingleThreadExecutor()
-
             cameraProviderFuture.addListener({
                 val cameraProvider = cameraProviderFuture.get()
-
                 val preview = Preview.Builder().build().also {
                     it.setSurfaceProvider(previewView.surfaceProvider)
                 }
-
                 val imageAnalyzer = ImageAnalysis.Builder()
                     .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                     .build()
@@ -393,9 +355,7 @@ fun CameraPreview(
                             onBarcodeScanned(barcode)
                         })
                     }
-
                 val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-
                 try {
                     cameraProvider.unbindAll()
                     camera = cameraProvider.bindToLifecycle(
@@ -404,7 +364,6 @@ fun CameraPreview(
                         preview,
                         imageAnalyzer
                     )
-
                     if (torchEnabled && camera?.cameraInfo?.hasFlashUnit() == true) {
                         camera?.cameraControl?.enableTorch(true)
                     }
@@ -412,21 +371,17 @@ fun CameraPreview(
                     Log.e("CameraPreview", "Camera binding failed", e)
                 }
             }, ContextCompat.getMainExecutor(ctx))
-
             previewView
         },
         modifier = Modifier.fillMaxSize()
     )
 }
-
 class BarcodeAnalyzer(
     private val onBarcodeDetected: (String) -> Unit
 ) : ImageAnalysis.Analyzer {
-
     private val scanner = BarcodeScanning.getClient()
     private var lastScannedTime = 0L
-    private val SCAN_DELAY = 2000L // 2 секунды между сканами
-
+    private val SCAN_DELAY = 2000L 
     @androidx.camera.core.ExperimentalGetImage
     override fun analyze(imageProxy: ImageProxy) {
         val mediaImage = imageProxy.image
@@ -435,7 +390,6 @@ class BarcodeAnalyzer(
                 mediaImage,
                 imageProxy.imageInfo.rotationDegrees
             )
-
             scanner.process(image)
                 .addOnSuccessListener { barcodes ->
                     for (barcode in barcodes) {
@@ -456,7 +410,6 @@ class BarcodeAnalyzer(
         }
     }
 }
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddScannedProductDialog(
@@ -473,22 +426,15 @@ fun AddScannedProductDialog(
     var selectedLocation by remember { mutableStateOf(StorageLocation.FRIDGE) }
     var calculatedDays by remember { mutableStateOf(7) }
     var expiryDate by remember { mutableStateOf<Date?>(null) }
-
     var showCategoryMenu by remember { mutableStateOf(false) }
     var showLocationMenu by remember { mutableStateOf(false) }
-
     val searchResults by scannerViewModel.searchResults.collectAsState()
-
-    // Автозаполнение из API
     LaunchedEffect(scannedProduct) {
         scannedProduct?.let { product ->
             productName = product.productName ?: ""
-            // Автоматически определяем категорию из данных OpenFoodFacts
             selectedCategory = CategoryMapper.mapFromOpenFoodFacts(product.categories)
         }
     }
-
-    // Рассчитываем дату окончания срока годности на основе дней
     LaunchedEffect(calculatedDays) {
         if (expiryDate == null) {
             expiryDate = java.util.Calendar.getInstance().apply {
@@ -496,7 +442,6 @@ fun AddScannedProductDialog(
             }.time
         }
     }
-
     AlertDialog(
         onDismissRequest = onDismiss,
         shape = RoundedCornerShape(24.dp),
@@ -528,7 +473,6 @@ fun AddScannedProductDialog(
         },
         text = {
             Column(modifier = Modifier.padding(vertical = 8.dp)) {
-                // Статус загрузки/ошибки
                 when {
                     isLoading -> {
                         Row(
@@ -590,8 +534,6 @@ fun AddScannedProductDialog(
                         Spacer(modifier = Modifier.height(12.dp))
                     }
                 }
-
-                // Поле ввода названия с автокомплитом
                 OutlinedTextField(
                     value = productName,
                     onValueChange = {
@@ -617,8 +559,6 @@ fun AddScannedProductDialog(
                     ),
                     enabled = !isLoading
                 )
-
-                // Результаты автокомплита
                 if (searchResults.isNotEmpty() && productName.length >= 2) {
                     Spacer(modifier = Modifier.height(8.dp))
                     Card(
@@ -652,10 +592,7 @@ fun AddScannedProductDialog(
                         }
                     }
                 }
-
                 Spacer(modifier = Modifier.height(12.dp))
-
-                // Категория
                 ExposedDropdownMenuBox(
                     expanded = showCategoryMenu,
                     onExpandedChange = { showCategoryMenu = it }
@@ -686,10 +623,7 @@ fun AddScannedProductDialog(
                         }
                     }
                 }
-
                 Spacer(modifier = Modifier.height(12.dp))
-
-                // Место хранения
                 ExposedDropdownMenuBox(
                     expanded = showLocationMenu,
                     onExpandedChange = { showLocationMenu = it }
@@ -720,10 +654,7 @@ fun AddScannedProductDialog(
                         }
                     }
                 }
-
                 Spacer(modifier = Modifier.height(12.dp))
-
-                // Ввод даты с использованием DateInputSection
                 DateInputSection(
                     onDaysCalculated = { days ->
                         calculatedDays = days
@@ -762,7 +693,6 @@ fun AddScannedProductDialog(
         }
     )
 }
-
 fun parseDateString(dateStr: String): Date? {
     return try {
         val formats = listOf(

@@ -1,11 +1,9 @@
 package com.example.godbless.ui.utils
-
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.example.godbless.R
 import com.example.godbless.domain.model.ProductCategory
 import com.example.godbless.domain.model.StorageLocation
-
 @Composable
 fun ProductCategory.getLocalizedName(): String {
     return when (this) {
@@ -21,7 +19,6 @@ fun ProductCategory.getLocalizedName(): String {
         ProductCategory.OTHER -> stringResource(R.string.category_other)
     }
 }
-
 @Composable
 fun StorageLocation.getLocalizedName(): String {
     return when (this) {

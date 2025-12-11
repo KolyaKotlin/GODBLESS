@@ -1,5 +1,4 @@
 package com.example.godbless.ui.screens.profile
-
 import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -27,7 +26,6 @@ import com.example.godbless.NeprosrochApp
 import com.example.godbless.R
 import com.example.godbless.ui.screens.home.HomeViewModel
 import com.example.godbless.ui.screens.home.HomeViewModelFactory
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
@@ -46,7 +44,6 @@ fun ProfileScreen(
     val userPreferences by viewModel.userPreferences.collectAsState()
     val error by viewModel.error.collectAsState()
     val products by homeViewModel.products.collectAsState()
-
     Scaffold(
         topBar = {
             TopAppBar(
@@ -73,28 +70,16 @@ fun ProfileScreen(
             if (currentUser == null) {
                 AuthSection(viewModel, error)
             } else {
-                // Профиль пользователя
                 UserProfileCard(currentUser!!.email ?: "")
-
-                // Статистика
                 StatsSection(products)
-
-                // Настройки уведомлений
                 NotificationSettings(userPreferences, viewModel)
-
-                // Дополнительные настройки
                 AdditionalSettings()
-
-                // О приложении
                 AboutSection()
-
-                // Выход
                 LogoutSection(viewModel, onSignOut)
             }
         }
     }
 }
-
 @Composable
 fun AuthSection(viewModel: ProfileViewModel, error: String?) {
     var email by remember { mutableStateOf("") }
@@ -102,15 +87,12 @@ fun AuthSection(viewModel: ProfileViewModel, error: String?) {
     var confirmPassword by remember { mutableStateOf("") }
     var isSignUp by remember { mutableStateOf(false) }
     val isLoading by viewModel.isLoading.collectAsState()
-
     Column {
         Text(
             text = if (isSignUp) stringResource(R.string.sign_up) else stringResource(R.string.sign_in),
             style = MaterialTheme.typography.headlineMedium
         )
-
         Spacer(modifier = Modifier.height(16.dp))
-
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
@@ -118,9 +100,7 @@ fun AuthSection(viewModel: ProfileViewModel, error: String?) {
             modifier = Modifier.fillMaxWidth(),
             enabled = !isLoading
         )
-
         Spacer(modifier = Modifier.height(8.dp))
-
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
@@ -129,7 +109,6 @@ fun AuthSection(viewModel: ProfileViewModel, error: String?) {
             modifier = Modifier.fillMaxWidth(),
             enabled = !isLoading
         )
-
         if (isSignUp) {
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
@@ -141,7 +120,6 @@ fun AuthSection(viewModel: ProfileViewModel, error: String?) {
                 enabled = !isLoading
             )
         }
-
         if (error != null) {
             Spacer(modifier = Modifier.height(8.dp))
             Text(
@@ -150,9 +128,7 @@ fun AuthSection(viewModel: ProfileViewModel, error: String?) {
                 style = MaterialTheme.typography.bodySmall
             )
         }
-
         Spacer(modifier = Modifier.height(16.dp))
-
         Button(
             onClick = {
                 if (isSignUp) {
@@ -173,9 +149,7 @@ fun AuthSection(viewModel: ProfileViewModel, error: String?) {
                 Text(if (isSignUp) stringResource(R.string.sign_up) else stringResource(R.string.sign_in))
             }
         }
-
         Spacer(modifier = Modifier.height(8.dp))
-
         TextButton(
             onClick = { isSignUp = !isSignUp },
             modifier = Modifier.fillMaxWidth(),
@@ -188,7 +162,6 @@ fun AuthSection(viewModel: ProfileViewModel, error: String?) {
         }
     }
 }
-
 @Composable
 fun UserProfileCard(email: String) {
     Card(
@@ -204,7 +177,6 @@ fun UserProfileCard(email: String) {
                 .padding(20.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Аватар
             Box(
                 modifier = Modifier
                     .size(64.dp)
@@ -226,9 +198,7 @@ fun UserProfileCard(email: String) {
                     tint = MaterialTheme.colorScheme.onPrimary
                 )
             }
-
             Spacer(modifier = Modifier.width(16.dp))
-
             Column {
                 Text(
                     text = stringResource(R.string.welcome),
@@ -246,14 +216,12 @@ fun UserProfileCard(email: String) {
         }
     }
 }
-
 @Composable
 fun StatsSection(products: List<com.example.godbless.domain.model.Product>) {
     val totalProducts = products.size
     val expiredProducts = products.count { it.isExpired() }
     val expiringSoonProducts = products.count { it.isExpiringSoon() && !it.isExpired() }
     val goodProducts = totalProducts - expiredProducts - expiringSoonProducts
-
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp)
@@ -276,9 +244,7 @@ fun StatsSection(products: List<com.example.godbless.domain.model.Product>) {
                     fontWeight = FontWeight.Bold
                 )
             }
-
             Spacer(modifier = Modifier.height(16.dp))
-
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
@@ -311,7 +277,6 @@ fun StatsSection(products: List<com.example.godbless.domain.model.Product>) {
         }
     }
 }
-
 @Composable
 fun StatItem(
     icon: ImageVector,
@@ -350,19 +315,15 @@ fun StatItem(
         )
     }
 }
-
 @Composable
 fun AdditionalSettings() {
     val settingsManager = NeprosrochApp.instance.settingsManager
     val context = LocalContext.current
     val activity = context as? Activity
-
     var showThemeDialog by remember { mutableStateOf(false) }
     var showLanguageDialog by remember { mutableStateOf(false) }
-
     var selectedTheme by remember { mutableStateOf(settingsManager.getTheme()) }
     var selectedLanguage by remember { mutableStateOf(settingsManager.getLanguage()) }
-
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -420,21 +381,17 @@ fun AdditionalSettings() {
                     fontWeight = FontWeight.Bold
                 )
             }
-
             Spacer(modifier = Modifier.height(16.dp))
-
             SettingItem(
                 icon = Icons.Default.Palette,
                 title = stringResource(R.string.theme_settings),
                 subtitle = selectedTheme,
                 onClick = { showThemeDialog = true }
             )
-
             Divider(
                 modifier = Modifier.padding(vertical = 12.dp),
                 color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
             )
-
             SettingItem(
                 icon = Icons.Default.Language,
                 title = stringResource(R.string.language_settings),
@@ -443,8 +400,6 @@ fun AdditionalSettings() {
             )
         }
     }
-
-    // Диалог выбора темы
     if (showThemeDialog) {
         ThemeSelectionDialog(
             currentTheme = selectedTheme,
@@ -452,14 +407,11 @@ fun AdditionalSettings() {
                 selectedTheme = theme
                 settingsManager.setTheme(theme)
                 showThemeDialog = false
-                // Перезапускаем Activity для применения темы
                 activity?.recreate()
             },
             onDismiss = { showThemeDialog = false }
         )
     }
-
-    // Диалог выбора языка
     if (showLanguageDialog) {
         LanguageSelectionDialog(
             currentLanguage = selectedLanguage,
@@ -467,14 +419,12 @@ fun AdditionalSettings() {
                 selectedLanguage = language
                 settingsManager.setLanguage(language)
                 showLanguageDialog = false
-                // Перезапускаем Activity для применения языка
                 activity?.recreate()
             },
             onDismiss = { showLanguageDialog = false }
         )
     }
 }
-
 @Composable
 fun SettingItem(
     icon: ImageVector,
@@ -518,7 +468,6 @@ fun SettingItem(
         }
     }
 }
-
 @Composable
 fun AboutSection() {
     Card(
@@ -543,16 +492,13 @@ fun AboutSection() {
                     fontWeight = FontWeight.Bold
                 )
             }
-
             Spacer(modifier = Modifier.height(12.dp))
-
             InfoRow(stringResource(R.string.version), "1.0.0")
             Divider(modifier = Modifier.padding(vertical = 8.dp))
             InfoRow(stringResource(R.string.developer), "GODBLESS Team")
         }
     }
 }
-
 @Composable
 fun InfoRow(label: String, value: String) {
     Row(
@@ -571,7 +517,6 @@ fun InfoRow(label: String, value: String) {
         )
     }
 }
-
 @Composable
 fun LogoutSection(viewModel: ProfileViewModel, onSignOut: () -> Unit) {
     OutlinedButton(
@@ -597,7 +542,6 @@ fun LogoutSection(viewModel: ProfileViewModel, onSignOut: () -> Unit) {
         )
     }
 }
-
 @Composable
 fun NotificationSettings(
     preferences: com.example.godbless.domain.model.UserPreferences,
@@ -625,9 +569,7 @@ fun NotificationSettings(
                     fontWeight = FontWeight.Bold
                 )
             }
-
             Spacer(modifier = Modifier.height(16.dp))
-
             NotificationRow(
                 icon = Icons.Default.CalendarMonth,
                 label = stringResource(R.string.notify_7_days),
@@ -636,9 +578,7 @@ fun NotificationSettings(
                     viewModel.updateNotificationPreference(notifySevenDays = it)
                 }
             )
-
             Divider(modifier = Modifier.padding(vertical = 8.dp))
-
             NotificationRow(
                 icon = Icons.Default.Event,
                 label = stringResource(R.string.notify_3_days),
@@ -647,9 +587,7 @@ fun NotificationSettings(
                     viewModel.updateNotificationPreference(notifyThreeDays = it)
                 }
             )
-
             Divider(modifier = Modifier.padding(vertical = 8.dp))
-
             NotificationRow(
                 icon = Icons.Default.EventAvailable,
                 label = stringResource(R.string.notify_1_day),
@@ -661,7 +599,6 @@ fun NotificationSettings(
         }
     }
 }
-
 @Composable
 fun NotificationRow(
     icon: ImageVector,
@@ -696,7 +633,6 @@ fun NotificationRow(
         )
     }
 }
-
 @Composable
 fun ThemeSelectionDialog(
     currentTheme: String,
@@ -704,7 +640,6 @@ fun ThemeSelectionDialog(
     onDismiss: () -> Unit
 ) {
     val themes = listOf(stringResource(R.string.theme_light), stringResource(R.string.theme_dark), stringResource(R.string.theme_system))
-
     AlertDialog(
         onDismissRequest = onDismiss,
         shape = RoundedCornerShape(24.dp),
@@ -765,7 +700,6 @@ fun ThemeSelectionDialog(
         }
     )
 }
-
 @Composable
 fun LanguageSelectionDialog(
     currentLanguage: String,
@@ -773,7 +707,6 @@ fun LanguageSelectionDialog(
     onDismiss: () -> Unit
 ) {
     val languages = listOf("Русский", "English", "中文")
-
     AlertDialog(
         onDismissRequest = onDismiss,
         shape = RoundedCornerShape(24.dp),
@@ -834,14 +767,12 @@ fun LanguageSelectionDialog(
         }
     )
 }
-
 @Composable
 fun BackupDialog(
     onDismiss: () -> Unit
 ) {
     var backupInProgress by remember { mutableStateOf(false) }
     var backupComplete by remember { mutableStateOf(false) }
-
     AlertDialog(
         onDismissRequest = onDismiss,
         shape = RoundedCornerShape(24.dp),
@@ -926,7 +857,6 @@ fun BackupDialog(
                 Button(
                     onClick = {
                         backupInProgress = true
-                        // Имитация процесса резервного копирования
                         kotlinx.coroutines.GlobalScope.launch {
                             kotlinx.coroutines.delay(2000)
                             backupInProgress = false
@@ -950,8 +880,6 @@ fun BackupDialog(
         }
     )
 }
-
-// ViewModelFactory
 class ProfileViewModelFactory(
     private val authRepository: com.example.godbless.data.repository.AuthRepository,
     private val preferencesRepository: com.example.godbless.data.repository.PreferencesRepository

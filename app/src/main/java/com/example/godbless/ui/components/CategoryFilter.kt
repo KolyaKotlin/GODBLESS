@@ -1,5 +1,4 @@
 package com.example.godbless.ui.components
-
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -16,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import com.example.godbless.R
 import com.example.godbless.domain.model.ProductCategory
 import com.example.godbless.ui.utils.getLocalizedName
-
 @Composable
 fun CategoryFilter(
     selectedCategory: ProductCategory?,
@@ -48,12 +46,10 @@ fun CategoryFilter(
                     fontWeight = FontWeight.Bold
                 )
             }
-
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 contentPadding = PaddingValues(horizontal = 16.dp)
             ) {
-                // "Все" чип
                 item {
                     FilterChip(
                         selected = selectedCategory == null,
@@ -71,8 +67,6 @@ fun CategoryFilter(
                         shape = RoundedCornerShape(20.dp)
                     )
                 }
-
-                // Категории
                 items(ProductCategory.values()) { category ->
                     FilterChip(
                         selected = selectedCategory == category,

@@ -1,5 +1,4 @@
 package com.example.godbless.ui.screens.auth
-
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
@@ -33,7 +32,6 @@ import com.example.godbless.NeprosrochApp
 import com.example.godbless.R
 import com.example.godbless.ui.screens.profile.ProfileViewModel
 import com.example.godbless.ui.screens.profile.ProfileViewModelFactory
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AuthScreen(
@@ -51,28 +49,21 @@ fun AuthScreen(
     var isSignUp by remember { mutableStateOf(false) }
     var passwordVisible by remember { mutableStateOf(false) }
     var confirmPasswordVisible by remember { mutableStateOf(false) }
-
     val isLoading by viewModel.isLoading.collectAsState()
     val error by viewModel.error.collectAsState()
     val currentUser by viewModel.currentUser.collectAsState()
-
-    // Если пользователь авторизован, переходим на главный экран
     LaunchedEffect(currentUser) {
         if (currentUser != null) {
             onAuthSuccess()
         }
     }
-
-    // Показываем сообщение об успехе
     val successMessage by viewModel.successMessage.collectAsState()
     LaunchedEffect(successMessage) {
         if (successMessage != null) {
             onAuthSuccess()
         }
     }
-
     Box(modifier = Modifier.fillMaxSize()) {
-        // Animated gradient background
         val infiniteTransition = rememberInfiniteTransition(label = "background")
         val colorShift by infiniteTransition.animateFloat(
             initialValue = 0f,
@@ -83,7 +74,6 @@ fun AuthScreen(
             ),
             label = "color_shift"
         )
-
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -98,7 +88,6 @@ fun AuthScreen(
                     )
                 )
         )
-
         Scaffold(
             containerColor = Color.Transparent
         ) { padding ->
@@ -111,7 +100,6 @@ fun AuthScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                // Логотип/Иконка приложения с анимацией
                 val logoScale by infiniteTransition.animateFloat(
                     initialValue = 1f,
                     targetValue = 1.05f,
@@ -121,7 +109,6 @@ fun AuthScreen(
                     ),
                     label = "logo_scale"
                 )
-
                 Box(
                     modifier = Modifier
                         .size(140.dp)
@@ -133,29 +120,21 @@ fun AuthScreen(
                         modifier = Modifier.fillMaxSize()
                     )
                 }
-
                 Spacer(modifier = Modifier.height(24.dp))
-
-                // Название приложения
                 Text(
                     text = stringResource(R.string.app_name),
                     style = MaterialTheme.typography.displayMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary
                 )
-
                 Spacer(modifier = Modifier.height(8.dp))
-
                 Text(
                     text = stringResource(R.string.app_subtitle),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center
                 )
-
                 Spacer(modifier = Modifier.height(40.dp))
-
-                // Форма авторизации с glassmorphism
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -177,10 +156,7 @@ fun AuthScreen(
                             style = MaterialTheme.typography.headlineSmall,
                             fontWeight = FontWeight.Bold
                         )
-
                         Spacer(modifier = Modifier.height(20.dp))
-
-                        // Email поле
                         OutlinedTextField(
                             value = email,
                             onValueChange = { email = it },
@@ -193,10 +169,7 @@ fun AuthScreen(
                             singleLine = true,
                             shape = RoundedCornerShape(12.dp)
                         )
-
                         Spacer(modifier = Modifier.height(12.dp))
-
-                        // Пароль
                         OutlinedTextField(
                             value = password,
                             onValueChange = { password = it },
@@ -222,8 +195,6 @@ fun AuthScreen(
                             singleLine = true,
                             shape = RoundedCornerShape(12.dp)
                         )
-
-                        // Подтверждение пароля (только при регистрации)
                         AnimatedVisibility(visible = isSignUp) {
                             Column {
                                 Spacer(modifier = Modifier.height(12.dp))
@@ -254,8 +225,6 @@ fun AuthScreen(
                                 )
                             }
                         }
-
-                        // Ошибка
                         if (error != null) {
                             Spacer(modifier = Modifier.height(12.dp))
                             Card(
@@ -272,10 +241,7 @@ fun AuthScreen(
                                 )
                             }
                         }
-
                         Spacer(modifier = Modifier.height(24.dp))
-
-                        // Кнопка входа/регистрации с градиентным фоном
                         Button(
                             onClick = {
                                 if (isSignUp) {
@@ -314,10 +280,7 @@ fun AuthScreen(
                                 )
                             }
                         }
-
                         Spacer(modifier = Modifier.height(12.dp))
-
-                        // Переключение режима
                         TextButton(
                             onClick = {
                                 isSignUp = !isSignUp
@@ -336,10 +299,7 @@ fun AuthScreen(
                         }
                     }
                 }
-
                 Spacer(modifier = Modifier.height(24.dp))
-
-                // Информация о приложении
                 Text(
                     text = "Отслеживайте сроки годности продуктов\nПолучайте уведомления вовремя\nНе выбрасывайте деньги на ветер!",
                     style = MaterialTheme.typography.bodyMedium,

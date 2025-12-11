@@ -1,5 +1,4 @@
 package com.example.godbless.ui.screens.scanner
-
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.godbless.data.remote.OpenFoodProduct
@@ -8,28 +7,21 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-
 class ScannerViewModel(
     private val openFoodFactsRepository: OpenFoodFactsRepository
 ) : ViewModel() {
-
     private val _scannedProduct = MutableStateFlow<OpenFoodProduct?>(null)
     val scannedProduct: StateFlow<OpenFoodProduct?> = _scannedProduct.asStateFlow()
-
     private val _searchResults = MutableStateFlow<List<OpenFoodProduct>>(emptyList())
     val searchResults: StateFlow<List<OpenFoodProduct>> = _searchResults.asStateFlow()
-
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
-
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error.asStateFlow()
-
     fun searchByBarcode(barcode: String) {
         viewModelScope.launch {
             _isLoading.value = true
             _error.value = null
-
             val result = openFoodFactsRepository.getProductByBarcode(barcode)
             result.onSuccess { product ->
                 _scannedProduct.value = product
@@ -41,13 +33,11 @@ class ScannerViewModel(
             }
         }
     }
-
     fun searchProducts(query: String) {
         if (query.length < 2) {
             _searchResults.value = emptyList()
             return
         }
-
         viewModelScope.launch {
             _isLoading.value = true
             val result = openFoodFactsRepository.searchProducts(query)
@@ -60,14 +50,12 @@ class ScannerViewModel(
             }
         }
     }
-
     fun clearSearch() {
         _searchResults.value = emptyList()
         _scannedProduct.value = null
         _error.value = null
     }
 }
-
 class ScannerViewModelFactory(
     private val repository: OpenFoodFactsRepository
 ) : androidx.lifecycle.ViewModelProvider.Factory {
